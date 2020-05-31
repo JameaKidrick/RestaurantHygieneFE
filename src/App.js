@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom';
 
 // COMPONENTS
 import Home from './components/Home';
-import Upload from './components/Upload';
+import Register from './components/Register';
 
 function App() {
   return (
@@ -11,10 +11,10 @@ function App() {
       <div className="App">
         <Link to='/'>Home</Link>
         <br />
-        <Link to='/upload'>Upload a Picture</Link>
+        <Link to='/register'>Signup</Link>
         <Switch>
           <Route exact path='/' component={Home} />
-          <Route path='/upload' component={Upload} />
+          <Route exact path='/register' component={Register} />
         </Switch>
 
       </div>
