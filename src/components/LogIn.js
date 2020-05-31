@@ -2,15 +2,13 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 // ACTIONS
-import { registerUser } from '../actions';
+import { logInUser } from '../actions';
 
-const Register = (props) => {
+const LogIn = (props) => {
   const dispatch = useDispatch()
   const error = useSelector(state => state.appStatusReducer.error)
   const isFetching = useSelector(state => state.appStatusReducer.isFetching)
   const [user, setUser] = useState({
-    first_name: '',
-    last_name: '',
     username: '',
     password: '',
   })
@@ -23,26 +21,14 @@ const Register = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault()
     console.log(user)
-    dispatch(registerUser(user, props.history))
+    dispatch(logInUser(user, props.history))
   }
 
   // console.log(error)
   return(
     <div>
-      Hello Register Form!
+      Hello Log In Form!
       <form onSubmit={handleSubmit}>
-        <input 
-        type='text' 
-        name='first_name' 
-        placeholder='first name' 
-        onChange={handleChanges} 
-        />
-        <input 
-        type='text' 
-        name='last_name' 
-        placeholder='last name' 
-        onChange={handleChanges} 
-        />
         <input 
         type='text' 
         name='username' 
@@ -55,7 +41,7 @@ const Register = (props) => {
         placeholder='password' 
         onChange={handleChanges} 
         />
-        <button type='submit'>Register</button>
+        <button type='submit'>Log In</button>
       </form>
       {error && (
         <p>{error}</p>
@@ -64,4 +50,4 @@ const Register = (props) => {
   )
 };
 
-export default Register;
+export default LogIn;
