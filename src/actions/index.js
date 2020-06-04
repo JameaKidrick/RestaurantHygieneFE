@@ -1,23 +1,26 @@
-// FROM SIGNUPACTION.JS
+/****************************** FROM SIGNUPACTION.JS ******************************/
 export {
   START_FETCHING,
   FETCH_FAILURE,
-  REGISTER_SUCCESS
-} from './signUpAction';
-
-export {
+  REGISTER_SUCCESS,
   registerUser
 } from './signUpAction';
 
-// FROM LOGINACTION.JS
+
+
+/****************************** FROM LOGINACTION.JS ******************************/
 export {
   LOGIN_SUCCESS,
   LOGOUT_SUCCESS,
-  USER_LOGGED_IN
-} from './logInAction';
-
-export {
+  USER_LOGGED_IN,
   logInUser,
   logInStatus,
   logOutUser
 } from './logInAction';
+
+
+
+/***************************** FROM GOOGLEAPIACTION.JS *****************************/
+export {
+  placeLocator
+} from './googleAPIAction';

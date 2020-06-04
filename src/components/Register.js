@@ -19,14 +19,11 @@ const Register = (props) => {
     setUser({ ...user, [e.target.name]:e.target.value })
   }
 
-  console.log(user)
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log(user)
     dispatch(registerUser(user, props.history))
   }
 
-  // console.log(error)
   return(
     <div>
       Hello Register Form!

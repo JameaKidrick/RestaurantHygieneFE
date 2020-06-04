@@ -17,10 +17,8 @@ const LogIn = (props) => {
     setUser({ ...user, [e.target.name]:e.target.value })
   }
 
-  console.log(user)
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log(user)
     dispatch(logInUser(user, props.history))
   }
 
