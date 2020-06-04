@@ -22,5 +22,6 @@ export {
 
 /***************************** FROM GOOGLEAPIACTION.JS *****************************/
 export {
+  LOCATION_SUCCESS,
   placeLocator
 } from './googleAPIAction';
