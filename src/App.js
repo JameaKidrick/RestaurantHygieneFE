@@ -10,6 +10,7 @@ import Home from './components/Home';
 import Register from './components/Register';
 import ErrorPage from './components/ErrorPage';
 import LogIn from './components/LogIn';
+import RestaurantSearch from './components/RestaurantSearch';
 
 function App() {
   const loggedIn = useSelector(state => state.logInReducer.loggedIn)
@@ -25,7 +26,11 @@ function App() {
         <Link to='/'>Home</Link>
         <br />
         {loggedIn && (
-          <Link to='/' onClick={() => dispatch(logOutUser())}>Log out</Link>
+          <>
+            <Link to='/findrestaurant'>Find a Restaurant</Link>
+            <br />
+            <Link to='/' onClick={() => dispatch(logOutUser())}>Log out</Link>
+          </>
         )}
         {!loggedIn && (
           <>
@@ -36,8 +41,9 @@ function App() {
         )}
         <Switch>
           <Route exact path='/' component={Home} />
-          <Route exact path='/register' component={Register} />
-          <Route exact path='/login' component={LogIn} />
+          <Route path='/register' component={Register} />
+          <Route path='/login' component={LogIn} />
+          <Route path='/findrestaurant' component={RestaurantSearch} />
           <Route component={ErrorPage} />
         </Switch>
 
