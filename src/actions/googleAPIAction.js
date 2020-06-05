@@ -12,7 +12,7 @@ export const placeLocator = (parameters) => dispatch => {
     .post(`/locate`, parameters)
     .then(response => {
       console.log(response)
-      dispatch({ type: 'LOCATION_SUCCESS', payload: response.data.candidates})
+      dispatch({ type: 'LOCATION_SUCCESS', payload: response.data.candidates, status: response.data.status})
     })
     .catch(error => {
       console.log(error.response)

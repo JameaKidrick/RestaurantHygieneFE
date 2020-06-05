@@ -1,7 +1,8 @@
 import { LOCATION_SUCCESS } from '../actions';
 
 const initialState = {
-  places: []
+  places: [],
+  status: 'OK'
 }
 
 export const googleAPIReducer = (state = initialState, action) => {
@@ -9,7 +10,8 @@ export const googleAPIReducer = (state = initialState, action) => {
     case LOCATION_SUCCESS:
       return{
         ...state,
-        places: action.payload
+        places: action.payload,
+        status: action.status
       }
     default:
       return state
