@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 // ACTIONS
@@ -18,35 +18,34 @@ const Register = (props) => {
   const handleChanges = e => {
     setUser({ ...user, [e.target.name]:e.target.value })
   }
-
   const handleSubmit = (e) => {
     e.preventDefault()
-    dispatch(registerUser(user, props.history))
+    // dispatch(registerUser(user, props.history))
   }
 
   return(
     <div>
       Hello Register Form!
-      <form onSubmit={handleSubmit}>
-        <input 
+      <form id='test' onSubmit={handleSubmit}>
+        <input
         type='text' 
         name='first_name' 
         placeholder='first name' 
         onChange={handleChanges} 
         />
-        <input 
+        <input
         type='text' 
         name='last_name' 
         placeholder='last name' 
-        onChange={handleChanges} 
+        onChange={handleChanges}
         />
-        <input 
+        <input
         type='text' 
         name='username' 
         placeholder='username' 
         onChange={handleChanges} 
         />
-        <input 
+        <input
         type='password' 
         name='password' 
         placeholder='password' 
@@ -55,7 +54,7 @@ const Register = (props) => {
         <button type='submit'>Register</button>
       </form>
       {error && (
-        <p>{error}</p>
+        <p id='registerError'>{error}</p>
       )}
     </div>
   )
