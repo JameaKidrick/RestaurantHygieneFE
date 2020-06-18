@@ -2,6 +2,13 @@
 
 let username = ''
 
+describe('Register form renders', () => {
+  it('Cypress can visit registration page', () => {
+    cy.visit('/register')
+    // cy.get('#hello-world').contains('Hello World!')
+  })
+})
+
 describe('Checks to see if form parts work', () => {
   let num = Math.random()
   username = `JaneDoe${num}`
