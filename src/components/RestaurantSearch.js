@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import 'react-phone-number-input/style.css'
+import * as Yup from "yup";
 
 // ACTIONS
 import { placeLocator } from '../actions';
+
+// PHONE NUMBER IS REQUIRED
+// STATE IS REQUIRED
 
 const RestaurantSearch = () => {
   const dispatch = useDispatch();
@@ -17,6 +21,7 @@ const RestaurantSearch = () => {
     'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon',
     'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 
     'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming']
+  const [buttonDisabled, setButtonDisabled] = useState(false)
   const [value, setValue] = useState('1')
   const [phoneNumberValidation, setPhoneNumberValidation] = useState(false)
   const [userLocation, setUserLocation] = useState({})
@@ -28,32 +33,102 @@ const RestaurantSearch = () => {
     radius: 2000,
     userLocation: userLocation
   });
+  const [formErrors, setFormErrors] = useState({
+    input: '',
+    inputType: '',
+    userCity: '',
+    userState: '',
+    phoneNumber: ''
+  })
+
+  let searchFormSchema = Yup.object().shape({
+    input: Yup.string().required('Please provide the required information to search with'),
+    inputType: Yup.string().required('Please provide a name, address, or phone number to search with'),
+    userLocation: Yup.object().shape({
+      userCity: Yup.string().required('Please provide a city'),
+      userState: Yup.string().required('Please provide a state'),
+      userAddress: Yup.string()
+    })
+  })
+
+  let phoneNumberSchema = Yup.object().shape({
+    phonenumber: Yup.number().min(10, 'Please min 10')
+  })
+
+  useEffect(() => {
+
+    console.log('PARAMETERS', Number(value), phoneNumberSchema.isValidSync(Number(value)))
+    parameters['userLocation'] = userLocation
+    searchFormSchema.isValid(parameters).then(valid => {
+      console.log(valid)
+      setButtonDisabled(!valid)
+    })
+  }, [parameters, userLocation, searchFormSchema, phoneNumberSchema]);
 
   const handleChange = (e) => {
-    if(e.target.name === 'phonenumber'){
-      console.log('phonenumber', e.target.value)
-      setValue(e.target.value)
-      if(isNaN(Number(value))){
-        setPhoneNumberValidation(true)
-      }else{
-        setPhoneNumberValidation(false)
+    e.persist();
+
+    if(e.target.value === 'phonenumber' || e.target.value === 'textquery'){
+      if(parameters.inputType !== e.target.value){
+        parameters.input = ''
+        setButtonDisabled(false)
       }
-    }else if(e.target.name === 'userAddress' || e.target.name === 'userCity' || e.target.name === 'userState'){
-      setUserLocation({ ...userLocation, [e.target.name]: e.target.value })
-    }else{
-      setParameters({ ...parameters, [e.target.name]: e.target.value });
     }
-  };
-  
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if(phoneNumberValidation === false){
+
+    if(e.target.name === 'phonenumber'){
+      // console.log('phonenumber', e.target.value)
+      setValue(e.target.value)
+      // if(isNaN(Number(value))){
+      //   setPhoneNumberValidation(true)
+      // }else{
+      //   setPhoneNumberValidation(false)
+      // }
+
       if(parameters.inputType === 'phonenumber'){
         parameters['input'] = `%2B1${value}`
       }
-      parameters['userLocation'] = userLocation
-      dispatch(placeLocator(parameters))
+      // if(phoneNumberValidation === false){
+      // }
+      Yup
+      .reach(phoneNumberSchema, e.target.name)
+      .validate(Number(value))
+      .then(valid => {
+        setFormErrors({ ...formErrors, [e.target.name]:'' })
+      })
+      .catch(err => {
+        setFormErrors({ ...formErrors, [e.target.name]:err.errors[0] })
+      })
+    }else if(e.target.name === 'userAddress' || e.target.name === 'userCity' || e.target.name === 'userState'){
+      // console.log(userLocation)
+      Yup
+      .reach(searchFormSchema, `userLocation.${e.target.name}`)
+      .validate(e.target.value)
+      .then(valid => {
+        setFormErrors({ ...formErrors, [e.target.name]:'' })
+      })
+      .catch(err => {
+        setFormErrors({ ...formErrors, [e.target.name]:err.errors[0] })
+      })
+      setUserLocation({ ...userLocation, [e.target.name]: e.target.value })
+    }else{
+      Yup
+      .reach(searchFormSchema, e.target.name)
+      .validate(e.target.value)
+      .then(valid => {
+        setFormErrors({ ...formErrors.user, [e.target.name]:'' })
+      })
+      .catch(err => {
+        setFormErrors({ ...formErrors, [e.target.name]:err.errors[0] })
+      })
+      setParameters({ ...parameters, [e.target.name]: e.target.value });
     }
+  };
+
+  /******************************** HANDLE SUBMIT & FORM ********************************/
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(parameters)
+    // dispatch(placeLocator(parameters))
   };
 
   return (
@@ -71,7 +146,7 @@ const RestaurantSearch = () => {
         name='userCity'
         placeholder='City'
         onChange={handleChange}
-        required
+        // required
         />
         <select name='userState' onChange={handleChange}>
           {usStates.map((state, index) => {
@@ -95,24 +170,14 @@ const RestaurantSearch = () => {
           name='inputType' 
           value='textquery' 
           onChange={handleChange}
-          />
-          <label htmlFor='name'>Name</label>
-          <br />
-          <input 
-          type='radio' 
-          name='inputType' 
-          value='textquery' 
-          onChange={handleChange}
-          />
-          <label htmlFor='address'>Address</label>
+          />Name
           <br />
           <input 
           type='radio' 
           name='inputType' 
           value='phonenumber'
           onChange={handleChange}
-          />
-          <label htmlFor='phonenumber'>Phone Number</label>
+          />Phone Number
           {parameters.inputType === 'textquery' ? 
             <>
               <br />
@@ -133,7 +198,6 @@ const RestaurantSearch = () => {
               minLength='10'
               maxLength='10'
               onChange={handleChange}
-              required
               />
               <br />
               {phoneNumberValidation && (
@@ -143,7 +207,7 @@ const RestaurantSearch = () => {
           }
         </div>
         <br />
-        <button>Find restaurant</button>
+        <button disabled={buttonDisabled}>Find restaurant</button>
       </form>
       {status === 'ZERO_RESULTS' ? <div>No restaurants found within desired radius</div>: places.length > 0 ? 
         places.map((restaurant, restaurantIndex) => {
