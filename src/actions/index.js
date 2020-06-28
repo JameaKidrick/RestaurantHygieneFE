@@ -23,5 +23,7 @@ export {
 /***************************** FROM GOOGLEAPIACTION.JS *****************************/
 export {
   LOCATION_SUCCESS,
-  placeLocator
+  NEXT_PAGE_LOCATION_SUCCESS,
+  placeLocator,
+  placeLocator_nextPage
 } from './googleAPIAction';

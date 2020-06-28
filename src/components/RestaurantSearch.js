@@ -4,46 +4,36 @@ import 'react-phone-number-input/style.css'
 import * as Yup from "yup";
 
 // ACTIONS
-import { placeLocator } from '../actions';
+import { placeLocator, placeLocator_nextPage } from '../actions';
 
-// PHONE NUMBER IS REQUIRED
-// STATE IS REQUIRED
-
-const RestaurantSearch = () => {
+const RestaurantSearch = (props) => {
   const dispatch = useDispatch();
+  const isFetching = useSelector(state => state.appStatusReducer.isFetching)
   const places = useSelector(state => state.googleAPIReducer.places)
+  const pages = useSelector(state => state.googleAPIReducer.pages)
+  const next_page = useSelector(state => state.googleAPIReducer.next_page)
   const status = useSelector(state => state.googleAPIReducer.status)
 
-  const usStates = ['State', 'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut',
-    'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas',
-    'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 
-    'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 
-    'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon',
-    'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 
-    'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming']
+  const usStates = ['State*', 'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon','Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming']
+  const [currentPageNumber, setCurrentPageNumber] = useState(0)
   const [buttonDisabled, setButtonDisabled] = useState(false)
-  const [value, setValue] = useState('1')
-  const [phoneNumberValidation, setPhoneNumberValidation] = useState(false)
   const [userLocation, setUserLocation] = useState({})
   const [parameters, setParameters] = useState({
-    input: '',
-    inputType: '',
-    fields:
-      'place_id,business_status,geometry,icon,photos,formatted_address,name,opening_hours,rating,types,permanently_closed',
+    query: '',
+    type: 'restaurant',
     radius: 2000,
     userLocation: userLocation
   });
   const [formErrors, setFormErrors] = useState({
-    input: '',
-    inputType: '',
+    query: '',
+    radius: '',
     userCity: '',
-    userState: '',
-    phoneNumber: ''
+    userState: ''
   })
 
   let searchFormSchema = Yup.object().shape({
-    input: Yup.string().required('Please provide the required information to search with'),
-    inputType: Yup.string().required('Please provide a name, address, or phone number to search with'),
+    query: Yup.string(),
+    radius: Yup.string(),
     userLocation: Yup.object().shape({
       userCity: Yup.string().required('Please provide a city'),
       userState: Yup.string().required('Please provide a state'),
@@ -51,55 +41,19 @@ const RestaurantSearch = () => {
     })
   })
 
-  let phoneNumberSchema = Yup.object().shape({
-    phonenumber: Yup.number().min(10, 'Please min 10')
-  })
-
   useEffect(() => {
-
-    console.log('PARAMETERS', Number(value), phoneNumberSchema.isValidSync(Number(value)))
     parameters['userLocation'] = userLocation
-    searchFormSchema.isValid(parameters).then(valid => {
-      console.log(valid)
-      setButtonDisabled(!valid)
-    })
-  }, [parameters, userLocation, searchFormSchema, phoneNumberSchema]);
+
+      searchFormSchema.isValid(parameters).then(valid => {
+        setButtonDisabled(!valid)
+      })
+    
+  }, [parameters, userLocation, searchFormSchema]);
 
   const handleChange = (e) => {
     e.persist();
 
-    if(e.target.value === 'phonenumber' || e.target.value === 'textquery'){
-      if(parameters.inputType !== e.target.value){
-        parameters.input = ''
-        setButtonDisabled(false)
-      }
-    }
-
-    if(e.target.name === 'phonenumber'){
-      // console.log('phonenumber', e.target.value)
-      setValue(e.target.value)
-      // if(isNaN(Number(value))){
-      //   setPhoneNumberValidation(true)
-      // }else{
-      //   setPhoneNumberValidation(false)
-      // }
-
-      if(parameters.inputType === 'phonenumber'){
-        parameters['input'] = `%2B1${value}`
-      }
-      // if(phoneNumberValidation === false){
-      // }
-      Yup
-      .reach(phoneNumberSchema, e.target.name)
-      .validate(Number(value))
-      .then(valid => {
-        setFormErrors({ ...formErrors, [e.target.name]:'' })
-      })
-      .catch(err => {
-        setFormErrors({ ...formErrors, [e.target.name]:err.errors[0] })
-      })
-    }else if(e.target.name === 'userAddress' || e.target.name === 'userCity' || e.target.name === 'userState'){
-      // console.log(userLocation)
+    if(e.target.name === 'userAddress' || e.target.name === 'userCity' || e.target.name === 'userState'){
       Yup
       .reach(searchFormSchema, `userLocation.${e.target.name}`)
       .validate(e.target.value)
@@ -127,9 +81,23 @@ const RestaurantSearch = () => {
   /******************************** HANDLE SUBMIT & FORM ********************************/
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(parameters)
-    // dispatch(placeLocator(parameters))
+    setCurrentPageNumber(1)
+    dispatch(placeLocator(parameters))
   };
+
+  const handleNextPage = () => {
+    setCurrentPageNumber(currentPageNumber  + 1)
+    if(!pages[currentPageNumber]){
+      dispatch(placeLocator_nextPage(next_page))
+
+    }
+  }
+
+  if(isFetching){
+    return (
+      <div>Loading...</div>
+    )
+  }
 
   return (
     <div>
@@ -140,15 +108,16 @@ const RestaurantSearch = () => {
         name='userAddress'
         placeholder='Address'
         onChange={handleChange}
+        value={parameters.userLocation.userAddress}
         />
         <input
         type='text'
         name='userCity'
         placeholder='City'
         onChange={handleChange}
-        // required
+        value={parameters.userLocation.userCity}
         />
-        <select name='userState' onChange={handleChange}>
+        <select name='userState' onChange={handleChange} value={parameters.userLocation.userState}>
           {usStates.map((state, index) => {
             return(
               <option key={index} value={state}>{state}</option>
@@ -157,60 +126,31 @@ const RestaurantSearch = () => {
         </select>
         <br />
         <label htmlFor='radius'>Choose radius: </label>
-        <select name='radius' onChange={handleChange}>
+        <select name='radius' onChange={handleChange} value={parameters.radius}>
           <option value='2000'>1 mile</option>
           <option value='5000'>3 miles</option>
           <option value='10000'>5 miles</option>
           <option value='20000'>10 miles</option>
+          <option value='25000'>15 miles</option>
+          <option value='35000'>20 miles</option>
+          <option value='40000'>25 miles</option>
+          <option value='50000'>30 miles</option>
         </select>
         <div>
           <p>Search restaurant by:</p>
-          <input 
-          type='radio' 
-          name='inputType' 
-          value='textquery' 
+          <input
+          type='text'
+          placeholder='Enter Name or Address'
+          name='query'
           onChange={handleChange}
-          />Name
-          <br />
-          <input 
-          type='radio' 
-          name='inputType' 
-          value='phonenumber'
-          onChange={handleChange}
-          />Phone Number
-          {parameters.inputType === 'textquery' ? 
-            <>
-              <br />
-              <input
-              type='text'
-              placeholder='Enter Name or Address'
-              name='input'
-              onChange={handleChange}
-              />
-            </>: parameters.inputType === 'phonenumber' ?
-            <>
-              <br />
-              <p>Searches by phone number are limited to the United States</p>
-              <input
-              type='tel'
-              placeholder='Format: 1234567890'
-              name='phonenumber'
-              minLength='10'
-              maxLength='10'
-              onChange={handleChange}
-              />
-              <br />
-              {phoneNumberValidation && (
-                <p>Invalid phone number</p>
-              )}
-            </>: false
-          }
+          value={parameters.query}
+          />
         </div>
         <br />
-        <button disabled={buttonDisabled}>Find restaurant</button>
+        <button disabled={buttonDisabled}>Find restaurants</button>
       </form>
       {status === 'ZERO_RESULTS' ? <div>No restaurants found within desired radius</div>: places.length > 0 ? 
-        places.map((restaurant, restaurantIndex) => {
+        pages[currentPageNumber - 1].map((restaurant, restaurantIndex) => {
           return(
             <div key={restaurantIndex}>
               <img src={restaurant.icon} alt='restaurant icon' />
@@ -227,6 +167,12 @@ const RestaurantSearch = () => {
           )
         }): false
       }
+      {(pages.length > 1) && (currentPageNumber !== 1)  && (
+        <div onClick={()=>setCurrentPageNumber(currentPageNumber - 1)}>{`<--- Back`}</div>
+      )}
+      {(currentPageNumber !== pages.length || next_page) && (
+        <div onClick={()=>handleNextPage()}>{`Next --->`}</div>
+      )}
     </div>
   );
 };
