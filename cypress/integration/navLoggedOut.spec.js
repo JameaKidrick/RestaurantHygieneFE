@@ -1,8 +1,13 @@
 /* global cy */
 
 describe('Check that nav links work', () => {
-  it('Signup link works', () => {
+  it('Find a Restaurant link works', () => {
     cy.visit('/')
+    cy.contains('Find a Restaurant').click()
+    cy.url().should('include', 'findrestaurant')
+  })
+
+  it('Signup link works', () => {
     cy.contains('Signup').click()
     cy.url().should('include', 'register')
   })

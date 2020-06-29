@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from "yup";
 
@@ -87,6 +88,7 @@ const Register = (props) => {
           type='text' 
           name='first_name'
           onChange={handleChanges} 
+          value={user.first_name}
           />
         </label>
         <label htmlFor='last_name'>
@@ -95,6 +97,7 @@ const Register = (props) => {
           type='text' 
           name='last_name'
           onChange={handleChanges}
+          value={user.last_name}
           />
         </label>
         <label htmlFor='username'>
@@ -103,6 +106,7 @@ const Register = (props) => {
           type='text' 
           name='username'
           onChange={handleChanges} 
+          value={user.username}
           />
           {user.username.length < 3 && (<p className="error">{formErrors.username}</p>)}
         </label>
@@ -112,6 +116,7 @@ const Register = (props) => {
           type={passwordType}
           name='password'
           onChange={handleChanges} 
+          value={user.password}
           />
           {user.password.length < 6 && (<p className="error">{formErrors.password}</p>)}
         </label>
@@ -127,6 +132,9 @@ const Register = (props) => {
         </label>
         <button type='submit' disabled={buttonDisabled}>Register</button>
       </form>
+      <div id='goToLogin'>
+        <p>Already have an account? <Link to='/login'>Click to login</Link></p>
+      </div>
       {error && (
         <p id='registerError'>{error}</p>
       )}

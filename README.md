@@ -4,12 +4,12 @@ Inspired by the abrupt presence of COVID-19, I wanted to create an app that peop
 
 ### **Features:**
 - User personal account
-- Restaurant search by name, address, or phone number
+- Restaurant search by name, address, or keywords, such as pizza
 - Restaurant search within certain distance
 - Restaurant page will display average rating
 - Rate and review restaurant's hygiene
 - Save favorite restaurants
-- User personal page of rates and reviews
+- User personal page of rates, reviews, and favorite restaurants
 - Full CRUD for rates and reviews
 
 ### **Tech used:**
@@ -20,14 +20,16 @@ Inspired by the abrupt presence of COVID-19, I wanted to create an app that peop
   - Bcrypt
   - JSON Web Token
   - Axios
+  - Jest for testing
 
 - Front End
   - ReactJS
   - Redux
   - Axios
+  - Cypress for testing
 
 - Geolocation provided by:
   - Google Geocoding API
   - Google Places API
 
-*Last Updated: 6/6/2020 by Jamea Kidrick*
+*Last Updated: 6/29/2020 by Jamea Kidrick*

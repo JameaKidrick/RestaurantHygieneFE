@@ -89,7 +89,6 @@ const RestaurantSearch = (props) => {
     setCurrentPageNumber(currentPageNumber  + 1)
     if(!pages[currentPageNumber]){
       dispatch(placeLocator_nextPage(next_page))
-
     }
   }
 
@@ -101,21 +100,22 @@ const RestaurantSearch = (props) => {
 
   return (
     <div>
+      <h3>Find a Restaurant</h3>
+      <p>Search based on a location:</p>
       <form onSubmit={handleSubmit}>
-        <br />
         <input
         type='text'
         name='userAddress'
         placeholder='Address'
         onChange={handleChange}
-        value={parameters.userLocation.userAddress}
+        defaultValue={parameters.userLocation.userAddress}
         />
         <input
         type='text'
         name='userCity'
-        placeholder='City'
+        placeholder='City*'
         onChange={handleChange}
-        value={parameters.userLocation.userCity}
+        defaultValue={parameters.userLocation.userCity}
         />
         <select name='userState' onChange={handleChange} value={parameters.userLocation.userState}>
           {usStates.map((state, index) => {
@@ -137,10 +137,10 @@ const RestaurantSearch = (props) => {
           <option value='50000'>30 miles</option>
         </select>
         <div>
-          <p>Search restaurant by:</p>
+          <p>Keywords (for example: pizza, chicken, etc.)</p>
           <input
           type='text'
-          placeholder='Enter Name or Address'
+          placeholder='Keyword'
           name='query'
           onChange={handleChange}
           value={parameters.query}
@@ -149,10 +149,10 @@ const RestaurantSearch = (props) => {
         <br />
         <button disabled={buttonDisabled}>Find restaurants</button>
       </form>
-      {status === 'ZERO_RESULTS' ? <div>No restaurants found within desired radius</div>: places.length > 0 ? 
+      {status === 'ZERO_RESULTS' ? <div id='noResultsError'>No restaurants found within the desired radius.</div>: places.length > 0 ? 
         pages[currentPageNumber - 1].map((restaurant, restaurantIndex) => {
           return(
-            <div key={restaurantIndex}>
+            <div className='restaurant' key={restaurantIndex}>
               <img src={restaurant.icon} alt='restaurant icon' />
               <h3>{restaurant.name}</h3>
               {restaurant.opening_hours ?

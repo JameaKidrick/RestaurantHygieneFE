@@ -1,4 +1,4 @@
-import {START_FETCHING, FETCH_FAILURE, LOGIN_SUCCESS, LOCATION_SUCCESS, NEXT_PAGE_LOCATION_SUCCESS} from '../actions';
+import {START_FETCHING, FETCH_FAILURE, REGISTER_SUCCESS, LOGIN_SUCCESS, LOGOUT_SUCCESS, LOCATION_SUCCESS, NEXT_PAGE_LOCATION_SUCCESS} from '../actions';
 
 const initialState = {
   isFetching: false,
@@ -23,7 +23,9 @@ export const appStatusReducer = (state = initialState, action) => {
 
     case NEXT_PAGE_LOCATION_SUCCESS:
     case LOCATION_SUCCESS:
+    case LOGOUT_SUCCESS:
     case LOGIN_SUCCESS:
+    case REGISTER_SUCCESS:
       return{
         ...state,
         isFetching: false,

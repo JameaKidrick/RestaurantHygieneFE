@@ -18,7 +18,7 @@ function App() {
 
   useEffect(() => {
     dispatch(logInStatus())
-  }, [])
+  }, [dispatch])
 
   return (
     <Router>
@@ -34,6 +34,8 @@ function App() {
         )}
         {!loggedIn && (
           <>
+            <Link to='/findrestaurant'>Find a Restaurant</Link>
+            <br />
             <Link to='/register'>Signup</Link>
             <br />
             <Link to='/login'>Log in</Link>

@@ -1,4 +1,3 @@
-/* global cy */
 
 describe('Sanity check', () => {
   it('Cypress is working', () => {

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from "yup";
 
@@ -74,7 +75,7 @@ const LogIn = (props) => {
 
   return(
     <div>
-      Hello Log In Form!
+      Log In
       <form onSubmit={handleSubmit}>
         <label htmlFor='username'>
           username*
@@ -106,8 +107,11 @@ const LogIn = (props) => {
         </label>
         <button type='submit' disabled={buttonDisabled}>Log In</button>
       </form>
+      <div id='goToRegister'>
+        <p>Don't have an account? <Link to='/register'>Click to register</Link></p>
+      </div>
       {error && (
-        <p>{error}</p>
+        <p id='loginError'>{error}</p>
       )}
     </div>
   )
