@@ -3,11 +3,11 @@ import axios from 'axios';
 export const axiosWithAuth = () => {
   const token = localStorage.getItem('token');
   return axios.create({
-    baseURL: 'http://localhost:5555/api',
+    baseURL: 'https://restaurant-hygiene.herokuapp.com/api',
     headers: {
       Authorization: token
     }
   })
 }
 
-// https://restaurant-hygiene.herokuapp.com/api
+// http://localhost:5555/api
