@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from "yup";
 
 // ACTIONS
-import { registerUser } from '../actions';
+import { registerUser, resetErrors } from '../actions';
 
 const Register = (props) => {
   const dispatch = useDispatch()
@@ -33,6 +33,10 @@ const Register = (props) => {
     username: Yup.string().min(3, 'Usernames must be at least 3 characters long').required('Please provide a username'),
     password: Yup.string().min(6, 'Passwords must be at least 6 characters long').required('Please provide a password')
   })
+
+  useEffect(() => {
+    dispatch(resetErrors())
+  }, [])
 
   useEffect(() => {
     registerFormSchema.isValid(user).then(valid => {
@@ -135,8 +139,8 @@ const Register = (props) => {
       <div id='goToLogin'>
         <p>Already have an account? <Link to='/login'>Click to login</Link></p>
       </div>
-      {error && (
-        <p id='registerError'>{error}</p>
+      {error && (error === 'There is already a user with that username in the database. Please choose a new username.') && (
+        <p id='loginError'>{error}</p>
       )}
     </div>
   )

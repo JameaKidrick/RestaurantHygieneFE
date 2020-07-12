@@ -19,7 +19,7 @@ export const logInUser = (data, history) => dispatch => {
       history.push('/')
     })
     .catch(error => {
-      console.log(error.response.data.error)
+      console.log(error.response)
       dispatch({ type: FETCH_FAILURE, payload: error.response.data.error })
     })
 }
@@ -31,6 +31,6 @@ export const logInStatus = () => dispatch => {
 }
 
 export const logOutUser = () => dispatch => {
-    localStorage.removeItem('token')
-    dispatch({ type: LOGOUT_SUCCESS })
+  localStorage.removeItem('token')
+  dispatch({ type: LOGOUT_SUCCESS })
 }

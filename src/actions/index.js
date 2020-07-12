@@ -1,3 +1,9 @@
+/***************************** FROM GOOGLEAPIACTION.JS *****************************/
+export {
+  RESET,
+  resetErrors
+} from './appStateActions';
+
 /****************************** FROM SIGNUPACTION.JS ******************************/
 export {
   START_FETCHING,

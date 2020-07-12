@@ -2,11 +2,47 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import 'react-phone-number-input/style.css'
 import * as Yup from "yup";
+import  Rating from '@material-ui/lab/Rating';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
+import PropTypes from 'prop-types';
 
 // ACTIONS
 import { placeLocator, placeLocator_nextPage } from '../actions';
 
+// STYLING
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles(() => ({
+  root: {
+    width: 200,
+    display: 'flex',
+    alignItems: 'center',
+  },
+  worst: {
+    color: '#ff0000'
+  },
+  bad: {
+    color: '#E9692C'
+  },
+  good: {
+    color: '#FFD700'
+  },
+  great: {
+    color: '#32CD32'
+  }
+}))
+
+const customIcons = {
+  0: 'worst',
+  1: 'worst',
+  2: 'bad',
+  4: 'good',
+  5: 'great',
+};
+
 const RestaurantSearch = (props) => {
+  const classes = useStyles();
   const dispatch = useDispatch();
   const isFetching = useSelector(state => state.appStatusReducer.isFetching)
   const places = useSelector(state => state.googleAPIReducer.places)
@@ -76,6 +112,16 @@ const RestaurantSearch = (props) => {
       })
       setParameters({ ...parameters, [e.target.name]: e.target.value });
     }
+  };
+
+  function IconContainer(props) {
+    const { value, ...other } = props;
+    console.log(value)
+    return <span {...other}>{customIcons[value].icon}</span>;
+  }
+
+  IconContainer.propTypes = {
+    value: PropTypes.number.isRequired,
   };
 
   /******************************** HANDLE SUBMIT & FORM ********************************/
@@ -159,6 +205,20 @@ const RestaurantSearch = (props) => {
                 restaurant.opening_hours['open_now'] === true ? 
                 <h4>Open</h4>: <h4>Closed</h4>: false
               }
+              <div className={classes.root}>
+                <Typography component="legend">Hygiene Rating</Typography>
+                <br />
+                <Rating
+                  name="customized-color"
+                  defaultValue={restaurant.avgHygieneRating}
+                  precision={0.1}
+                  className={classes[customIcons[Math.ceil(restaurant.avgHygieneRating)]]}
+                  readOnly
+                />
+                {restaurant.avgHygieneRating === null ? 
+                  <div>Not Rated</div>:<div>{restaurant.avgHygieneRating}</div>
+                }
+              </div>
               {restaurant.rating && (
                 <h5>Rating: {restaurant.rating}</h5>
               )}

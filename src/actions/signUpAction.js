@@ -17,7 +17,7 @@ export const registerUser = (data, history) => dispatch => {
       history.push('/')
     })
     .catch(error => {
-      console.log(error.response.data.error)
+      console.log(error.response)
       dispatch({ type: FETCH_FAILURE, payload: error.response.data.error })
     })
 }

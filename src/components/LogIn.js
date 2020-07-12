@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from "yup";
 
 // ACTIONS
-import { logInUser } from '../actions';
+import { logInUser, resetErrors } from '../actions';
 
 const LogIn = (props) => {
   const dispatch = useDispatch()
@@ -27,6 +27,10 @@ const LogIn = (props) => {
     username: Yup.string().required('Please provide a username'),
     password: Yup.string().required('Please provide a password')
   })
+
+  useEffect(() => {
+    dispatch(resetErrors())
+  }, [])
 
   useEffect(() => {
     loginFormSchema.isValid(user).then(valid => {
@@ -110,7 +114,7 @@ const LogIn = (props) => {
       <div id='goToRegister'>
         <p>Don't have an account? <Link to='/register'>Click to register</Link></p>
       </div>
-      {error && (
+      {error && (error === 'Invalid credentials: Please check your password and try again.' || error === 'Invalid credentials: Please check your username and try again.') && (
         <p id='loginError'>{error}</p>
       )}
     </div>
