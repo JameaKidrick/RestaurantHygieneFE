@@ -16,6 +16,9 @@ export const logInUser = (data, history) => dispatch => {
       dispatch({ type: LOGIN_SUCCESS })
       localStorage.setItem('token', response.data.token)
       console.log(response)
+      if(history.back() === '/restaurant/:place_id'){
+        history.push('/restaurant/:place_id')
+      }
       history.push('/')
     })
     .catch(error => {

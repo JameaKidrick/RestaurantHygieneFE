@@ -31,5 +31,6 @@ export {
   LOCATION_SUCCESS,
   NEXT_PAGE_LOCATION_SUCCESS,
   placeLocator,
-  placeLocator_nextPage
+  placeLocator_nextPage,
+  placeDetails
 } from './googleAPIAction';

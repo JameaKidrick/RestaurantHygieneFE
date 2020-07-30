@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import 'react-phone-number-input/style.css'
 import * as Yup from "yup";
 import  Rating from '@material-ui/lab/Rating';
 import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
-import PropTypes from 'prop-types';
+import queryString from 'query-string'
 
 // ACTIONS
 import { placeLocator, placeLocator_nextPage } from '../actions';
@@ -49,9 +49,12 @@ const RestaurantSearch = (props) => {
   const pages = useSelector(state => state.googleAPIReducer.pages)
   const next_page = useSelector(state => state.googleAPIReducer.next_page)
   const status = useSelector(state => state.googleAPIReducer.status)
+  const reducer = useSelector(state => state.googleAPIReducer)
+  console.log('REDUCER', reducer)
 
   const usStates = ['State*', 'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon','Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming']
-  const [currentPageNumber, setCurrentPageNumber] = useState(0)
+  const parse = queryString.parse(props.location.search)
+  const [pageNumber, setPageNumber] = useState(Number(parse.page))
   const [buttonDisabled, setButtonDisabled] = useState(false)
   const [userLocation, setUserLocation] = useState({})
   const [parameters, setParameters] = useState({
@@ -66,6 +69,8 @@ const RestaurantSearch = (props) => {
     userCity: '',
     userState: ''
   })
+  const [query, setQuery] = useState(`?page=${pageNumber}`)
+  // console.log('QUERY PAGE', parse.page)
 
   let searchFormSchema = Yup.object().shape({
     query: Yup.string(),
@@ -76,15 +81,39 @@ const RestaurantSearch = (props) => {
       userAddress: Yup.string()
     })
   })
+  // console.log(parse, Object.keys(parse).length)
+
+  useEffect(() => {
+    console.log('ON RENDER DO THIS: `(*>﹏<*)′`(*>﹏<*)′`(*>﹏<*)′')
+    if(parse.page === undefined){
+      setPageNumber(0)
+    }
+  }, [])
+  
+  useEffect(() => {
+    // console.log('DOES PARSE LENGTH === 1?', Object.keys(parse).length === 1)
+    if(Object.keys(parse).length === 1){
+      // console.log('QUERY', query)
+      // console.log('PROPS', props, props.location)
+      // console.log('PARSER', parse)
+      // {page: "1"}
+      setPageNumber(Number(parse.page))
+    }
+  }, [query, props, parse])
+
+  console.log('PAGE NUMBER', pageNumber, 'QUERY', query, 'PARSE PAGE NUMBER', parse.page)
 
   useEffect(() => {
     parameters['userLocation'] = userLocation
-
       searchFormSchema.isValid(parameters).then(valid => {
         setButtonDisabled(!valid)
       })
     
   }, [parameters, userLocation, searchFormSchema]);
+
+  useEffect(() => {
+    setQuery(`?page=${pageNumber}`)
+  }, [pageNumber])
 
   const handleChange = (e) => {
     e.persist();
@@ -114,29 +143,29 @@ const RestaurantSearch = (props) => {
     }
   };
 
-  function IconContainer(props) {
-    const { value, ...other } = props;
-    console.log(value)
-    return <span {...other}>{customIcons[value].icon}</span>;
-  }
-
-  IconContainer.propTypes = {
-    value: PropTypes.number.isRequired,
-  };
+  // ADD QUERY FOR PAGE LOCATION AND PASS QUERY TO KEEP TRACK OF LAST LOCATION
 
   /******************************** HANDLE SUBMIT & FORM ********************************/
   const handleSubmit = (e) => {
     e.preventDefault();
-    setCurrentPageNumber(1)
-    dispatch(placeLocator(parameters))
+    setPageNumber(1)
+    setQuery(`?page=${1}`)
+    console.log(query)
+    dispatch(placeLocator(parameters, props.history, `?page=${1}`))
   };
 
   const handleNextPage = () => {
-    setCurrentPageNumber(currentPageNumber  + 1)
-    if(!pages[currentPageNumber]){
+    setPageNumber(pageNumber + 1)
+    if(!pages[pageNumber]){
       dispatch(placeLocator_nextPage(next_page))
     }
   }
+
+  const handleBackPage = () => {
+    setPageNumber(pageNumber - 1)
+  }
+
+  // console.log('CURRENT PAGE', pageNumber)
 
   if(isFetching){
     return (
@@ -194,17 +223,20 @@ const RestaurantSearch = (props) => {
         </div>
         <br />
         <button disabled={buttonDisabled}>Find restaurants</button>
+        
       </form>
+      {(pages.length > 1) && (pageNumber !== 1)  && (
+        <Link to={`/findrestaurant/${query}`} onClick={()=>handleBackPage()}>{`<--- Back`}</Link>
+      )}
+      {(pageNumber !== pages.length || next_page) && (
+        <Link to={`/findrestaurant/${query}`} onClick={()=>handleNextPage()}>{`Next --->`}</Link>
+      )}
       {status === 'ZERO_RESULTS' ? <div id='noResultsError'>No restaurants found within the desired radius.</div>: places.length > 0 ? 
-        pages[currentPageNumber - 1].map((restaurant, restaurantIndex) => {
+        pages[pageNumber - 1].map((restaurant, restaurantIndex) => {
           return(
-            <div className='restaurant' key={restaurantIndex}>
+            <Link to={{ pathname: `/restaurant/${restaurant.place_id}`, state: {restaurant, pageNumber, last:props.location.pathname}}} restaurantinfo={restaurant} className='restaurant' key={restaurantIndex} style={{border:'2px solid red'}}>
               <img src={restaurant.icon} alt='restaurant icon' />
               <h3>{restaurant.name}</h3>
-              {restaurant.opening_hours ?
-                restaurant.opening_hours['open_now'] === true ? 
-                <h4>Open</h4>: <h4>Closed</h4>: false
-              }
               <div className={classes.root}>
                 <Typography component="legend">Hygiene Rating</Typography>
                 <br />
@@ -223,15 +255,15 @@ const RestaurantSearch = (props) => {
                 <h5>Rating: {restaurant.rating}</h5>
               )}
               <p>Address: {restaurant.formatted_address}</p>
-            </div>
+            </Link>
           )
         }): false
       }
-      {(pages.length > 1) && (currentPageNumber !== 1)  && (
-        <div onClick={()=>setCurrentPageNumber(currentPageNumber - 1)}>{`<--- Back`}</div>
+      {(pages.length > 1) && (pageNumber !== 1)  && (
+        <Link to={`/findrestaurant/${query}`} onClick={()=>handleBackPage()}>{`<--- Back`}</Link>
       )}
-      {(currentPageNumber !== pages.length || next_page) && (
-        <div onClick={()=>handleNextPage()}>{`Next --->`}</div>
+      {(pageNumber !== pages.length || next_page) && (
+        <Link to={`/findrestaurant/${query}`} onClick={()=>handleNextPage()}>{`Next --->`}</Link>
       )}
     </div>
   );
