@@ -1,3 +1,9 @@
+/***************************** FROM GOOGLEAPIACTION.JS *****************************/
+export {
+  RESET,
+  resetErrors
+} from './appStateActions';
+
 /****************************** FROM SIGNUPACTION.JS ******************************/
 export {
   START_FETCHING,
@@ -24,6 +30,19 @@ export {
 export {
   LOCATION_SUCCESS,
   NEXT_PAGE_LOCATION_SUCCESS,
+  RESET_GOOGLE_STATE,
   placeLocator,
-  placeLocator_nextPage
+  placeLocator_nextPage,
+  placeDetails,
+  resetResponseState
 } from './googleAPIAction';
+
+
+
+/***************************** FROM REVIEWSACTION.JS *****************************/
+export {
+  FETCH_REVIEWS_SUCCESS,
+  FETCH_RESTAURANTS_SUCCESS,
+  getReviewsByRestaurantID,
+  getRestaurantByPlaceID
+} from './reviewsAction';

@@ -1,9 +1,12 @@
-import { LOCATION_SUCCESS, NEXT_PAGE_LOCATION_SUCCESS, LOGOUT_SUCCESS } from '../actions';
+import { LOCATION_SUCCESS, NEXT_PAGE_LOCATION_SUCCESS, LOGOUT_SUCCESS, RESET_GOOGLE_STATE } from '../actions';
 
 const initialState = {
   places: [],
   pages: [],
+  page_number: 0,
   next_page: '',
+  single_restaurant: [],
+  test: '',
   status: 'OK'
 }
 
@@ -31,6 +34,16 @@ export const googleAPIReducer = (state = initialState, action) => {
         places: [],
         pages: [],
         next_page: ''
+      };
+    case RESET_GOOGLE_STATE:
+      return{
+        places: [],
+        pages: [],
+        page_number: 0,
+        next_page: '',
+        single_restaurant: [],
+        test: '',
+        status: 'OK'
       }
     default:
       return state

@@ -11,13 +11,14 @@ export const registerUser = (data, history) => dispatch => {
   axiosWithAuth()
     .post('/auth/register', data)
     .then(response => {
-      dispatch({ type: REGISTER_SUCCESS })
+      dispatch({ type: REGISTER_SUCCESS, payload: response.data.user_id })
       localStorage.setItem('token', response.data.token)
+      localStorage.setItem('user_id', response.data.user_id)
       console.log(response)
       history.push('/')
     })
     .catch(error => {
-      console.log(error.response.data.error)
+      console.log(error.response)
       dispatch({ type: FETCH_FAILURE, payload: error.response.data.error })
     })
 }
