@@ -22,12 +22,14 @@ export const placeLocator = (parameters, history, query) => dispatch => {
     })
 };
 
-export const placeLocator_nextPage = (pageToken) => dispatch => {
+export const placeLocator_nextPage = (pageToken, history, query) => dispatch => {
   dispatch({ type: 'START_FETCHING' })
+  console.log('ACTION', query)
   axiosWithAuth()
     .post(`/locate/next`, {pageToken})
     .then(response => {
       dispatch({ type: 'NEXT_PAGE_LOCATION_SUCCESS', payload: response.data.results, status: response.data.status, next_page: response.data.next_page_token, pages:response.data.results})
+      history.push(`/findrestaurant${query}`)
     })
     .catch(error => {
       dispatch({ type: 'FETCH_FAILURE', payload: error.response })

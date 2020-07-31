@@ -81,7 +81,7 @@ const RestaurantSearch = (props) => {
       userAddress: Yup.string()
     })
   })
-  // console.log(parse, Object.keys(parse).length)
+  console.log('PAGE', pageNumber)
 
   useEffect(() => {
     console.log('ON RENDER DO THIS: `(*>﹏<*)′`(*>﹏<*)′`(*>﹏<*)′')
@@ -89,29 +89,17 @@ const RestaurantSearch = (props) => {
       setPageNumber(0)
     }
 
-    console.log(props.location)
     if(props.location.state !== undefined && props.location.state.page){
       setPageNumber(props.location.state.page)
     }
   }, [])
 
   useEffect(() => {
-    console.log('LOCATIONS', props.location.pathname)
-  }, [props])
-  
-  useEffect(() => {
-    // console.log('DOES PARSE LENGTH === 1?', Object.keys(parse).length === 1)
-    if(Object.keys(parse).length === 1){
-      // console.log('QUERY', query)
-      // console.log('PROPS', props, props.location)
-      // console.log('PARSER', parse)
-      // {page: "1"}
-      setPageNumber(Number(parse.page))
-    }
-  }, [query, props, parse])
+    console.log('CHECKING PAGENUMBER', pageNumber)
+    setQuery(`?page=${pageNumber}`)
+  }, [pageNumber])
 
-  console.log(props.history.location)
-  console.log('PAGE NUMBER', pageNumber, 'QUERY', query, 'PARSE PAGE NUMBER', parse.page)
+  console.log('QUERY', query)
 
   useEffect(() => {
     parameters['userLocation'] = userLocation
@@ -120,10 +108,6 @@ const RestaurantSearch = (props) => {
       })
     
   }, [parameters, userLocation, searchFormSchema]);
-
-  useEffect(() => {
-    setQuery(`?page=${pageNumber}`)
-  }, [pageNumber])
 
   const handleChange = (e) => {
     e.persist();
@@ -153,13 +137,12 @@ const RestaurantSearch = (props) => {
     }
   };
 
-  // ADD QUERY FOR PAGE LOCATION AND PASS QUERY TO KEEP TRACK OF LAST LOCATION
-
   /******************************** HANDLE SUBMIT & FORM ********************************/
   const handleSubmit = (e) => {
     e.preventDefault();
     setPageNumber(1)
     setQuery(`?page=${1}`)
+    delete props.location.state
     console.log(query)
     dispatch(placeLocator(parameters, props.history, `?page=${1}`))
   };
@@ -167,15 +150,13 @@ const RestaurantSearch = (props) => {
   const handleNextPage = () => {
     setPageNumber(pageNumber + 1)
     if(!pages[pageNumber]){
-      dispatch(placeLocator_nextPage(next_page))
+      dispatch(placeLocator_nextPage(next_page, props.history, `?page=${pageNumber + 1}`))
     }
   }
 
   const handleBackPage = () => {
     setPageNumber(pageNumber - 1)
   }
-
-  // console.log('CURRENT PAGE', pageNumber)
 
   if(isFetching){
     return (
@@ -193,16 +174,16 @@ const RestaurantSearch = (props) => {
         name='userAddress'
         placeholder='Address'
         onChange={handleChange}
-        defaultValue={parameters.userLocation.userAddress}
+        defaultValue={props.location.state?props.location.state.parameters.userLocation.userAddress:parameters.userLocation.userAddress}
         />
         <input
         type='text'
         name='userCity'
         placeholder='City*'
         onChange={handleChange}
-        defaultValue={parameters.userLocation.userCity}
+        defaultValue={props.location.state?props.location.state.parameters.userLocation.userCity:parameters.userLocation.userCity}
         />
-        <select name='userState' onChange={handleChange} value={parameters.userLocation.userState}>
+        <select name='userState' onChange={handleChange} defaultValue={props.location.state?props.location.state.parameters.userLocation.userState:parameters.userLocation.userState}>
           {usStates.map((state, index) => {
             return(
               <option key={index} value={state}>{state}</option>
@@ -211,7 +192,7 @@ const RestaurantSearch = (props) => {
         </select>
         <br />
         <label htmlFor='radius'>Choose radius: </label>
-        <select name='radius' onChange={handleChange} value={parameters.radius}>
+        <select name='radius' onChange={handleChange} defaultValue={props.location.state?props.location.state.parameters.radius:parameters.radius}>
           <option value='2000'>1 mile</option>
           <option value='5000'>3 miles</option>
           <option value='10000'>5 miles</option>
@@ -228,23 +209,21 @@ const RestaurantSearch = (props) => {
           placeholder='Keyword'
           name='query'
           onChange={handleChange}
-          value={parameters.query}
+          defaultValue={props.location.state?props.location.state.parameters.query:parameters.query}
           />
         </div>
         <br />
         <button disabled={buttonDisabled}>Find restaurants</button>
-        
       </form>
       {(pages.length > 1) && (pageNumber !== 1)  && (
-        <Link to={`/findrestaurant${query}`} onClick={()=>handleBackPage()}>{`<--- Back`}</Link>
+        <Link to={`/findrestaurant?page=${pageNumber - 1}`} onClick={()=>handleBackPage()}>{`<--- Back`}</Link>
       )}
       {(pageNumber !== pages.length || next_page) && (
-        <Link to={`/findrestaurant${query}`} onClick={()=>handleNextPage()}>{`Next --->`}</Link>
+        <Link to={`/findrestaurant?page=${pageNumber + 1}`} onClick={()=>handleNextPage()}>{`Next --->`}</Link>
       )}
-      {status === 'ZERO_RESULTS' ? <div id='noResultsError'>No restaurants found within the desired radius.</div>: places.length > 0 ? 
-        pages[pageNumber - 1].map((restaurant, restaurantIndex) => {
+      {status === 'ZERO_RESULTS' ? <div id='noResultsError'>No restaurants found within the desired radius.</div>: places.length > 0 ? (props.location.state !== undefined) ? pages[props.location.state.page - 1].map((restaurant, restaurantIndex) => {
           return(
-            <Link to={{ pathname: `/restaurant/${restaurant.place_id}`, state: {restaurant, pageNumber, last:props.location.pathname+query, page:pageNumber}}} restaurantinfo={restaurant} className='restaurant' key={restaurantIndex} style={{border:'2px solid red'}}>
+            <Link to={{ pathname: `/restaurant/${restaurant.place_id}`, state: {restaurant, pageNumber, last:props.location.pathname+query, page:pageNumber, parameters:parameters}}} className='restaurant' key={restaurantIndex} style={{border:'2px solid red'}}>
               <img src={restaurant.icon} alt='restaurant icon' />
               <h3>{restaurant.name}</h3>
               <div className={classes.root}>
@@ -267,13 +246,39 @@ const RestaurantSearch = (props) => {
               <p>Address: {restaurant.formatted_address}</p>
             </Link>
           )
-        }): <div>NO RESTAURANTS</div>
+        }):
+        pages[pageNumber - 1].map((restaurant, restaurantIndex) => {
+          return(
+            <Link to={{ pathname: `/restaurant/${restaurant.place_id}`, state: {restaurant, pageNumber, last:props.location.pathname+query, page:pageNumber, parameters:parameters}}} restaurantinfo={restaurant} className='restaurant' key={restaurantIndex} style={{border:'2px solid red'}}>
+              <img src={restaurant.icon} alt='restaurant icon' />
+              <h3>{restaurant.name}</h3>
+              <div className={classes.root}>
+                <Typography component="legend">Hygiene Rating</Typography>
+                <br />
+                <Rating
+                  name="customized-color"
+                  defaultValue={restaurant.avgHygieneRating}
+                  precision={0.1}
+                  className={classes[customIcons[Math.ceil(restaurant.avgHygieneRating)]]}
+                  readOnly
+                />
+                {restaurant.avgHygieneRating === null ? 
+                  <div>Not Rated</div>:<div>{restaurant.avgHygieneRating}</div>
+                }
+              </div>
+              {restaurant.rating && (
+                <h5>Rating: {restaurant.rating}</h5>
+              )}
+              <p>Address: {restaurant.formatted_address}</p>
+            </Link>
+          )
+        }): false
       }
       {(pages.length > 1) && (pageNumber !== 1)  && (
-        <Link to={`/findrestaurant${query}`} onClick={()=>handleBackPage()}>{`<--- Back`}</Link>
+        <Link to={`/findrestaurant?page=${pageNumber - 1}`} onClick={()=>handleBackPage()}>{`<--- Back`}</Link>
       )}
       {(pageNumber !== pages.length || next_page) && (
-        <Link to={`/findrestaurant${query}`} onClick={()=>handleNextPage()}>{`Next --->`}</Link>
+        <Link to={`/findrestaurant?page=${pageNumber + 1}`} onClick={()=>handleNextPage()}>{`Next --->`}</Link>
       )}
     </div>
   );
