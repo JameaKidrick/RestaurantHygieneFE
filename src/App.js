@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 // ACTIONS
-import { logInStatus, logOutUser } from './actions';
+import { logInStatus, logOutUser, resetResponseState } from './actions';
 
 // COMPONENTS
 import Home from './components/Home';
@@ -24,11 +24,11 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <Link to='/'>Home</Link>
+        <Link to='/' onClick={()=> dispatch(resetResponseState())}>Home</Link>
         <br />
         {loggedIn && (
           <>
-            <Link to='/findrestaurant'>Find a Restaurant</Link>
+            <Link to='/findrestaurant' onClick={()=> dispatch(resetResponseState())}>Find a Restaurant</Link>
             <br />
             <Link to='/' onClick={() => dispatch(logOutUser())}>Log out</Link>
           </>

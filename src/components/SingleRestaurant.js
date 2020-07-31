@@ -4,7 +4,7 @@ import Rating from "@material-ui/lab/Rating";
 import Typography from "@material-ui/core/Typography";
 
 // ACTIONS
-import { placeDetails } from "../actions";
+
 
 // STYLING
 import { makeStyles } from "@material-ui/core/styles";
@@ -40,21 +40,14 @@ const customIcons = {
 
 const SingleRestaurant = (props) => {
   const classes = useStyles();
-  const dispatch = useDispatch()
-  const place = useSelector(state => state.googleAPIReducer.single_restaurant)
-  console.log(props.location);
+  const restaurant = props.location.state.restaurant
 
-  useEffect(() => {
-    // dispatch(singleRestaurant(props.location.state))
-  }, [])
-
-  console.log('PLACE', place)
+  console.log('restaurant', restaurant)
   return (
     <div>
       SINGLE RESTAURANT PAGE
-      <Link to={{pathname: `/findrestaurant?page=${props.location.state.page}`, state: {page:props.location.state.page, parameters:props.location.state.parameters}}}>Return to results</Link>
-      {/* <h2>
-        {restaurant.name}
+      <Link to={{pathname: `/findrestaurant?page=${props.location.state.page}`, state: {page:props.location.state.page, parameters:props.location.state.parameters, last:props.location.pathname}}}>Return to results</Link>
+      <h2>{restaurant.name}
         <span style={{fontSize: '0.8rem'}}>{restaurant.opening_hours ?
           restaurant.opening_hours['open_now'] === true ? 
           <h4 style={{color: 'green'}}>Open</h4>: <h4 style={{color: 'red'}}>Closed</h4>: false
@@ -85,42 +78,10 @@ const SingleRestaurant = (props) => {
         localStorage.getItem('token') ? (
           <div>You can see</div>
         ):
-        <div>Please <Link to={{ pathname: '/login', state: restaurant}}>sign in</Link> to see user ratings and reviews</div>
-      } */}
+        <div>Please <Link to={{ pathname: '/login', state: {last:props.location.pathname, next:props.location.state.last}}}>sign in</Link> to see user ratings and reviews</div>
+      }
     </div>
   );
 };
 
 export default SingleRestaurant;
-
-/*
-address_components: (6) [{…}, {…}, {…}, {…}, {…}, {…}]
-adr_address: "<span class="locality">Martinsburg</span>, <span class="region">WV</span> <span class="postal-code">25401</span>, <span class="country-name">USA</span>"
-business_status: "OPERATIONAL"
-formatted_address: "Martinsburg, WV 25401, USA"
-geometry: {location: {…}, viewport: {…}}
-icon: "https://maps.gstatic.com/mapfiles/place_api/icons/restaurant-71.png"
-name: "McDonald’s"
-place_id: "ChIJjWYOtykDyokR-kS0ikxSI84"
-plus_code: {compound_code: "F228+53 Martinsburg, WV, United States", global_code: "87F4F228+53"}
-types: (4) ["restaurant", "food", "point_of_interest", "establishment"]
-url: "https://maps.google.com/?cid=14853806484696089850"
-utc_offset: -240
-vicinity: "Martinsburg"
-
-
-avgHygieneRating: null ❌
-business_status: "OPERATIONAL" ✅
-formatted_address: "Martinsburg, WV 25401" ✅
-geometry: {location: {…}, viewport: {…}} ✅
-icon: "https://maps.gstatic.com/mapfiles/place_api/icons/restaurant-71.png" ✅
-id: "64e1edf398001fbfce347df56b3742d634ae9173" ✅
-name: "McDonald’s" ✅
-place_id: "ChIJjWYOtykDyokR-kS0ikxSI84" ✅
-plus_code: {compound_code: "F228+53 Martinsburg, West Virginia", global_code: "87F4F228+53"} ✅
-price_level: 1 ❌
-rating: 5 ❌
-reference: "ChIJjWYOtykDyokR-kS0ikxSI84" ❌
-types: (4) ["restaurant", "food", "point_of_interest", "establishment"] ✅
-user_ratings_total: 1 ❌
-*/

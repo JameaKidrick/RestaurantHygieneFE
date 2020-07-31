@@ -7,6 +7,7 @@ export const NEXT_PAGE_LOCATION_SUCCESS = 'NEXT_PAGE_LOCATION_SUCCESS';
 export const CURRENT_PAGE = 'CURRENT_PAGE';
 export const GET_RESTAURANT = 'CURRENT_PAGE';
 export const FETCH_FAILURE = 'FETCH_FAILURE';
+export const RESET_GOOGLE_STATE = 'RESET_GOOGLE_STATE';
 
 // ACTION CREATORS
 export const placeLocator = (parameters, history, query) => dispatch => {
@@ -48,11 +49,7 @@ export const placeDetails = (places_id) => dispatch => {
     })
 }
 
-// export const pageNumber = (page_number) => dispatch => {
-//   dispatch({ type: 'CURRENT_PAGE', payload: page_number.page })
-// } 
-
-// export const singleRestaurant = (restaurantObject) => dispatch => {
-//   console.log(restaurantObject)
-//   dispatch({ type: 'GET_RESTAURANT', payload: restaurantObject })
-// }
+// ACTION CREATORS
+export const resetResponseState = () => dispatch => {
+  dispatch({ type: RESET_GOOGLE_STATE })
+}

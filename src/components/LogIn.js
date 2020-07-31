@@ -18,6 +18,8 @@ const LogIn = (props) => {
     password: ''
   })
 
+  console.log('LOCATION', props.location)
+
   const [user, setUser] = useState({
     username: '',
     password: '',
@@ -66,7 +68,7 @@ const LogIn = (props) => {
   
   const handleSubmit = (e) => {
     e.preventDefault()
-    dispatch(logInUser(user, props.history))
+    dispatch(logInUser(user, props.history, props.location))
   }
     
   if(isFetching){

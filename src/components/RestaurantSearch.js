@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import queryString from 'query-string'
 
 // ACTIONS
-import { placeLocator, placeLocator_nextPage } from '../actions';
+import { placeLocator, placeLocator_nextPage, resetResponseState } from '../actions';
 
 // STYLING
 import { makeStyles } from '@material-ui/core/styles';
@@ -70,7 +70,6 @@ const RestaurantSearch = (props) => {
     userState: ''
   })
   const [query, setQuery] = useState(`?page=${pageNumber}`)
-  // console.log('QUERY PAGE', parse.page)
 
   let searchFormSchema = Yup.object().shape({
     query: Yup.string(),
@@ -81,10 +80,12 @@ const RestaurantSearch = (props) => {
       userAddress: Yup.string()
     })
   })
-  console.log('PAGE', pageNumber)
+  console.log(props.history.location)
 
   useEffect(() => {
     console.log('ON RENDER DO THIS: `(*>﹏<*)′`(*>﹏<*)′`(*>﹏<*)′')
+    window.addEventListener("beforeunload", props.history.replace('/findrestaurant'));
+    window.removeEventListener("beforeunload", props.history.replace('/findrestaurant'));
     if(parse.page === undefined){
       setPageNumber(0)
     }
@@ -95,11 +96,8 @@ const RestaurantSearch = (props) => {
   }, [])
 
   useEffect(() => {
-    console.log('CHECKING PAGENUMBER', pageNumber)
     setQuery(`?page=${pageNumber}`)
   }, [pageNumber])
-
-  console.log('QUERY', query)
 
   useEffect(() => {
     parameters['userLocation'] = userLocation

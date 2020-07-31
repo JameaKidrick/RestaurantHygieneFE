@@ -8,18 +8,22 @@ export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
 export const USER_LOGGED_IN = 'USER_LOGGED_IN';
 
 // ACTION CREATORS
-export const logInUser = (data, history) => dispatch => {
+export const logInUser = (data, history, location) => dispatch => {
   dispatch({ type: START_FETCHING });
+  console.log(location.state.last, typeof(location.state.last))
   axiosWithAuth()
     .post('/auth/login', data)
     .then(response => {
       dispatch({ type: LOGIN_SUCCESS })
       localStorage.setItem('token', response.data.token)
       console.log(response)
-      if(history.back() === '/restaurant/:place_id'){
-        history.push('/restaurant/:place_id')
+      if(location.state.last.includes('/restaurant/')){
+        // history.pushState({restaurant: location.state.restaurant, page: location.state.page, parameters: location.state.parameters, last: location.pathname}, 'state', location.state.last)
+        history.push(location.state.next)
+      }else{
+        history.push('/')
+
       }
-      history.push('/')
     })
     .catch(error => {
       console.log(error.response)

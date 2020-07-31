@@ -1,4 +1,4 @@
-import { LOCATION_SUCCESS, NEXT_PAGE_LOCATION_SUCCESS, LOGOUT_SUCCESS, GET_RESTAURANT } from '../actions';
+import { LOCATION_SUCCESS, NEXT_PAGE_LOCATION_SUCCESS, LOGOUT_SUCCESS, RESET_GOOGLE_STATE } from '../actions';
 
 const initialState = {
   places: [],
@@ -35,18 +35,16 @@ export const googleAPIReducer = (state = initialState, action) => {
         pages: [],
         next_page: ''
       };
-    // case CURRENT_PAGE:
-    //   return{
-    //     ...state,
-    //     page_number: action.payload
-    //   };
-    // case GET_RESTAURANT:
-    //   console.log('INITIAL', action.payload, state.single_restaurant)
-    //   return{
-    //     ...state,
-    //     single_restaurant: action.payload,
-    //     test: 'working'
-    //   }
+    case RESET_GOOGLE_STATE:
+      return{
+        places: [],
+        pages: [],
+        page_number: 0,
+        next_page: '',
+        single_restaurant: [],
+        test: '',
+        status: 'OK'
+      }
     default:
       return state
   }
