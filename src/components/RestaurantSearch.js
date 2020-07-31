@@ -88,7 +88,16 @@ const RestaurantSearch = (props) => {
     if(parse.page === undefined){
       setPageNumber(0)
     }
+
+    console.log(props.location)
+    if(props.location.state !== undefined && props.location.state.page){
+      setPageNumber(props.location.state.page)
+    }
   }, [])
+
+  useEffect(() => {
+    console.log('LOCATIONS', props.location.pathname)
+  }, [props])
   
   useEffect(() => {
     // console.log('DOES PARSE LENGTH === 1?', Object.keys(parse).length === 1)
@@ -101,6 +110,7 @@ const RestaurantSearch = (props) => {
     }
   }, [query, props, parse])
 
+  console.log(props.history.location)
   console.log('PAGE NUMBER', pageNumber, 'QUERY', query, 'PARSE PAGE NUMBER', parse.page)
 
   useEffect(() => {
@@ -226,15 +236,15 @@ const RestaurantSearch = (props) => {
         
       </form>
       {(pages.length > 1) && (pageNumber !== 1)  && (
-        <Link to={`/findrestaurant/${query}`} onClick={()=>handleBackPage()}>{`<--- Back`}</Link>
+        <Link to={`/findrestaurant${query}`} onClick={()=>handleBackPage()}>{`<--- Back`}</Link>
       )}
       {(pageNumber !== pages.length || next_page) && (
-        <Link to={`/findrestaurant/${query}`} onClick={()=>handleNextPage()}>{`Next --->`}</Link>
+        <Link to={`/findrestaurant${query}`} onClick={()=>handleNextPage()}>{`Next --->`}</Link>
       )}
       {status === 'ZERO_RESULTS' ? <div id='noResultsError'>No restaurants found within the desired radius.</div>: places.length > 0 ? 
         pages[pageNumber - 1].map((restaurant, restaurantIndex) => {
           return(
-            <Link to={{ pathname: `/restaurant/${restaurant.place_id}`, state: {restaurant, pageNumber, last:props.location.pathname}}} restaurantinfo={restaurant} className='restaurant' key={restaurantIndex} style={{border:'2px solid red'}}>
+            <Link to={{ pathname: `/restaurant/${restaurant.place_id}`, state: {restaurant, pageNumber, last:props.location.pathname+query, page:pageNumber}}} restaurantinfo={restaurant} className='restaurant' key={restaurantIndex} style={{border:'2px solid red'}}>
               <img src={restaurant.icon} alt='restaurant icon' />
               <h3>{restaurant.name}</h3>
               <div className={classes.root}>
@@ -257,13 +267,13 @@ const RestaurantSearch = (props) => {
               <p>Address: {restaurant.formatted_address}</p>
             </Link>
           )
-        }): false
+        }): <div>NO RESTAURANTS</div>
       }
       {(pages.length > 1) && (pageNumber !== 1)  && (
-        <Link to={`/findrestaurant/${query}`} onClick={()=>handleBackPage()}>{`<--- Back`}</Link>
+        <Link to={`/findrestaurant${query}`} onClick={()=>handleBackPage()}>{`<--- Back`}</Link>
       )}
       {(pageNumber !== pages.length || next_page) && (
-        <Link to={`/findrestaurant/${query}`} onClick={()=>handleNextPage()}>{`Next --->`}</Link>
+        <Link to={`/findrestaurant${query}`} onClick={()=>handleNextPage()}>{`Next --->`}</Link>
       )}
     </div>
   );

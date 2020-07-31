@@ -47,7 +47,7 @@ function App() {
           <Route path='/register' component={Register} />
           <Route path='/login' component={LogIn} />
           <Route path='/findrestaurant' component={RestaurantSearch} />
-          {/* <Route path='/findrestaurant' component={RestaurantSearch} /> */}
+          <Route path='/findrestaurant?page=:number' component={RestaurantSearch} />
           <Route path='/restaurant/:place_id' component={SingleRestaurant} />
           <Route component={ErrorPage} />
         </Switch>

@@ -43,6 +43,7 @@ const SingleRestaurant = (props) => {
   const dispatch = useDispatch()
   const place = useSelector(state => state.googleAPIReducer.single_restaurant)
   console.log(props.location);
+  const query = `?page=${1}`
 
   useEffect(() => {
     // dispatch(singleRestaurant(props.location.state))
@@ -52,7 +53,7 @@ const SingleRestaurant = (props) => {
   return (
     <div>
       SINGLE RESTAURANT PAGE
-      <Link to={{pathname: props.location.state.last, state: {restaurant:props.restaurant, last:props.location.pathname}}}>Return to results</Link>
+      <Link to={{pathname: `/findrestaurant${query}`, state: {restaurant:props.restaurant, last:props.location.pathname, page:1}}}>Return to results</Link>
       {/* <h2>
         {restaurant.name}
         <span style={{fontSize: '0.8rem'}}>{restaurant.opening_hours ?
