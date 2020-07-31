@@ -228,7 +228,7 @@ const RestaurantSearch = (props) => {
                 <Typography component="legend">Hygiene Rating</Typography>
                 <br />
                 <Rating
-                  name="customized-color"
+                  name="restaurant_rating"
                   defaultValue={restaurant.avgHygieneRating}
                   precision={0.1}
                   className={classes[customIcons[Math.ceil(restaurant.avgHygieneRating)]]}

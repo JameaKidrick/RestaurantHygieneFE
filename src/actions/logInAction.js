@@ -10,19 +10,17 @@ export const USER_LOGGED_IN = 'USER_LOGGED_IN';
 // ACTION CREATORS
 export const logInUser = (data, history, location) => dispatch => {
   dispatch({ type: START_FETCHING });
-  console.log(location.state.last, typeof(location.state.last))
   axiosWithAuth()
     .post('/auth/login', data)
     .then(response => {
-      dispatch({ type: LOGIN_SUCCESS })
+      dispatch({ type: LOGIN_SUCCESS, payload: response.data.user_id })
       localStorage.setItem('token', response.data.token)
+      localStorage.setItem('user_id', response.data.user_id)
       console.log(response)
-      if(location.state.last.includes('/restaurant/')){
-        // history.pushState({restaurant: location.state.restaurant, page: location.state.page, parameters: location.state.parameters, last: location.pathname}, 'state', location.state.last)
+      if(location.state !== undefined && location.state.last.includes('/restaurant/')){
         history.push(location.state.next)
       }else{
         history.push('/')
-
       }
     })
     .catch(error => {
@@ -31,9 +29,9 @@ export const logInUser = (data, history, location) => dispatch => {
     })
 }
 
-export const logInStatus = () => dispatch => {
+export const logInStatus = (user_id) => dispatch => {
   if(localStorage.getItem('token')){
-    dispatch({ type: USER_LOGGED_IN })
+    dispatch({ type: USER_LOGGED_IN, payload: user_id })
   }
 }
 

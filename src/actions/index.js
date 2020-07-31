@@ -36,3 +36,13 @@ export {
   placeDetails,
   resetResponseState
 } from './googleAPIAction';
+
+
+
+/***************************** FROM REVIEWSACTION.JS *****************************/
+export {
+  FETCH_REVIEWS_SUCCESS,
+  FETCH_RESTAURANTS_SUCCESS,
+  getReviewsByRestaurantID,
+  getRestaurantByPlaceID
+} from './reviewsAction';

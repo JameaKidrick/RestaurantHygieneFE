@@ -1,7 +1,8 @@
 import {LOGIN_SUCCESS, LOGOUT_SUCCESS, REGISTER_SUCCESS, USER_LOGGED_IN} from '../actions';
 
 const initialState = {
-  loggedIn: false
+  loggedIn: false,
+  user_id: 0
 }
 
 export const logInReducer = (state = initialState, action) => {
@@ -11,12 +12,14 @@ export const logInReducer = (state = initialState, action) => {
     case USER_LOGGED_IN:
       return{
         ...state,
-        loggedIn: true
+        loggedIn: true,
+        user_id: action.payload
       };
     case LOGOUT_SUCCESS:
       return{
         ...state,
-        loggedIn: false
+        loggedIn: false,
+        user_id: 0
       }
     default:
       return state

@@ -15,10 +15,11 @@ import SingleRestaurant from './components/SingleRestaurant';
 
 function App() {
   const loggedIn = useSelector(state => state.logInReducer.loggedIn)
+  const user_id = useSelector(state => state.logInReducer.user_id)
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(logInStatus())
+    dispatch(logInStatus(user_id))
   }, [dispatch])
 
   return (
