@@ -11,6 +11,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import DeleteCommentModal from "./DeleteCommentModal";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -52,6 +53,13 @@ const SingleRestaurant = (props) => {
     rating: 0,
     review: ''
   })
+  const [editing, setEditing] = useState(false)
+  const [editHover, setEditHover] = useState(0)
+  const [editReview, setEditReview] = useState({
+    rating: 0,
+    review: ''
+  })
+  const [deleting, setDeleting] = useState(false)
 
   const formatDate = (date) => {
     const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -67,13 +75,32 @@ const SingleRestaurant = (props) => {
   }
 
   const handleChanges = (e) => {
-    
     if(e.target.name === 'rating'){
       setNewReview({...newReview, [e.target.name]:Number(e.target.value)})
     }else{
       setNewReview({...newReview, [e.target.name]:e.target.value})
     }
     
+  }
+
+  const handleEditingStatus = (originalReview) => {
+    setEditing(!editing)
+    setEditReview({
+      rating: originalReview.rating,
+      review: originalReview.review
+    })
+  }
+
+  const handleEditChanges = (e) => {
+    if(e.target.name === 'edit_rating'){
+      setEditReview({...editReview, rating:Number(e.target.value)})
+    }else{
+      setEditReview({...editReview, review:e.target.value})
+    }
+  }
+
+  const handleEditHoverChanges = (e, newHover) => {
+    setEditHover(newHover)
   }
 
   const handleHoverChanges = (e, newHover) => {
@@ -83,6 +110,11 @@ const SingleRestaurant = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault()
     console.log(newReview)
+  }
+
+  const handleEditSubmit = (e) => {
+    e.preventDefault()
+    console.log(editReview)
   }
 
   useEffect(() => {
@@ -155,8 +187,8 @@ const SingleRestaurant = (props) => {
                 review.user_id === Number(user_id2) ? 
                   <div key={index}>
                   <br/>
-                    <EditIcon />
-                    <DeleteForeverIcon />
+                    <EditIcon onClick={()=>handleEditingStatus(review)}/>
+                    <DeleteForeverIcon onClick={()=>setDeleting(!deleting)}/>
                     <div>{review.username}</div>
                     <div>{formatDate(review.created_at)}</div>
                     <Rating
@@ -166,9 +198,38 @@ const SingleRestaurant = (props) => {
                       readOnly
                     />
                     <div>{review.review}</div>
-                  </div> :
+
+                    {editing && (
+                    <form style={{border:'2px solid blue'}} onSubmit={handleEditSubmit}>
+                      <h4>Edit your review</h4>
+                      <div style={{display:'flex'}}>
+                        <Rating
+                          name="edit_rating"
+                          precision={0.5}
+                          value={editReview.rating}
+                          onChange={handleEditChanges}
+                          onChangeActive={handleEditHoverChanges}
+                        />
+                        <Typography component="legend">
+                          {<span style={{ fontWeight: "bold" }}>{editHover > 0 ? editHover : editReview.rating}</span>}
+                        </Typography>
+                      </div>
+                      <input
+                        type='text'
+                        name='review'
+                        onChange={handleEditChanges}
+                        defaultValue={editReview.review}
+                      />
+                      <button>Edit Review</button>
+                    </form>
+                  )}
+                  {deleting && (
+                    <DeleteCommentModal setDeleting={setDeleting} />
+                  )}
+                  </div>
+                  :
                   <div key={index}>
-                  <br/>
+                    <br/>
                     <div>{review.username}</div>
                     <div>{formatDate(review.created_at)}</div>
                     <Rating
@@ -179,7 +240,6 @@ const SingleRestaurant = (props) => {
                     />
                     <div>{review.review}</div>
                   </div>
-                
               )
             })}
           </div>
