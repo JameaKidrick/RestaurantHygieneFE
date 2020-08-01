@@ -30,7 +30,7 @@ export {
 export {
   LOCATION_SUCCESS,
   NEXT_PAGE_LOCATION_SUCCESS,
-  RESET_GOOGLE_STATE,
+  RESET_STATE,
   placeLocator,
   placeLocator_nextPage,
   placeDetails,

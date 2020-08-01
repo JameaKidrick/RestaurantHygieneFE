@@ -18,6 +18,7 @@ export const getReviewsByRestaurantID = (restaurant_id) => dispatch => {
     })
     .catch(error => {
       console.log(error)
+      dispatch({ type: FETCH_FAILURE, payload: error })
     })
 }
 
@@ -31,44 +32,57 @@ export const getRestaurantByPlaceID = (place_id) => dispatch => {
     })
     .catch(error => {
       console.log(error)
+      dispatch({ type: FETCH_FAILURE, payload: error })
     })
 }
 
-export const addReview = (place_id, review, restaurant_id) => dispatch => {
+export const addReview = (place_id, review, restaurant_id, setNewReview) => dispatch => {
   dispatch({ type: START_FETCHING })
+  console.log('ACTION', place_id, review, restaurant_id, setNewReview)
   axiosWithAuth()
     .post(`/reviews/restaurant/${place_id}`, review)
     .then(response => {
       console.log(response)
       dispatch({ type: ADD_REVIEW_SUCCESS })
       dispatch(getReviewsByRestaurantID(restaurant_id))
+      setNewReview({
+        rating: 0,
+        review: ''
+      })
     })
     .catch(error => {
-      console.log(error)
+      console.log('ERROR', error)
+      dispatch({ type: FETCH_FAILURE, payload: error })
     })
 }
 
-export const editReviewAction = (review_id, changes) => dispatch => {
+export const editReviewAction = (review_id, changes, restaurant_id, setEditing) => dispatch => {
   dispatch({ type: START_FETCHING })
   axiosWithAuth()
     .put(`/reviews/${review_id}`, changes)
     .then(response => {
       console.log(response)
+      setEditing(false)
+      dispatch(getReviewsByRestaurantID(restaurant_id))
     })
     .catch(error => {
       console.log(error)
+      dispatch({ type: FETCH_FAILURE, payload: error })
     })
 }
 
-export const deleteReview = (review_id) => dispatch => {
+export const deleteReview = (review_id, restaurant_id, setDeleting) => dispatch => {
   dispatch({ type: START_FETCHING })
   axiosWithAuth()
     .delete(`/reviews/${review_id}`)
     .then(response => {
       console.log(response)
+      setDeleting(false)
+      dispatch(getReviewsByRestaurantID(restaurant_id))
       // dispatch({ type: FETCH_REVIEWS_SUCCESS, payload: response.data })
     })
     .catch(error => {
       console.log(error)
+      dispatch({ type: FETCH_FAILURE, payload: error })
     })
 }

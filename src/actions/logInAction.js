@@ -15,7 +15,6 @@ export const logInUser = (data, history, location) => dispatch => {
     .then(response => {
       dispatch({ type: LOGIN_SUCCESS, payload: response.data.user_id })
       localStorage.setItem('token', response.data.token)
-      localStorage.setItem('user_id', response.data.user_id)
       console.log(response)
       if(location.state !== undefined && location.state.last.includes('/restaurant/')){
         history.push(location.state.next)
@@ -35,7 +34,11 @@ export const logInStatus = (user_id) => dispatch => {
   }
 }
 
-export const logOutUser = () => dispatch => {
-  localStorage.removeItem('token')
-  dispatch({ type: LOGOUT_SUCCESS })
+export const logOutUser = (persistor, resetResponseState) => dispatch => {
+  persistor.purge()
+    .then(after => {
+      localStorage.removeItem('token')
+      dispatch({ type: LOGOUT_SUCCESS })
+      dispatch(resetResponseState())
+    })
 }

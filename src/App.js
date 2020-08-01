@@ -13,7 +13,7 @@ import LogIn from './components/LogIn';
 import RestaurantSearch from './components/RestaurantSearch';
 import SingleRestaurant from './components/SingleRestaurant';
 
-function App() {
+function App(props) {
   const loggedIn = useSelector(state => state.logInReducer.loggedIn)
   const user_id = useSelector(state => state.logInReducer.user_id)
   const dispatch = useDispatch()
@@ -31,7 +31,7 @@ function App() {
           <>
             <Link to='/findrestaurant' onClick={()=> dispatch(resetResponseState())}>Find a Restaurant</Link>
             <br />
-            <Link to='/' onClick={() => dispatch(logOutUser())}>Log out</Link>
+            <Link to='/' onClick={() => dispatch(logOutUser(props.persistor, resetResponseState))}>Log out</Link>
           </>
         )}
         {!loggedIn && (

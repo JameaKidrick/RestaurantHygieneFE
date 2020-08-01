@@ -42,6 +42,7 @@ const customIcons = {
 };
 
 const RestaurantSearch = (props) => {
+  console.log(props)
   const classes = useStyles();
   const dispatch = useDispatch();
   const isFetching = useSelector(state => state.appStatusReducer.isFetching)
@@ -84,8 +85,11 @@ const RestaurantSearch = (props) => {
 
   useEffect(() => {
     console.log('ON RENDER DO THIS: `(*>﹏<*)′`(*>﹏<*)′`(*>﹏<*)′')
-    window.addEventListener("beforeunload", props.history.replace('/findrestaurant'));
-    window.removeEventListener("beforeunload", props.history.replace('/findrestaurant'));
+    if(props.location.state === undefined){
+      window.addEventListener("beforeunload", props.history.replace('/findrestaurant'));
+      window.removeEventListener("beforeunload", props.history.replace('/findrestaurant'));
+    }
+
     if(parse.page === undefined){
       setPageNumber(0)
     }
