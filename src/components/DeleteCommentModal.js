@@ -1,9 +1,15 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
+
+// ACTIONS
+import { deleteReview } from '../actions'
 
 const DeleteCommentModal = (props) => {
+  const dispatch = useDispatch()
+
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log('YES PLEASE DELETE MY COMMENT')
+    dispatch(deleteReview(props.review.id))
   }
   return(
     <div className='delete_modal'>

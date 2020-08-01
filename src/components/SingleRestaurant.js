@@ -4,7 +4,7 @@ import Rating from "@material-ui/lab/Rating";
 import Typography from "@material-ui/core/Typography";
 
 // ACTIONS
-import { getReviewsByRestaurantID, getRestaurantByPlaceID } from '../actions'
+import { getReviewsByRestaurantID, getRestaurantByPlaceID, addReview, editReviewAction } from '../actions'
 
 // STYLING
 import { makeStyles } from "@material-ui/core/styles";
@@ -44,6 +44,7 @@ const customIcons = {
 const SingleRestaurant = (props) => {
   const classes = useStyles();
   const dispatch = useDispatch()
+  const isFetching = useSelector(state => state.appStatusReducer.isFetching)
   const restaurantInfo = useSelector(state => state.reviewsReducer)
   const user_id = useSelector(state => state.logInReducer.user_id)
   const user_id2 = localStorage.getItem('user_id')
@@ -55,7 +56,8 @@ const SingleRestaurant = (props) => {
   })
   const [editing, setEditing] = useState(false)
   const [editHover, setEditHover] = useState(0)
-  const [editReview, setEditReview] = useState({
+  const [editReview, setEditReview] = useState({})
+  const [originalReview, setOriginalReview] = useState({
     rating: 0,
     review: ''
   })
@@ -83,19 +85,17 @@ const SingleRestaurant = (props) => {
     
   }
 
-  const handleEditingStatus = (originalReview) => {
+  const handleEditingStatus = (review) => {
     setEditing(!editing)
-    setEditReview({
-      rating: originalReview.rating,
-      review: originalReview.review
-    })
+    setOriginalReview(review)
   }
+  console.log(originalReview)
 
   const handleEditChanges = (e) => {
     if(e.target.name === 'edit_rating'){
       setEditReview({...editReview, rating:Number(e.target.value)})
     }else{
-      setEditReview({...editReview, review:e.target.value})
+      setEditReview({...editReview, [e.target.name]:e.target.value})
     }
   }
 
@@ -109,12 +109,12 @@ const SingleRestaurant = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log(newReview)
+    dispatch(addReview(restaurant.place_id, newReview, restaurantInfo.restaurant_id))
   }
 
   const handleEditSubmit = (e) => {
     e.preventDefault()
-    console.log(editReview)
+    dispatch(editReviewAction(originalReview.id, editReview))
   }
 
   useEffect(() => {
@@ -126,6 +126,12 @@ const SingleRestaurant = (props) => {
       dispatch(getReviewsByRestaurantID(restaurantInfo.restaurant_id))
     }
   }, [restaurantInfo.restaurant_id])
+
+  if(isFetching){
+    return(
+      <div>Loading...</div>
+    )
+  }
 
   return (
     <div>
@@ -171,7 +177,7 @@ const SingleRestaurant = (props) => {
                   onChangeActive={handleHoverChanges}
                 />
                 <Typography component="legend">
-                  {<span style={{ fontWeight: "bold" }}>{hover !== -1 ? hover : newReview.rating ? newReview.rating: 0}</span>}
+                  {<span style={{ fontWeight: "bold" }}>{hover > 0 ? hover : newReview.rating ? newReview.rating === 0 ? false : newReview.rating: false}</span>}
                 </Typography>
               </div>
               <input
@@ -206,7 +212,7 @@ const SingleRestaurant = (props) => {
                         <Rating
                           name="edit_rating"
                           precision={0.5}
-                          value={editReview.rating}
+                          defaultValue={originalReview.rating}
                           onChange={handleEditChanges}
                           onChangeActive={handleEditHoverChanges}
                         />
@@ -218,13 +224,13 @@ const SingleRestaurant = (props) => {
                         type='text'
                         name='review'
                         onChange={handleEditChanges}
-                        defaultValue={editReview.review}
+                        defaultValue={originalReview.review}
                       />
                       <button>Edit Review</button>
                     </form>
                   )}
                   {deleting && (
-                    <DeleteCommentModal setDeleting={setDeleting} />
+                    <DeleteCommentModal setDeleting={setDeleting} review={review} />
                   )}
                   </div>
                   :
@@ -249,19 +255,5 @@ const SingleRestaurant = (props) => {
     </div>
   );
 };
-
-/*
-created_at: "2020-07-11T23:50:38.163Z"
-first_name: "user"
-id: 2
-last_name: "two"
-password: "$2b$10$OryQPhSWOnggnXuMXHYbTOc26bVc1gynbH4u66J3dKWhNyDjDeGSG"
-rating: 4
-restaurant_id: 2
-review: "I think they wash their hands and stuff"
-updated_at: "2020-07-11T23:50:38.163Z"
-user_id: 2
-username: "user2"
-*/
 
 export default SingleRestaurant;

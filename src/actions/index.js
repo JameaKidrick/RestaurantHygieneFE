@@ -43,6 +43,10 @@ export {
 export {
   FETCH_REVIEWS_SUCCESS,
   FETCH_RESTAURANTS_SUCCESS,
+  ADD_REVIEW_SUCCESS,
   getReviewsByRestaurantID,
+  addReview,
+  editReviewAction,
+  deleteReview,
   getRestaurantByPlaceID
 } from './reviewsAction';
