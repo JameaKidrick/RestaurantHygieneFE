@@ -18,8 +18,6 @@ const LogIn = (props) => {
     password: ''
   })
 
-  console.log('LOCATION', props.location)
-
   const [user, setUser] = useState({
     username: '',
     password: '',

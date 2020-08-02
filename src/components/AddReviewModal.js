@@ -12,6 +12,8 @@ const AddCommentModal = ({ restaurant, restaurantInfo, setCreating }) => {
   const dispatch = useDispatch()
   const [hover, setHover] = useState(0)
   const [newReview, setNewReview] = useState({
+    restaurant_name: restaurant.name,
+    restaurant_address: restaurant.formatted_address,
     rating: 0,
     review: ''
   })
@@ -30,7 +32,7 @@ const AddCommentModal = ({ restaurant, restaurantInfo, setCreating }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    dispatch(addReview(restaurant.place_id, newReview, restaurantInfo.restaurant_id, setNewReview))
+    dispatch(addReview(restaurant.place_id, newReview, restaurantInfo.restaurant_id, setNewReview, setCreating))
   }
 
   return(

@@ -18,7 +18,6 @@ const persistConfig = {
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 
 const store = createStore(persistedReducer, applyMiddleware(thunk, logger))
-// console.log('GET STATE', store.getState())
 let persistor = persistStore(store)
 
 ReactDOM.render(

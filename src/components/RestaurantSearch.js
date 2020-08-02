@@ -42,7 +42,6 @@ const customIcons = {
 };
 
 const RestaurantSearch = (props) => {
-  console.log(props)
   const classes = useStyles();
   const dispatch = useDispatch();
   const isFetching = useSelector(state => state.appStatusReducer.isFetching)
@@ -51,7 +50,6 @@ const RestaurantSearch = (props) => {
   const next_page = useSelector(state => state.googleAPIReducer.next_page)
   const status = useSelector(state => state.googleAPIReducer.status)
   const reducer = useSelector(state => state.googleAPIReducer)
-  console.log('REDUCER', reducer)
 
   const usStates = ['State*', 'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon','Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming']
   const parse = queryString.parse(props.location.search)
@@ -81,10 +79,8 @@ const RestaurantSearch = (props) => {
       userAddress: Yup.string()
     })
   })
-  console.log(props.history.location)
 
   useEffect(() => {
-    console.log('ON RENDER DO THIS: `(*>﹏<*)′`(*>﹏<*)′`(*>﹏<*)′')
     if(props.location.state === undefined){
       window.addEventListener("beforeunload", props.history.replace('/findrestaurant'));
       window.removeEventListener("beforeunload", props.history.replace('/findrestaurant'));
@@ -145,7 +141,6 @@ const RestaurantSearch = (props) => {
     setPageNumber(1)
     setQuery(`?page=${1}`)
     delete props.location.state
-    console.log(query)
     dispatch(placeLocator(parameters, props.history, `?page=${1}`))
   };
 

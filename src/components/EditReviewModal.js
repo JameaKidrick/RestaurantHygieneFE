@@ -6,7 +6,7 @@ import Typography from "@material-ui/core/Typography";
 // ACTIONS
 import { editReviewAction } from '../actions'
 
-const EditCommentModal = ({ originalReview, setEditing }) => {
+const EditCommentModal = ({ originalReview, setEditing, user_id }) => {
   const dispatch = useDispatch()
   const restaurantInfo = useSelector(state => state.reviewsReducer)
   const [editHover, setEditHover] = useState(0)
@@ -26,7 +26,7 @@ const EditCommentModal = ({ originalReview, setEditing }) => {
 
   const handleEditSubmit = (e) => {
     e.preventDefault()
-    dispatch(editReviewAction(originalReview.id, editReview, restaurantInfo.restaurant_id, setEditing))
+    dispatch(editReviewAction(originalReview.id, editReview, restaurantInfo.restaurant_id, setEditing, user_id))
   }
 
   return(

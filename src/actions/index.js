@@ -44,9 +44,13 @@ export {
   FETCH_REVIEWS_SUCCESS,
   FETCH_RESTAURANTS_SUCCESS,
   ADD_REVIEW_SUCCESS,
+  FETCH_USER_REVIEWS_SUCCESS,
+  RESET_REVIEWS_STATE,
   getReviewsByRestaurantID,
+  getRestaurantByPlaceID,
+  getReviewsByUserID,
   addReview,
   editReviewAction,
   deleteReview,
-  getRestaurantByPlaceID
+  resetReviewsState
 } from './reviewsAction';

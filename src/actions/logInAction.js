@@ -15,7 +15,6 @@ export const logInUser = (data, history, location) => dispatch => {
     .then(response => {
       dispatch({ type: LOGIN_SUCCESS, payload: response.data.user_id })
       localStorage.setItem('token', response.data.token)
-      console.log(response)
       if(location.state !== undefined && location.state.last.includes('/restaurant/')){
         history.push(location.state.next)
       }else{
@@ -23,7 +22,6 @@ export const logInUser = (data, history, location) => dispatch => {
       }
     })
     .catch(error => {
-      console.log(error.response)
       dispatch({ type: FETCH_FAILURE, payload: error.response.data.error })
     })
 }

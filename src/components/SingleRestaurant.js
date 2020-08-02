@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import DeleteCommentModal from "./DeleteCommentModal";
-import EditCommentModal from "./EditCommentModal";
-import AddCommentModal from "./AddCommentModal";
+import DeleteReviewModal from "./DeleteReviewModal";
+import EditReviewModal from "./EditReviewModal";
+import AddReviewModal from "./AddReviewModal";
 
 // ACTIONS
-import { getReviewsByRestaurantID, getRestaurantByPlaceID } from '../actions'
+import { getRestaurantByPlaceID } from '../actions'
 
 // STYLING
 import { makeStyles } from "@material-ui/core/styles";
@@ -55,11 +55,11 @@ const SingleRestaurant = (props) => {
 
   const [creating, setCreating] = useState(false)
   const [editing, setEditing] = useState(false)
+  const [deleting, setDeleting] = useState(false)
   const [originalReview, setOriginalReview] = useState({
     rating: 0,
     review: ''
   })
-  const [deleting, setDeleting] = useState(false)
 
   const formatDate = (date) => {
     const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -90,18 +90,10 @@ const SingleRestaurant = (props) => {
     setOriginalReview(review)
   }
 
-  console.log(creating)
-
   /************************************** LIFECYCLE **************************************/
   useEffect(() => {
     dispatch(getRestaurantByPlaceID(restaurant.place_id))
   }, [])
-
-  useEffect(() => {
-    if(restaurantInfo.restaurant_id !== undefined){
-      dispatch(getReviewsByRestaurantID(restaurantInfo.restaurant_id))
-    }
-  }, [restaurantInfo.restaurant_id])
 
   if(isFetching === true){
     return(
@@ -145,7 +137,7 @@ const SingleRestaurant = (props) => {
             Be the first to add a review!
             <AddIcon onClick={()=>setCreating(true)} />
             {creating && (
-              <AddCommentModal restaurant={restaurant} restaurantInfo={restaurantInfo} setCreating={setCreating} />
+              <AddReviewModal restaurant={restaurant} restaurantInfo={restaurantInfo} setCreating={setCreating} />
             )}
           </div>:<div className='review'>
           <AddIcon onClick={()=>setCreating(true)} />
@@ -183,13 +175,13 @@ const SingleRestaurant = (props) => {
             )
           })}
           {creating && (
-            <AddCommentModal restaurant={restaurant} restaurantInfo={restaurantInfo} setCreating={setCreating} />
+            <AddReviewModal restaurant={restaurant} restaurantInfo={restaurantInfo} setCreating={setCreating} />
           )}
           {editing && (
-            <EditCommentModal originalReview={originalReview} setEditing={setEditing} />
+            <EditReviewModal originalReview={originalReview} setEditing={setEditing} />
           )}
           {deleting && (
-            <DeleteCommentModal review={originalReview} formatDate={formatDate} setDeleting={setDeleting} />
+            <DeleteReviewModal review={originalReview} formatDate={formatDate} setDeleting={setDeleting} />
           )}
         </div>
         :

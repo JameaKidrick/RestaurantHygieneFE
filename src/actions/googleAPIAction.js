@@ -25,7 +25,6 @@ export const placeLocator = (parameters, history, query) => dispatch => {
 
 export const placeLocator_nextPage = (pageToken, history, query) => dispatch => {
   dispatch({ type: 'START_FETCHING' })
-  console.log('ACTION', query)
   axiosWithAuth()
     .post(`/locate/next`, {pageToken})
     .then(response => {
@@ -49,7 +48,6 @@ export const placeDetails = (places_id) => dispatch => {
     })
 }
 
-// ACTION CREATORS
 export const resetResponseState = () => dispatch => {
   dispatch({ type: RESET_STATE })
 }
