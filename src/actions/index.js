@@ -54,3 +54,17 @@ export {
   deleteReview,
   resetReviewsState
 } from './reviewsAction';
+
+
+
+/***************************** FROM FAVORITESACTION.JS *****************************/
+export {
+  FETCH_FAVORITES_SUCCESS,
+  ADD_FAVORITE_SUCCESS,
+  DELETE_FAVORITE_SUCCESS,
+  RESET_USER_DATA,
+  getAllFavoritesByUserID,
+  addNewFavorite,
+  deleteFavorite,
+  resetUserData
+} from './favoritesAction';

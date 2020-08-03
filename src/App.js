@@ -13,7 +13,9 @@ import ErrorPage from './components/ErrorPage';
 import LogIn from './components/LogIn';
 import RestaurantSearch from './components/RestaurantSearch';
 import SingleRestaurant from './components/SingleRestaurant';
-import MyProfile from './components/Profile';
+import MyReviews from './components/MyReviews';
+import MyFavoriteRestaurants from './components/MyFavoriteRestaurants';
+import Profile from './components/Profile';
 
 function App(props) {
   const loggedIn = useSelector(state => state.logInReducer.loggedIn)
@@ -33,7 +35,11 @@ function App(props) {
           <>
             <Link to='/findrestaurant' onClick={()=> dispatch(resetResponseState())}>Find a Restaurant</Link>
             <br />
-            <Link to='/myprofile'>My Profile</Link>
+            <Link to='/myreviews'>My Reviews</Link>
+            <br />
+            <Link to='/myrestaurants'>My Restaurants</Link>
+            <br />
+            <Link to='/settings'>Settings</Link>
             <br />
             <Link to='/' onClick={() => dispatch(logOutUser(props.persistor, resetResponseState))}>Log out</Link>
           </>
@@ -51,15 +57,15 @@ function App(props) {
           <Route exact path='/' component={Home} />
           <Route path='/register' component={Register} />
           <Route path='/login' component={LogIn} />
-          {/* <Route exact path="/props-through-render" render={(props) => <PropsPage {...props} title={`Props through render`} />} /> */}
           <Route path='/findrestaurant' component={RestaurantSearch} />
           <Route path='/findrestaurant?page=:number' component={RestaurantSearch} />
-          {/* <Route path='/restaurant/:place_id' component={SingleRestaurant} /> */}
           <Route 
           path="/restaurant/:place_id" 
           render={(props) => <SingleRestaurant {...props} 
           persistor={props.persistor} />} />
-          <PrivateRoute exact path='/myprofile' component={MyProfile} />
+          <PrivateRoute exact path='/myreviews' component={MyReviews} />
+          <PrivateRoute exact path='/myrestaurants' component={MyFavoriteRestaurants} />
+          <PrivateRoute exact path='/settings' component={Profile} />
           <Route component={ErrorPage} />
         </Switch>
 

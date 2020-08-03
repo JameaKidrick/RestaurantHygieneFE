@@ -4,9 +4,10 @@ import { Link } from "react-router-dom";
 import DeleteReviewModal from "./DeleteReviewModal";
 import EditReviewModal from "./EditReviewModal";
 import AddReviewModal from "./AddReviewModal";
+import DeleteFavoriteModal from './DeleteFavoriteModal';
 
 // ACTIONS
-import { getRestaurantByPlaceID } from '../actions'
+import { getRestaurantByPlaceID, addNewFavorite } from '../actions'
 
 // STYLING
 import { makeStyles } from "@material-ui/core/styles";
@@ -15,6 +16,8 @@ import Typography from "@material-ui/core/Typography";
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
+import FavoriteIcon from "@material-ui/icons/Favorite";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -51,8 +54,15 @@ const SingleRestaurant = (props) => {
   const isFetching = useSelector(state => state.appStatusReducer.isFetching)
   const restaurantInfo = useSelector(state => state.reviewsReducer)
   const user_id = useSelector(state => state.logInReducer.user_id)
+  const user_favorites = useSelector(
+    (state) => state.logInReducer.user_favorites
+  );
+  const favorites_place_ids = user_favorites.map((favorite) => {
+    return favorite.place_id;
+  });
   const restaurant = props.location.state.restaurant
-
+  const [currentFavorite, setCurrentFavorite] = useState({});
+  const [faveDeleting, setFaveDeleting] = useState(false)
   const [creating, setCreating] = useState(false)
   const [editing, setEditing] = useState(false)
   const [deleting, setDeleting] = useState(false)
@@ -90,6 +100,17 @@ const SingleRestaurant = (props) => {
     setOriginalReview(review)
   }
 
+  const handleDeleteFavoriteChanges = (e, favorite) => {
+    e.preventDefault();
+    setCurrentFavorite(favorite);
+    setFaveDeleting(true);
+  };
+
+  const handleAddFavoriteChanges = (e, favorite) => {
+    e.preventDefault();
+    dispatch(addNewFavorite({place_id: favorite.place_id, restaurant_name: favorite.name, restaurant_address: favorite.formatted_address}, user_id))
+  };
+
   /************************************** LIFECYCLE **************************************/
   useEffect(() => {
     dispatch(getRestaurantByPlaceID(restaurant.place_id))
@@ -106,12 +127,35 @@ const SingleRestaurant = (props) => {
       SINGLE RESTAURANT PAGE
       <Link to={{pathname: `/findrestaurant?page=${props.location.state.page}`, state: {page:props.location.state.page, parameters:props.location.state.parameters, last:props.location.pathname}}}>Return to results</Link>
       <h2>{restaurant.name}
+      {localStorage.getItem('token') && (
+        favorites_place_ids.includes(restaurant.place_id) ? (
+          <FavoriteIcon
+            onClick={(e) =>
+              handleDeleteFavoriteChanges(e, restaurant)
+            }
+          />
+        ) : (
+          <FavoriteBorderIcon
+            onClick={(e) => handleAddFavoriteChanges(e, restaurant)}
+          />
+        )
+        
+      )}
         <span style={{fontSize: '0.8rem'}}>{restaurant.opening_hours ?
           restaurant.opening_hours['open_now'] === true ? 
           <h4 style={{color: 'green'}}>Open</h4>: <h4 style={{color: 'red'}}>Closed</h4>: false
           }
         </span>
       </h2>
+      {localStorage.getItem('token') && (
+        faveDeleting && (
+          <DeleteFavoriteModal
+            favorite={currentFavorite}
+            setDeleting={setFaveDeleting}
+            user_id={user_id}
+          />
+        )
+      )}
       <p>{restaurant.formatted_address}</p>
       <Typography component="legend">
         Hygiene Rating:{' '}
