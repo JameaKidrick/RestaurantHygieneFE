@@ -1,8 +1,10 @@
-import {LOGIN_SUCCESS, LOGOUT_SUCCESS, REGISTER_SUCCESS, USER_LOGGED_IN} from '../actions';
+import {LOGIN_SUCCESS, LOGOUT_SUCCESS, REGISTER_SUCCESS, USER_LOGGED_IN, FETCH_USER_REVIEWS_SUCCESS, FETCH_FAVORITES_SUCCESS, RESET_USER_DATA} from '../actions';
 
 const initialState = {
   loggedIn: false,
-  user_id: 0
+  user_id: 0,
+  user_reviews: [],
+  user_favorites: []
 }
 
 export const logInReducer = (state = initialState, action) => {
@@ -20,6 +22,22 @@ export const logInReducer = (state = initialState, action) => {
         ...state,
         loggedIn: false,
         user_id: 0
+      };
+    case FETCH_USER_REVIEWS_SUCCESS:
+      return{
+        ...state,
+        user_reviews: action.payload
+      };
+    case FETCH_FAVORITES_SUCCESS:
+      return{
+        ...state,
+        user_favorites: action.payload
+      };
+    case RESET_USER_DATA:
+      return{
+        ...state,
+        user_reviews: [],
+        user_favorites: []
       }
     default:
       return state

@@ -30,7 +30,7 @@ export {
 export {
   LOCATION_SUCCESS,
   NEXT_PAGE_LOCATION_SUCCESS,
-  RESET_GOOGLE_STATE,
+  RESET_STATE,
   placeLocator,
   placeLocator_nextPage,
   placeDetails,
@@ -43,6 +43,28 @@ export {
 export {
   FETCH_REVIEWS_SUCCESS,
   FETCH_RESTAURANTS_SUCCESS,
+  ADD_REVIEW_SUCCESS,
+  FETCH_USER_REVIEWS_SUCCESS,
+  RESET_REVIEWS_STATE,
   getReviewsByRestaurantID,
-  getRestaurantByPlaceID
+  getRestaurantByPlaceID,
+  getReviewsByUserID,
+  addReview,
+  editReviewAction,
+  deleteReview,
+  resetReviewsState
 } from './reviewsAction';
+
+
+
+/***************************** FROM FAVORITESACTION.JS *****************************/
+export {
+  FETCH_FAVORITES_SUCCESS,
+  ADD_FAVORITE_SUCCESS,
+  DELETE_FAVORITE_SUCCESS,
+  RESET_USER_DATA,
+  getAllFavoritesByUserID,
+  addNewFavorite,
+  deleteFavorite,
+  resetUserData
+} from './favoritesAction';

@@ -7,7 +7,7 @@ export const NEXT_PAGE_LOCATION_SUCCESS = 'NEXT_PAGE_LOCATION_SUCCESS';
 export const CURRENT_PAGE = 'CURRENT_PAGE';
 export const GET_RESTAURANT = 'CURRENT_PAGE';
 export const FETCH_FAILURE = 'FETCH_FAILURE';
-export const RESET_GOOGLE_STATE = 'RESET_GOOGLE_STATE';
+export const RESET_STATE = 'RESET_STATE';
 
 // ACTION CREATORS
 export const placeLocator = (parameters, history, query) => dispatch => {
@@ -25,7 +25,6 @@ export const placeLocator = (parameters, history, query) => dispatch => {
 
 export const placeLocator_nextPage = (pageToken, history, query) => dispatch => {
   dispatch({ type: 'START_FETCHING' })
-  console.log('ACTION', query)
   axiosWithAuth()
     .post(`/locate/next`, {pageToken})
     .then(response => {
@@ -49,7 +48,6 @@ export const placeDetails = (places_id) => dispatch => {
     })
 }
 
-// ACTION CREATORS
 export const resetResponseState = () => dispatch => {
-  dispatch({ type: RESET_GOOGLE_STATE })
+  dispatch({ type: RESET_STATE })
 }
