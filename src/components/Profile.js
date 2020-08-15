@@ -3,12 +3,20 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from "yup";
 import MyReviews from './MyReviews';
 
+// ACTIONS
+import { editUser } from '../actions'
 
 const MyProfile = () => {
+  const dispatch = useDispatch()
   const isFetching = useSelector(state => state.appStatusReducer.isFetching)
   const user_id = useSelector(state => state.logInReducer.user_id)
-  const [reviewsStatus, setReviewsStatus] = useState(false)
+  const [error, setError] = useState(false)
   const [update, setUpdate] = useState({})
+  const [success, setSuccess] = useState(false)
+  const [hidePassword, setHidePassword] = useState(true)
+  const [passwordType, setPasswordType] = useState('password')
+  const [hideCurrentPassword, setHideCurrentPassword] = useState(true)
+  const [currentPasswordType, setCurrentPasswordType] = useState('password')
   const [formErrors, setFormErrors] = useState({
     first_name: '',
     last_name: '',
@@ -25,7 +33,8 @@ const MyProfile = () => {
     confirm_password: Yup.string().required('Please confirm your current password to make these changes.')
   })
 
-  /************************************** HANDLERS **************************************/
+  /************************************** USEEFFECTS **************************************/
+
   useEffect(() => {
     let formValues = Object.values(update)
     let formKeys = Object.keys(update)
@@ -35,35 +44,58 @@ const MyProfile = () => {
         delete update[formKeys[index]]
       }
     })
-    settingsFormSchema.isValid(update).then(valid => {
-      console.log(valid, formErrors)
-    });
   }, [update])
+  
+  useEffect(() => {
+    if(hidePassword === true){
+      setPasswordType('password')
+    }else{
+      setPasswordType('text')
+    }
+  }, [hidePassword])
+
+  useEffect(() => {
+    if(hideCurrentPassword === true){
+      setCurrentPasswordType('password')
+    }else{
+      setCurrentPasswordType('text')
+    }
+  }, [hideCurrentPassword])
+  
+  /************************************** HANDLERS **************************************/
 
   const handleChanges = (e) => {
     e.persist();
-    console.log(e.target.name, e.target.value)
-    Yup
-      .reach(settingsFormSchema, e.target.name)
-      .validate(e.target.value)
-      .then(valid => {
-        console.log('VALID', valid, e.target.name)
-        setFormErrors({ ...formErrors, [e.target.name]:'' })
-      })
-      .catch(err => {
-        console.log('ERROR', err)
-        setFormErrors({ ...formErrors, [e.target.name]:err.errors[0] })
-      })
+    if(e.target.name === 'hidePassword'){
+      setHidePassword(!hidePassword)
+    }else if(e.target.name === 'hideCurrentPassword'){
+      setHideCurrentPassword(!hideCurrentPassword)
+    }else{
+      Yup
+        .reach(settingsFormSchema, e.target.name)
+        .validate(e.target.value)
+        .then(valid => {
+          setFormErrors({ ...formErrors, [e.target.name]:'' })
+        })
+        .catch(err => {
+          setFormErrors({ ...formErrors, [e.target.name]:err.errors[0] })
+        })
       setUpdate({...update, [e.target.name]: e.target.value})
+      if(e.target.name === 'change_password'){
+        setError(false)
+    }
+    }
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    // MAY HAVE TO ADD A DELETE IF ANY VALUE IS AN EMPTY STRING
     settingsFormSchema.isValid(update).then(valid => {
-      console.log(valid, formErrors)
+      if(valid === false){
+        setError(true)
+      }else{
+        dispatch(editUser(user_id, update, setSuccess))
+      }
     });
-    console.log(update)
   }
 
   if(isFetching === true){
@@ -74,7 +106,10 @@ const MyProfile = () => {
 
   return(
     <div>
-      <h2 onClick={()=>setReviewsStatus(true)}>Settings</h2>
+      <h2>Settings</h2>
+      {success && (
+        <p>Your account information has been successfully updated.</p>
+      )}
       <form onSubmit={handleSubmit}>
         <label>
           First name
@@ -106,22 +141,47 @@ const MyProfile = () => {
         <label>
           New Password
           <input
-          type='text'
+          type={passwordType}
           name='password'
           onChange={handleChanges}
           />
         </label>
+        <label htmlFor='hidePassword'>
+          Hide password
+          <input
+          type='checkbox'
+          name='hidePassword'
+          onChange={handleChanges}
+          value={hidePassword}
+          checked={hidePassword}
+          />
+        </label>
+        {update.password && update.password.length < 6 && (<p className="error">{formErrors.password}</p>)}
         <br />
         <label>
-          Confirm Old Password
+          Current Password*
           <input
-          type='text'
+          type={currentPasswordType}
           name='confirm_password'
           onChange={handleChanges}
           />
         </label>
+        <label htmlFor='hideCurrentPassword'>
+          Hide password
+          <input
+          type='checkbox'
+          name='hideCurrentPassword'
+          onChange={handleChanges}
+          value={hideCurrentPassword}
+          checked={hideCurrentPassword}
+          />
+        </label>
+        {error && (
+          <p>{formErrors.confirm_password}</p>
+        )}
         <button>Submit</button>
       </form>
+      <button>Delete Account</button>
     </div>
   )
 }

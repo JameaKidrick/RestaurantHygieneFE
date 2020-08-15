@@ -68,3 +68,12 @@ export {
   deleteFavorite,
   resetUserData
 } from './favoritesAction';
+
+
+
+/***************************** FROM EDITUSERACTION.JS *****************************/
+export {
+  EDIT_USER_SUCCESS,
+  DELETE_USER_SUCCESS,
+  editUser
+} from './editUserAction'
