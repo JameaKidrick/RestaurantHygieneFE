@@ -24,7 +24,7 @@ const Register = (props) => {
     first_name: '',
     last_name: '',
     username: '',
-    password: '',
+    password: ''
   })
 
   const registerFormSchema = Yup.object().shape({
@@ -52,20 +52,21 @@ const Register = (props) => {
     }
   }, [hidePassword])
 
+  
   const handleChanges = e => {
     e.persist();
     if(e.target.name === 'hidePassword'){
       setHidePassword(!hidePassword)
     }else{
       Yup
-      .reach(registerFormSchema, e.target.name)
-      .validate(e.target.value)
-      .then(valid => {
-        setFormErrors({ ...formErrors, [e.target.name]:'' })
-      })
-      .catch(err => {
-        setFormErrors({ ...formErrors, [e.target.name]:err.errors[0] })
-      })
+        .reach(registerFormSchema, e.target.name)
+        .validate(e.target.value)
+        .then(valid => {
+          setFormErrors({ ...formErrors, [e.target.name]:'' })
+        })
+        .catch(err => {
+          setFormErrors({ ...formErrors, [e.target.name]:err.errors[0] })
+        })
       setUser({ ...user, [e.target.name]:e.target.value })
     }
   }

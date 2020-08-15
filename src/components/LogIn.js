@@ -14,8 +14,8 @@ const LogIn = (props) => {
   const [hidePassword, setHidePassword] = useState(true)
   const [passwordType, setPasswordType] = useState('password')
   const [formErrors, setFormErrors] = useState({
-    username: '',
-    password: ''
+    username: 'Please provide a username',
+    password: 'Please provide a password'
   })
 
   const [user, setUser] = useState({

@@ -14,7 +14,7 @@ const MyProfile = () => {
     last_name: '',
     username: '',
     password: '',
-    confirm_password: ''
+    confirm_password: 'Please confirm your current password to make these changes.'
   })
 
   const settingsFormSchema = Yup.object().shape({
@@ -22,7 +22,7 @@ const MyProfile = () => {
     last_name: Yup.string(),
     username: Yup.string().min(3, 'Usernames must be at least 3 characters long'),
     password: Yup.string().min(6, 'Passwords must be at least 6 characters long'),
-    confirm_password: Yup.string().required(Yup.ref('password'), 'Please confirm your current password.')
+    confirm_password: Yup.string().required('Please confirm your current password to make these changes.')
   })
 
   /************************************** HANDLERS **************************************/
@@ -30,35 +30,40 @@ const MyProfile = () => {
     let formValues = Object.values(update)
     let formKeys = Object.keys(update)
     
-    formValues.filter((val, index) => {
-      if(val === ''){
+    formValues.filter((value, index) => {
+      if(value === ''){
         delete update[formKeys[index]]
       }
     })
-
-    console.log(settingsFormSchema.isValidSync())
+    settingsFormSchema.isValid(update).then(valid => {
+      console.log(valid, formErrors)
+    });
   }, [update])
 
   const handleChanges = (e) => {
     e.persist();
+    console.log(e.target.name, e.target.value)
     Yup
       .reach(settingsFormSchema, e.target.name)
       .validate(e.target.value)
       .then(valid => {
+        console.log('VALID', valid, e.target.name)
         setFormErrors({ ...formErrors, [e.target.name]:'' })
       })
       .catch(err => {
+        console.log('ERROR', err)
         setFormErrors({ ...formErrors, [e.target.name]:err.errors[0] })
       })
       setUpdate({...update, [e.target.name]: e.target.value})
-    console.log(formErrors)
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
     // MAY HAVE TO ADD A DELETE IF ANY VALUE IS AN EMPTY STRING
+    settingsFormSchema.isValid(update).then(valid => {
+      console.log(valid, formErrors)
+    });
     console.log(update)
-    
   }
 
   if(isFetching === true){
@@ -79,6 +84,7 @@ const MyProfile = () => {
           onChange={handleChanges}
           />
         </label>
+        <br />
         <label>
           Last name
           <input
@@ -87,6 +93,7 @@ const MyProfile = () => {
           onChange={handleChanges}
           />
         </label>
+        <br />
         <label>
           Username
           <input
@@ -95,6 +102,7 @@ const MyProfile = () => {
           onChange={handleChanges}
           />
         </label>
+        <br />
         <label>
           New Password
           <input
@@ -103,6 +111,7 @@ const MyProfile = () => {
           onChange={handleChanges}
           />
         </label>
+        <br />
         <label>
           Confirm Old Password
           <input
