@@ -1,5 +1,8 @@
 import { axiosWithAuth } from '../utils/axiosWithAuth'
 
+// ACTIONS
+import { logOutUser, resetResponseState } from '../actions'
+
 // ACTION TYPES
 export const START_FETCHING = 'START_FETCHING'
 export const FETCH_FAILURE = 'FETCH_FAILURE'
@@ -12,6 +15,7 @@ export const editUser = (user_id, changes, setSuccess) => dispatch => {
   axiosWithAuth()
     .put(`/users/${user_id}`, changes)
     .then(response => {
+      console.log(response)
       setSuccess(true)
       dispatch({ type: EDIT_USER_SUCCESS })
     })
@@ -20,6 +24,17 @@ export const editUser = (user_id, changes, setSuccess) => dispatch => {
     })
 }
 
-// export const deleteUser = () => dispatch => {
-
-// }
+export const deleteUser = (user_id, setDeleting, persistor, history) => dispatch => {
+  dispatch({ type: START_FETCHING })
+  axiosWithAuth()
+    .delete(`/users/${user_id}`)
+    .then(response => {
+      console.log(response)
+      dispatch({ type: DELETE_USER_SUCCESS })
+      setDeleting(false)
+      dispatch(logOutUser(persistor, resetResponseState))
+    })
+    .catch(error => {
+      dispatch({ type: FETCH_FAILURE })
+    })
+}

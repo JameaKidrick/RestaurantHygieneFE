@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from "yup";
-import MyReviews from './MyReviews';
+import DeleteUserModal from './DeleteUserModal';
 
 // ACTIONS
 import { editUser } from '../actions'
 
-const MyProfile = () => {
+const MyProfile = (props) => {
   const dispatch = useDispatch()
   const isFetching = useSelector(state => state.appStatusReducer.isFetching)
   const user_id = useSelector(state => state.logInReducer.user_id)
@@ -17,6 +17,7 @@ const MyProfile = () => {
   const [passwordType, setPasswordType] = useState('password')
   const [hideCurrentPassword, setHideCurrentPassword] = useState(true)
   const [currentPasswordType, setCurrentPasswordType] = useState('password')
+  const [deleting, setDeleting] = useState(false)
   const [formErrors, setFormErrors] = useState({
     first_name: '',
     last_name: '',
@@ -34,7 +35,7 @@ const MyProfile = () => {
   })
 
   /************************************** USEEFFECTS **************************************/
-
+  
   useEffect(() => {
     let formValues = Object.values(update)
     let formKeys = Object.keys(update)
@@ -96,6 +97,12 @@ const MyProfile = () => {
         dispatch(editUser(user_id, update, setSuccess))
       }
     });
+  }
+
+  const handleDeletingStatus = () => {
+    if(deleting === false){
+      setDeleting(true)
+    }
   }
 
   if(isFetching === true){
@@ -181,7 +188,10 @@ const MyProfile = () => {
         )}
         <button>Submit</button>
       </form>
-      <button>Delete Account</button>
+      <button onClick={()=>handleDeletingStatus()}>Delete Account</button>
+      {deleting && (
+        <DeleteUserModal user_id={user_id} setDeleting={setDeleting} persistor={props.persistor} history={props.history} />
+      )}
     </div>
   )
 }

@@ -75,5 +75,6 @@ export {
 export {
   EDIT_USER_SUCCESS,
   DELETE_USER_SUCCESS,
-  editUser
+  editUser,
+  deleteUser
 } from './editUserAction'

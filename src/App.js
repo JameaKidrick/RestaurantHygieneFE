@@ -18,9 +18,9 @@ import MyFavoriteRestaurants from './components/MyFavoriteRestaurants';
 import Profile from './components/Profile';
 
 function App(props) {
+  const dispatch = useDispatch()
   const loggedIn = useSelector(state => state.logInReducer.loggedIn)
   const user_id = useSelector(state => state.logInReducer.user_id)
-  const dispatch = useDispatch()
 
   useEffect(() => {
     dispatch(logInStatus(user_id));
@@ -65,7 +65,7 @@ function App(props) {
           persistor={props.persistor} />} />
           <PrivateRoute exact path='/myreviews' component={MyReviews} />
           <PrivateRoute exact path='/myrestaurants' component={MyFavoriteRestaurants} />
-          <PrivateRoute exact path='/settings' component={Profile} />
+          <PrivateRoute exact path='/settings' component={Profile} persistor={props.persistor} />
           <Route component={ErrorPage} />
         </Switch>
 
