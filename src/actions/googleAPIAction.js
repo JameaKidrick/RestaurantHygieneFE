@@ -5,7 +5,7 @@ export const START_FETCHING = 'START_FETCHING';
 export const LOCATION_SUCCESS = 'LOCATION_SUCCESS';
 export const NEXT_PAGE_LOCATION_SUCCESS = 'NEXT_PAGE_LOCATION_SUCCESS';
 export const CURRENT_PAGE = 'CURRENT_PAGE';
-export const GET_RESTAURANT = 'CURRENT_PAGE';
+export const FETCH_RESTAURANT_SUCCESS = 'FETCH_RESTAURANT_SUCCESS';
 export const FETCH_FAILURE = 'FETCH_FAILURE';
 export const RESET_STATE = 'RESET_STATE';
 
@@ -36,15 +36,16 @@ export const placeLocator_nextPage = (pageToken, history, query) => dispatch => 
     })
 };
 
-export const placeDetails = (places_id) => dispatch => {
+export const placeDetails = (places_id, setRestaurant) => dispatch => {
   dispatch({ type: 'START_FETCHING' })
   axiosWithAuth()
     .post('/locate/details', {places_id})
     .then(response => {
-      console.log(response)
+      setRestaurant(response.data.result)
+      dispatch({ type: FETCH_RESTAURANT_SUCCESS, payload: response.data.result})
     })
     .catch(error => {
-      console.log(error)
+      dispatch({ type: FETCH_FAILURE, payload: error.response })
     })
 }
 

@@ -14,11 +14,9 @@ export const getAllFavoritesByUserID = (user_id) => dispatch => {
   axiosWithAuth()
     .get(`/favorites/user/${user_id}`)
     .then(response => {
-      console.log(response)
       dispatch({ type: FETCH_FAVORITES_SUCCESS, payload: response.data })
     })
     .catch(error => {
-      console.log(error)
       dispatch({ type: FETCH_FAILURE })
     })
 }
@@ -28,12 +26,10 @@ export const addNewFavorite = (favorite, user_id) => dispatch => {
   axiosWithAuth()
     .post(`/favorites`, favorite)
     .then(response => {
-      console.log(response)
       dispatch({ type: ADD_FAVORITE_SUCCESS })
       dispatch(getAllFavoritesByUserID(user_id))
     })
     .catch(error => {
-      console.log(error)
       dispatch({ type: FETCH_FAILURE })
     })
 }
@@ -43,13 +39,11 @@ export const deleteFavorite = (favorite_id, setDeleting, user_id) => dispatch =>
   axiosWithAuth()
     .delete(`/favorites/${favorite_id}`)
     .then(response => {
-      console.log(response)
       dispatch({ type: DELETE_FAVORITE_SUCCESS })
       dispatch(getAllFavoritesByUserID(user_id))
       setDeleting(false)
     })
     .catch(error => {
-      console.log(error)
       dispatch({ type: FETCH_FAILURE })
     })
 }
