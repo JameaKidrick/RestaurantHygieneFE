@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom'
 import DeleteFavoriteModal from './DeleteFavoriteModal';
 
 // ACTIONS
@@ -34,8 +35,10 @@ const MyFavoriteRestaurants = () => {
       {user_favorites.map((favorite, index) => {
         return(
           <div key={index}>
-            <div>{favorite.restaurant_name}</div>
-            <div>{favorite.restaurant_address}</div>
+            <Link to={`/restaurant/${favorite.place_id}`}>
+              <div>{favorite.restaurant_name}</div>
+              <div>{favorite.restaurant_address}</div>
+            </Link>
             <button onClick={()=>handleFavoriteChanges(favorite)}>Delete</button>
           </div>
         )
@@ -48,3 +51,14 @@ const MyFavoriteRestaurants = () => {
 }
 
 export default MyFavoriteRestaurants;
+
+/*
+created_at: "2020-08-02T17:14:24.514Z"
+id: 32
+place_id: "ChIJVZ6MsNkDyokRs884W2r6gE8"
+restaurant_address: "14634 Apple Harvest Dr, Martinsburg, WV 25401, USA"
+restaurant_id: 2
+restaurant_name: "McDonald's"
+updated_at: "2020-08-02T17:14:24.514Z"
+user_id: 6
+*/

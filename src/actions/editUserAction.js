@@ -15,7 +15,6 @@ export const editUser = (user_id, changes, setSuccess) => dispatch => {
   axiosWithAuth()
     .put(`/users/${user_id}`, changes)
     .then(response => {
-      console.log(response)
       setSuccess(true)
       dispatch({ type: EDIT_USER_SUCCESS })
     })
@@ -29,7 +28,6 @@ export const deleteUser = (user_id, setDeleting, persistor, history) => dispatch
   axiosWithAuth()
     .delete(`/users/${user_id}`)
     .then(response => {
-      console.log(response)
       dispatch({ type: DELETE_USER_SUCCESS })
       setDeleting(false)
       dispatch(logOutUser(persistor, resetResponseState))

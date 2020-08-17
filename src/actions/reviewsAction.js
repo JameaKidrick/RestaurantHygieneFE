@@ -15,7 +15,6 @@ export const getReviewsByRestaurantID = (restaurant_id) => dispatch => {
   axiosWithAuth()
     .get(`/reviews/restaurant/${restaurant_id}`)
     .then(response => {
-      console.log(response.data)
       dispatch({ type: FETCH_REVIEWS_SUCCESS, payload: response.data })
     })
     .catch(error => {

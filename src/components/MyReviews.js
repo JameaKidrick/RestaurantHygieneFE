@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom'
 import DeleteReviewModal from "./DeleteReviewModal";
 import EditReviewModal from "./EditReviewModal";
 
@@ -72,9 +73,11 @@ const MyReviews = () => {
         return(
           <div key={index}>
             <br/>
-            <div>{review.restaurant_name}</div>
-            <div>{review.restaurant_address}</div>
-            <div>{formatDate(review.created_at)}</div>
+            <Link to={`/restaurant/${review.place_id}`}>
+              <div>{review.restaurant_name}</div>
+              <div>{review.restaurant_address}</div>
+              <div>{formatDate(review.created_at)}</div>
+            </Link>
             <div style={{display:'flex'}}>
               <Rating
                 name="edit_rating"
@@ -103,3 +106,15 @@ const MyReviews = () => {
 }
 
 export default MyReviews;
+
+/*
+created_at: "2020-08-03T04:28:59.610Z"
+id: 6
+place_id: "ChIJjWYOtykDyokR-kS0ikxSI84"
+rating: 5
+restaurant_address: "Martinsburg, WV 25401, USA"
+restaurant_id: 1
+restaurant_name: "McDonald's"
+review: "great"
+user_id: 6
+*/

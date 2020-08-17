@@ -1,4 +1,4 @@
-import { LOCATION_SUCCESS, NEXT_PAGE_LOCATION_SUCCESS, LOGOUT_SUCCESS, RESET_STATE } from '../actions';
+import { LOCATION_SUCCESS, NEXT_PAGE_LOCATION_SUCCESS, FETCH_RESTAURANT_SUCCESS, LOGOUT_SUCCESS, RESET_STATE } from '../actions';
 
 const initialState = {
   places: [],
@@ -28,6 +28,11 @@ export const googleAPIReducer = (state = initialState, action) => {
         next_page: action.next_page,
         status: action.status
       };
+    case FETCH_RESTAURANT_SUCCESS:
+      return{
+        ...state,
+        single_restaurant: action.payload
+      }
     case LOGOUT_SUCCESS:
       return{
         ...state,

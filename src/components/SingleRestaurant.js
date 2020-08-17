@@ -7,7 +7,7 @@ import AddReviewModal from "./AddReviewModal";
 import DeleteFavoriteModal from './DeleteFavoriteModal';
 
 // ACTIONS
-import { getRestaurantByPlaceID, addNewFavorite } from '../actions'
+import { getRestaurantByPlaceID, addNewFavorite, placeDetails } from '../actions'
 
 // STYLING
 import { makeStyles } from "@material-ui/core/styles";
@@ -60,7 +60,7 @@ const SingleRestaurant = (props) => {
   const favorites_place_ids = user_favorites.map((favorite) => {
     return favorite.place_id;
   });
-  const restaurant = props.location.state.restaurant
+  const [restaurant, setRestaurant] = useState({})
   const [currentFavorite, setCurrentFavorite] = useState({});
   const [faveDeleting, setFaveDeleting] = useState(false)
   const [creating, setCreating] = useState(false)
@@ -113,8 +113,16 @@ const SingleRestaurant = (props) => {
 
   /************************************** LIFECYCLE **************************************/
   useEffect(() => {
-    dispatch(getRestaurantByPlaceID(restaurant.place_id))
+    if(!props.location.state){
+      dispatch(placeDetails(props.match.params.place_id, setRestaurant))
+    }else{
+      setRestaurant(props.location.state.restaurant)
+    }
   }, [])
+
+  useEffect(() => {
+    dispatch(getRestaurantByPlaceID(restaurant.place_id))
+  }, [restaurant])
 
   if(isFetching === true){
     return(
@@ -125,7 +133,9 @@ const SingleRestaurant = (props) => {
   return (
     <div>
       SINGLE RESTAURANT PAGE
-      <Link to={{pathname: `/findrestaurant?page=${props.location.state.page}`, state: {page:props.location.state.page, parameters:props.location.state.parameters, last:props.location.pathname}}}>Return to results</Link>
+      {props.location.state && (
+        <Link to={{pathname: `/findrestaurant?page=${props.location.state.page}`, state: {page:props.location.state.page, parameters:props.location.state.parameters, last:props.location.pathname}}}>Return to results</Link>
+      )}
       <h2>{restaurant.name}
       {localStorage.getItem('token') && (
         favorites_place_ids.includes(restaurant.place_id) ? (

@@ -1,4 +1,4 @@
-/***************************** FROM GOOGLEAPIACTION.JS *****************************/
+/***************************** FROM APPSTATEACTIONS.JS *****************************/
 export {
   RESET,
   resetErrors
@@ -31,6 +31,7 @@ export {
   LOCATION_SUCCESS,
   NEXT_PAGE_LOCATION_SUCCESS,
   RESET_STATE,
+  FETCH_RESTAURANT_SUCCESS,
   placeLocator,
   placeLocator_nextPage,
   placeDetails,
