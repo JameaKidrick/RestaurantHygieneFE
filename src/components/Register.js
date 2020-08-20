@@ -141,7 +141,7 @@ const Register = (props) => {
         <p>Already have an account? <Link to='/login'>Click to login</Link></p>
       </div>
       {error && (error === 'There is already a user with that username in the database. Please choose a new username.') && (
-        <p id='loginError'>{error}</p>
+        <p id='registerError'>{error}</p>
       )}
     </div>
   )

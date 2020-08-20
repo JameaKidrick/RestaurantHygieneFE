@@ -71,6 +71,8 @@ const SingleRestaurant = (props) => {
     review: ''
   })
 
+  console.log(props)
+
   const formatDate = (date) => {
     const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
@@ -136,7 +138,7 @@ const SingleRestaurant = (props) => {
       {props.location.state && (
         <Link to={{pathname: `/findrestaurant?page=${props.location.state.page}`, state: {page:props.location.state.page, parameters:props.location.state.parameters, last:props.location.pathname}}}>Return to results</Link>
       )}
-      <h2>{restaurant.name}
+      <h2 id='restaurant_name'>{restaurant.name}
       {localStorage.getItem('token') && (
         favorites_place_ids.includes(restaurant.place_id) ? (
           <FavoriteIcon
@@ -198,7 +200,7 @@ const SingleRestaurant = (props) => {
           {restaurantInfo.reviews.map((review, index) => {
             return(
               review.user_id === Number(user_id) ? 
-                <div key={index}>
+                <div className='user_reviews' key={index}>
                 <br/>
                   <EditIcon onClick={()=>handleEditingStatus(review)}/>
                   <DeleteForeverIcon onClick={()=>handleDeletingStatus(review)}/>
@@ -214,7 +216,7 @@ const SingleRestaurant = (props) => {
 
                 </div>
                 :
-                <div key={index}>
+                <div className='user_reviews' key={index}>
                   <br/>
                   <div>{review.username}</div>
                   <div>{formatDate(review.created_at)}</div>
@@ -239,7 +241,10 @@ const SingleRestaurant = (props) => {
           )}
         </div>
         :
+        props.location.state !== undefined ? 
         <div>Please <Link to={{ pathname: '/login', state: {last:props.location.pathname, next:props.location.state.last}}}>sign in</Link> to see user ratings and reviews</div>
+        :
+        <div>Please <Link to={{ pathname: '/login', state: {last:props.location.pathname}}}>sign in</Link> to see user ratings and reviews</div>
       }
     </div>
   );
