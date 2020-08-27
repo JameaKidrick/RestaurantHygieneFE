@@ -3,6 +3,7 @@
 let username = "";
 let new_review = "";
 let review_length = 0;
+let token = "";
 
 describe("Creating a user to login with", () => {
   let num = Math.random();
@@ -22,6 +23,7 @@ describe("Creating a user to login with", () => {
 describe("Review/ratings CRUD", () => {
   before(() => {
     cy.wait(1000);
+    console.log(token);
     cy.contains("Find a Restaurant").click();
     cy.get("form").within(() => {
       cy.get("input[name=userCity]").type("Martinsburg");
@@ -55,33 +57,8 @@ describe("Review/ratings CRUD", () => {
       cy.get(buttons[0]).click();
     });
     cy.wait(1000);
-    // it("Can see newly created review", () => {
     cy.get(".user_reviews").should((reviews) => {
       expect(reviews).to.have.length(review_length + 1);
-      cy.get(`${reviews[reviews.length - 1]}.div`).should((elements) => {
-        console.log(elements);
-      });
-      // expect(reviews[reviews.length - 1]).to.match(/[new_review]/);
     });
-    // });
   });
 });
-
-// describe("Can add a new review and rating", () => {
-//   it("User can add review", () => {
-//     // cy.get("#add_review").click();
-//     cy.get(".add_review").click();
-//     cy.wait(3000);
-//   });
-//   // it("Can see newly created review");
-// });
-
-// describe('Can edit a review and/or rating', () => {
-//   it('User can edit their review')
-//   it('Can see edited review')
-// })
-
-// describe('Can delete a review and rating', () => {
-//   it('User can delete their review')
-//   it('Can not see deleted review')
-// })
