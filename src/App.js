@@ -17,6 +17,10 @@ import MyReviews from './components/MyReviews';
 import MyFavoriteRestaurants from './components/MyFavoriteRestaurants';
 import Profile from './components/Profile';
 
+// STYLING
+import { FontStyle } from './syles/globalStyling'
+import { Nav } from './syles/navBar'
+
 function App(props) {
   const dispatch = useDispatch()
   const loggedIn = useSelector(state => state.logInReducer.loggedIn)
@@ -28,11 +32,11 @@ function App(props) {
 
   return (
     <Router>
-      <div className="App">
-        <Link to='/' onClick={()=> dispatch(resetResponseState())}>Home</Link>
-        <br />
+      <FontStyle className="App">
         {loggedIn && (
-          <>
+          <Nav>
+            <Link to='/' onClick={()=> dispatch(resetResponseState())}>Home</Link>
+            <br />
             <Link to='/findrestaurant' onClick={()=> dispatch(resetResponseState())}>Find a Restaurant</Link>
             <br />
             <Link to='/myreviews'>My Reviews</Link>
@@ -42,16 +46,18 @@ function App(props) {
             <Link to='/settings'>Settings</Link>
             <br />
             <Link to='/' onClick={() => dispatch(logOutUser(props.persistor, resetResponseState))}>Log out</Link>
-          </>
+          </Nav>
         )}
         {!loggedIn && (
-          <>
+          <Nav>
+            <Link to='/' onClick={()=> dispatch(resetResponseState())}>Home</Link>
+            <br />
             <Link to='/findrestaurant'>Find a Restaurant</Link>
             <br />
             <Link to='/register'>Signup</Link>
             <br />
             <Link to='/login'>Log in</Link>
-          </>
+          </Nav>
         )}
         <Switch>
           <Route exact path='/' component={Home} />
@@ -69,7 +75,7 @@ function App(props) {
           <Route component={ErrorPage} />
         </Switch>
 
-      </div>
+      </FontStyle>
     </Router>
   );
 }
