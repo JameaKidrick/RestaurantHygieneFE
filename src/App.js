@@ -16,6 +16,7 @@ import SingleRestaurant from './components/SingleRestaurant';
 import MyReviews from './components/MyReviews';
 import MyFavoriteRestaurants from './components/MyFavoriteRestaurants';
 import Profile from './components/Profile';
+import FastfoodIcon from '@material-ui/icons/Fastfood';
 
 // STYLING
 import { FontStyle } from './syles/globalStyling'
@@ -35,28 +36,36 @@ function App(props) {
       <FontStyle className="App">
         {loggedIn && (
           <Nav>
-            <Link to='/' onClick={()=> dispatch(resetResponseState())}>Home</Link>
-            <br />
-            <Link to='/findrestaurant' onClick={()=> dispatch(resetResponseState())}>Find a Restaurant</Link>
-            <br />
-            <Link to='/myreviews'>My Reviews</Link>
-            <br />
-            <Link to='/myrestaurants'>My Restaurants</Link>
-            <br />
-            <Link to='/settings'>Settings</Link>
-            <br />
-            <Link to='/' onClick={() => dispatch(logOutUser(props.persistor, resetResponseState))}>Log out</Link>
+            <Link to='/'>
+              <div className='logoContainer'>
+                <FastfoodIcon className='icon' />
+                <h2>Restaurant Hygiene</h2>
+              </div>
+            </Link>
+            <div className='links'>
+              <Link to='/' onClick={()=> dispatch(resetResponseState())}>Home</Link>
+              <Link to='/findrestaurant' onClick={()=> dispatch(resetResponseState())}>Find a Restaurant</Link>
+              <Link to='/myreviews'>My Reviews</Link>
+              <Link to='/myrestaurants'>My Restaurants</Link>
+              <Link to='/settings'>Settings</Link>
+              <Link to='/' onClick={() => dispatch(logOutUser(props.persistor, resetResponseState))}>Log out</Link>
+            </div>
           </Nav>
         )}
         {!loggedIn && (
           <Nav>
-            <Link to='/' onClick={()=> dispatch(resetResponseState())}>Home</Link>
-            <br />
-            <Link to='/findrestaurant'>Find a Restaurant</Link>
-            <br />
-            <Link to='/register'>Signup</Link>
-            <br />
-            <Link to='/login'>Log in</Link>
+            <Link to='/'>
+              <div className='logoContainer'>
+                <FastfoodIcon className='icon' />
+                <h2>Restaurant Hygiene</h2>
+              </div>
+            </Link>
+            <div className='links'>
+              <Link to='/' onClick={()=> dispatch(resetResponseState())}>Home</Link>
+              <Link to='/findrestaurant'>Find a Restaurant</Link>
+              <Link to='/register'>Signup</Link>
+              <Link to='/login'>Log in</Link>
+            </div>
           </Nav>
         )}
         <Switch>
