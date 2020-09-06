@@ -75,8 +75,6 @@ const SingleRestaurant = (props) => {
     review: "",
   });
 
-  console.log(props);
-
   const formatDate = (date) => {
     const days = [
       "Sunday",
@@ -166,6 +164,7 @@ const SingleRestaurant = (props) => {
       SINGLE RESTAURANT PAGE
       {props.location.state && (
         <Link
+          className='link search return' 
           to={{
             pathname: `/findrestaurant?page=${props.location.state.page}`,
             state: {
@@ -307,6 +306,7 @@ const SingleRestaurant = (props) => {
         <div>
           Please{" "}
           <Link
+            className='link login' 
             to={{
               pathname: "/login",
               state: {
@@ -323,6 +323,7 @@ const SingleRestaurant = (props) => {
         <div>
           Please{" "}
           <Link
+            className='link login' 
             to={{
               pathname: "/login",
               state: { last: props.location.pathname },

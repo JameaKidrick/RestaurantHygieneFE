@@ -73,7 +73,7 @@ const MyReviews = () => {
         return(
           <div key={index}>
             <br/>
-            <Link to={`/restaurant/${review.place_id}`}>
+            <Link className='link singleRestaurant' to={`/restaurant/${review.place_id}`}>
               <div>{review.restaurant_name}</div>
               <div>{review.restaurant_address}</div>
               <div>{formatDate(review.created_at)}</div>

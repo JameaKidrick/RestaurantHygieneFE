@@ -138,7 +138,7 @@ const Register = (props) => {
         <button type='submit' disabled={buttonDisabled}>Register</button>
       </form>
       <div id='goToLogin'>
-        <p>Already have an account? <Link to='/login'>Click to login</Link></p>
+        <p>Already have an account? <Link className='link login' to='/login'>Click to login</Link></p>
       </div>
       {error && (error === 'There is already a user with that username in the database. Please choose a new username.') && (
         <p id='registerError'>{error}</p>

@@ -19,7 +19,7 @@ export const logInUser = (data, history, location) => dispatch => {
       dispatch({ type: LOGIN_SUCCESS, payload: response.data.user_id })
       localStorage.setItem('token', response.data.token)
       dispatch(getAllFavoritesByUserID(response.data.user_id))
-      if(location.state !== undefined && location.state.last.includes('/restaurant/')){
+      if(location.state !== null && location.state.last.includes('/restaurant/')){
         if(location.state.next){
           history.push(location.state.next)
         }else{

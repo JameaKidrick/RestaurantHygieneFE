@@ -110,7 +110,7 @@ const RestaurantSearch = (props) => {
       setPageNumber(0);
     }
 
-    if (props.location.state !== undefined && props.location.state.page) {
+    if (props.location.state !== null && props.location.state !== undefined && props.location.state.page) {
       setPageNumber(props.location.state.page);
     }
   }, []);
@@ -280,13 +280,13 @@ const RestaurantSearch = (props) => {
       </form>
       {pages.length > 1 && pageNumber !== 1 && (
         <Link
-          to={`/findrestaurant?page=${pageNumber - 1}`}
+        className='link search back' to={`/findrestaurant?page=${pageNumber - 1}`}
           onClick={() => handleBackPage()}
         >{`<--- Back`}</Link>
       )}
       {(pageNumber !== pages.length || next_page) && (
         <Link
-          to={`/findrestaurant?page=${pageNumber + 1}`}
+        className='link search next' to={`/findrestaurant?page=${pageNumber + 1}`}
           onClick={() => handleNextPage()}
         >{`Next --->`}</Link>
       )}
@@ -299,7 +299,7 @@ const RestaurantSearch = (props) => {
           pages[props.location.state.page - 1].map(
             (restaurant, restaurantIndex) => {
               return (
-                <Link
+                <Link 
                   to={{
                     pathname: `/restaurant/${restaurant.place_id}`,
                     state: {
@@ -310,7 +310,7 @@ const RestaurantSearch = (props) => {
                       parameters: parameters,
                     },
                   }}
-                  className="restaurant"
+                  className="link singleRestaurant restaurant"
                   key={restaurantIndex}
                   style={{ border: "2px solid red" }}
                 >
@@ -367,8 +367,7 @@ const RestaurantSearch = (props) => {
                     parameters: parameters,
                   },
                 }}
-                restaurantinfo={restaurant}
-                className="restaurant"
+                restaurantinfo={restaurant}className="link singleRestaurant restaurant"
                 key={restaurantIndex}
                 style={{ border: "2px solid red" }}
               >
@@ -423,12 +422,14 @@ const RestaurantSearch = (props) => {
       )}
       {pages.length > 1 && pageNumber !== 1 && (
         <Link
+        className='link search back' 
           to={`/findrestaurant?page=${pageNumber - 1}`}
           onClick={() => handleBackPage()}
         >{`<--- Back`}</Link>
       )}
       {(pageNumber !== pages.length || next_page) && (
         <Link
+          className='link search next' 
           to={`/findrestaurant?page=${pageNumber + 1}`}
           onClick={() => handleNextPage()}
         >{`Next --->`}</Link>

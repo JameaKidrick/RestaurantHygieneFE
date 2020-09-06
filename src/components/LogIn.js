@@ -86,7 +86,7 @@ const LogIn = (props) => {
       <LoginPage>
         <Form onSubmit={handleSubmit}>
           <InputContainer htmlFor='username'>
-            <Label>username*</Label>
+            <Label>username<span> *</span></Label>
             <Input
             type='text' 
             name='username'
@@ -95,7 +95,7 @@ const LogIn = (props) => {
             />
           </InputContainer>
           <InputContainer htmlFor='password'>
-            <Label>password*</Label>
+            <Label>password<span> *</span></Label>
             <Input
             type={passwordType}
             name='password'
@@ -113,10 +113,10 @@ const LogIn = (props) => {
             checked={hidePassword}
             />
           </LabelHide>
-          <Button type='submit' disabled={buttonDisabled}>Log In</Button>
+          <Button id={buttonDisabled ? 'enabled':'disabled'} type='submit' disabled={buttonDisabled}>Log In</Button>
         </Form>
         <div id='goToRegister'>
-          <p>Don't have an account? <Link to='/register'>Click to register</Link></p>
+          <p>Don't have an account? <Link className='link register' to='/register'>Click to register</Link></p>
         </div>
         {error && (error === 'Invalid credentials: Please check your password and try again.' || error === 'Invalid credentials: Please check your username and try again.') && (
           <p id='loginError'>{error}</p>

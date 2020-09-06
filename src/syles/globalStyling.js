@@ -1,5 +1,12 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
-export const FontStyle = styled.div`
-  font-family: 'Roboto', sans-serif;
-`
+export const GlobalStyle = styled.div`
+  // font-size: 62.5%;
+  // color: black;
+
+  .link {
+    color: black;
+    text-decoration: none;
+    cursor: point;
+  }
+`;

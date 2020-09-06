@@ -35,7 +35,7 @@ const MyFavoriteRestaurants = () => {
       {user_favorites.map((favorite, index) => {
         return(
           <div key={index}>
-            <Link to={`/restaurant/${favorite.place_id}`}>
+            <Link className='link singleRestaurant' to={`/restaurant/${favorite.place_id}`}>
               <div>{favorite.restaurant_name}</div>
               <div>{favorite.restaurant_address}</div>
             </Link>
