@@ -7,7 +7,7 @@ import * as Yup from "yup";
 import { logInUser, resetErrors } from '../actions';
 
 // STYLING
-import { ParentContainer, LoginPage, Form, InputContainer, Label, LabelHide, Input, Button } from '../syles/loginStyling'
+import { ParentContainer, FormPage, Form, InputContainer, Label, LabelHide, Input, Button } from '../syles/loginStyling'
 
 const LogIn = (props) => {
   const dispatch = useDispatch()
@@ -82,8 +82,8 @@ const LogIn = (props) => {
 
   return(
     <ParentContainer>
-      <p id='login_header'>Log In</p>
-      <LoginPage>
+      <p id='header'>Log In</p>
+      <FormPage>
         <Form onSubmit={handleSubmit}>
           <InputContainer htmlFor='username'>
             <Label>username<span> *</span></Label>
@@ -93,6 +93,9 @@ const LogIn = (props) => {
             onChange={handleChanges} 
             value={user.username}
             />
+            {error && (error === 'Invalid credentials: Please check your username and try again.') && (
+              <p id='loginError' className='error'>{error}</p>
+            )}
           </InputContainer>
           <InputContainer htmlFor='password'>
             <Label>password<span> *</span></Label>
@@ -102,6 +105,9 @@ const LogIn = (props) => {
             onChange={handleChanges}
             value={user.password}
             />
+            {error && (error === 'Invalid credentials: Please check your password and try again.') && (
+              <p id='loginError' className='error'>{error}</p>
+            )}
           </InputContainer>
           <LabelHide htmlFor='hidePassword'>
             <span>Hide password</span>
@@ -118,10 +124,7 @@ const LogIn = (props) => {
         <div id='goToRegister'>
           <p>Don't have an account? <Link className='link register' to='/register'>Click to register</Link></p>
         </div>
-        {error && (error === 'Invalid credentials: Please check your password and try again.' || error === 'Invalid credentials: Please check your username and try again.') && (
-          <p id='loginError'>{error}</p>
-        )}
-      </LoginPage>
+      </FormPage>
     </ParentContainer>
   )
 };

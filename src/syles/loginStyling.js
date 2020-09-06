@@ -5,13 +5,13 @@ export const ParentContainer = styled.div`
   width: 45%;
   margin: 0 auto;
   margin-top: 3rem;
-  #login_header {
+  #header {
     font-weight: bold;
     font-size: 1.3rem;
   }
 `
 
-export const LoginPage = styled.div`
+export const FormPage = styled.div`
   border: 2px solid black;
   display: flex;
   flex-direction: column;
@@ -20,6 +20,10 @@ export const LoginPage = styled.div`
   margin-top: 1%;
 
   #goToRegister .register {
+    color: blue;
+  }
+
+  #goToLogin .login {
     color: blue;
   }
 `
@@ -35,6 +39,13 @@ export const InputContainer = styled.label`
   display: flex;
   flex-direction: column;
   margin-bottom: 1rem;
+
+  .error {
+    color: red;
+    font-size: 0.7rem;
+    margin-left: 0.5rem;
+    margin-top: 0.2rem;
+  }
 `
 
 export const Label = styled.span`

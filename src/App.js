@@ -65,7 +65,6 @@ function App(props) {
               <NavLink
                 className="link search"
                 isActive={(match, location) => {
-                  console.log(match, location);
                   if (
                     (match && match.url.includes("/findrestaurant")) ||
                     location.pathname.includes("/restaurant") ||
