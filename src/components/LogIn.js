@@ -7,7 +7,7 @@ import * as Yup from "yup";
 import { logInUser, resetErrors } from '../actions';
 
 // STYLING
-import { ParentContainer, FormPage, Form, InputContainer, Label, LabelHide, Input, Button } from '../syles/loginStyling'
+import { ParentContainer, FormPage, Form, InputContainer, Label, LabelHide, Input, Button } from '../syles/formStyling'
 
 const LogIn = (props) => {
   const dispatch = useDispatch()

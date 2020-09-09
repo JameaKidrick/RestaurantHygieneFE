@@ -155,7 +155,7 @@ const SingleRestaurant = (props) => {
     dispatch(getRestaurantByPlaceID(restaurant.place_id));
   }, [restaurant]);
 
-  if (isFetching === true) {
+  if (isFetching) {
     return <div>Loading...</div>;
   }
 
@@ -171,6 +171,7 @@ const SingleRestaurant = (props) => {
               page: props.location.state.page,
               parameters: props.location.state.parameters,
               last: props.location.pathname,
+              userLocation: props.location.state.parameters.userLocation
             },
           }}
         >

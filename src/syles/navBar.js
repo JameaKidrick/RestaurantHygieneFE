@@ -41,5 +41,3 @@ export const Nav = styled.nav`
     color: red;
   }
 `
-
-// REMOVE TEXT DECORATION FOR ALL LINKS (MAY HAVE TO ADD THIS TO THE GLOBAL STYLES)

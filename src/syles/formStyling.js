@@ -1,9 +1,13 @@
 import styled from "styled-components";
 
+export const GrandparentContainer = styled.div`
+  display: flex;
+`
+
 export const ParentContainer = styled.div`
   // border: 2px solid green;
-  width: 45%;
-  margin: 0 auto;
+  width: ${props => props.results ? '25%': '45%'};
+  margin: ${props => props.results ? '0 0 0 3rem': '0 auto'};
   margin-top: 3rem;
   #header {
     font-weight: bold;
@@ -71,9 +75,16 @@ export const Input = styled.input`
   padding: 0.5rem;
 `
 
+export const Select = styled.select`
+  // border: 2px solid red;
+  margin-top: 1rem;
+  border-radius: 0.2rem;
+  border: 1px solid black;
+  padding: 0.5rem;
+`
+
 export const Button = styled.button`
   // border: 2px solid red;
-  width: 5rem;
   margin: 0 auto;
   margin-bottom: 2rem;
   padding: 0.5rem;
