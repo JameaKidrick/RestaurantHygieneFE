@@ -1,23 +1,26 @@
 import styled from "styled-components";
 
 export const Results = styled.div`
+  display: ${props => props.results ? '': 'none'};
   // border: 2px solid red;
   width: 100%;
-  margin-top: 5rem;
-  margin-left: 3rem;
-  margin-right: 4rem;
+  margin: 5rem 4rem 0 3rem;
+
+  // TOP RIGHT BOTTOM LEFT
 
   .cards {
-    // border: 2px solid pink;
+    // border: 2px solid blue;
     display: flex;
     flex-wrap: wrap;
+    padding: 0 0rem 0 5rem;
   }
 
   .singleRestaurant {
     border: 2px solid black;
     width: 30%;
-    margin: 0.5rem;
+    // margin: 0.5rem;
     padding: 0.5rem;
+    margin: 0.5rem 0.5rem 0.5rem 0;
   }
 
   #favorite {
@@ -64,10 +67,13 @@ export const Results = styled.div`
   }
 
   .pageDirections {
-    // border: 2px solid red;
+    // border: 2px solid green;
     padding: 0.5rem;
-    width: 25%;
-    margin: 0 auto;
+    // margin-left: 3rem;
+    // width: 25%;
+    // margin: 0 auto;
+    display: flex;
+    justify-content: center;
   }
 
   .back {
@@ -76,5 +82,11 @@ export const Results = styled.div`
 
   .next {
     // border: 2px solid blue;
+  }
+
+  .disabledLink {
+    // border: 2px solid blue;
+    color: grey;
+    cursor: default;
   }
 `;

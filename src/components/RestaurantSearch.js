@@ -35,7 +35,7 @@ const RestaurantSearch = (props) => {
     userState: "",
   });
   const [query, setQuery] = useState(`?page=${pageNumber}`);
-  const [results, setResults] = useState(true)
+  const [results, setResults] = useState(false)
 
   let searchFormSchema = Yup.object().shape({
     query: Yup.string(),
@@ -126,7 +126,7 @@ const RestaurantSearch = (props) => {
   // }
 
   return (
-    <GrandparentContainer results={results}>
+    <GrandparentContainer>
       <ParentContainer results={results}>
         <p id='header'>Find a Restaurant</p>
         <FormPage>
@@ -220,7 +220,7 @@ const RestaurantSearch = (props) => {
           </Form>
         </FormPage>
       </ParentContainer>
-      <SearchResults pageNumber={pageNumber} setPageNumber={setPageNumber} parameters={parameters} setParameters={setParameters} setUserLocation={setUserLocation} query={query} history={props.history} location={props.location} />
+      <SearchResults pageNumber={pageNumber} setPageNumber={setPageNumber} parameters={parameters} setParameters={setParameters} setUserLocation={setUserLocation} query={query} history={props.history} location={props.location} results={results} setResults={setResults} />
     </GrandparentContainer>
   );
 };

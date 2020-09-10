@@ -13,6 +13,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import { Results } from "../syles/resultsStyling";
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -51,6 +53,8 @@ const SearchResults = ({
   query,
   history,
   location,
+  results,
+  setResults
 }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -89,46 +93,54 @@ const SearchResults = ({
     );
   };
 
-  const handleNextPage = () => {
-    setPageNumber(pageNumber + 1);
-    if (!pages[pageNumber]) {
-      dispatch(
-        placeLocator_nextPage(next_page, history, `?page=${pageNumber + 1}`)
-      );
+  const handleNextPage = (e) => {
+    if(pageNumber !== pages.length || next_page){
+      setPageNumber(pageNumber + 1);
+      if (!pages[pageNumber]) {
+        dispatch(
+          placeLocator_nextPage(next_page, history, `?page=${pageNumber + 1}`)
+        );
+      }
+    }else{
+      e.preventDefault()
     }
   };
 
-  const handleBackPage = () => {
-    setPageNumber(pageNumber - 1);
+  const handleBackPage = (e) => {
+    if(pages.length > 1 && pageNumber !== 1){
+      setPageNumber(pageNumber - 1);
+    }else{
+      e.preventDefault()
+    }
   };
+
+  useEffect(() => {
+    if(places.length > 0){
+      setResults(true)
+    }
+  }, [])
 
   if (isFetching) {
     return <div>Loading...</div>;
   }
 
   return (
-    <Results>
+    <Results results={results}>
       <div className='pageDirections'>
-        {pages.length > 1 && pageNumber !== 1 && (
+        {results && (
           <Link
-            className="link search back"
+            className='link search back'
             to={`/findrestaurant?page=${pageNumber - 1}`}
-            onClick={() => handleBackPage()}
-          >{`<--- Back`}</Link>
+            onClick={(e) => handleBackPage(e)}
+          ><ChevronLeftIcon className={`${pages.length > 1 && pageNumber !== 1 ? '':'disabledLink'}`} /></Link>
         )}
-        {(pageNumber !== pages.length || next_page) && (
-          <Link
-            className="link search back"
-            to={`/findrestaurant?page=${pageNumber - 1}`}
-            onClick={() => handleBackPage()}
-          >{`<--- Back`}</Link>
-        )}
-        {(pageNumber !== pages.length || next_page) && (
+        <p>Page {pageNumber}</p>
+        {results && (
           <Link
             className="link search next"
             to={`/findrestaurant?page=${pageNumber + 1}`}
-            onClick={() => handleNextPage()}
-          >{`Next --->`}</Link>
+            onClick={(e) => handleNextPage(e)}
+          ><ChevronRightIcon className={`${pageNumber !== pages.length || next_page ? '':'disabledLink'}`} /></Link>
         )}
       </div>
       {status === "ZERO_RESULTS" ? (
@@ -194,7 +206,7 @@ const SearchResults = ({
           </div>
         ) : (
           <div className='cards'>
-            {pages[0].map((restaurant, restaurantIndex) => {
+            {pages[pageNumber - 1].map((restaurant, restaurantIndex) => {
               return (
                 <Link
                   to={{
@@ -266,26 +278,20 @@ const SearchResults = ({
         />
       )}
       <div className='pageDirections'>
-        {pages.length > 1 && pageNumber !== 1 && (
+        {results && (
           <Link
             className="link search back"
             to={`/findrestaurant?page=${pageNumber - 1}`}
-            onClick={() => handleBackPage()}
-          >{`<--- Back`}</Link>
+            onClick={(e) => handleBackPage(e)}
+          ><ChevronLeftIcon className={`${pages.length > 1 && pageNumber !== 1 ? '':'disabledLink'}`} /></Link>
         )}
-        {(pageNumber !== pages.length || next_page) && (
-          <Link
-            className="link search back"
-            to={`/findrestaurant?page=${pageNumber - 1}`}
-            onClick={() => handleBackPage()}
-          >{`<--- Back`}</Link>
-        )}
-        {(pageNumber !== pages.length || next_page) && (
+        <p>Page {pageNumber}</p>
+        {results && (
           <Link
             className="link search next"
             to={`/findrestaurant?page=${pageNumber + 1}`}
-            onClick={() => handleNextPage()}
-          >{`Next --->`}</Link>
+            onClick={(e) => handleNextPage(e)}
+          ><ChevronRightIcon className={`${pageNumber !== pages.length || next_page ? '':'disabledLink'}`} /></Link>
         )}
       </div>
     </Results>

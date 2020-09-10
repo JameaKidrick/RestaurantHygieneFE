@@ -2,9 +2,9 @@ import { LOCATION_SUCCESS, NEXT_PAGE_LOCATION_SUCCESS, FETCH_RESTAURANT_SUCCESS,
 import { places } from '../components/dummyData';
 
 const initialState = {
-  places: places.results,
-  pages: [places.results],
-  next_page: places.next_page_token,
+  places: [],
+  pages: [],
+  next_page: '',
   single_restaurant: [],
   status: 'OK'
 }
