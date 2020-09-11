@@ -35,10 +35,6 @@ export const Results = styled.div`
     margin-right: 0.5rem;
   }
 
-  .heartIcon .favorited {
-    color: red;
-  }
-
   .restaurantName {
     font-weight: bold;
   }

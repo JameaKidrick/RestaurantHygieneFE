@@ -22,6 +22,10 @@ import EditIcon from "@material-ui/icons/Edit";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import FavoriteIcon from "@material-ui/icons/Favorite";
+import {
+  SingleRestaurantPage,
+  Opening_hours,
+} from "../syles/singleRestaurantStyling";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -160,26 +164,25 @@ const SingleRestaurant = (props) => {
   }
 
   return (
-    <div>
-      SINGLE RESTAURANT PAGE
+    <SingleRestaurantPage>
       {props.location.state && (
         <Link
-          className='link search return' 
+          className="link search return"
           to={{
             pathname: `/findrestaurant?page=${props.location.state.page}`,
             state: {
               page: props.location.state.page,
               parameters: props.location.state.parameters,
               last: props.location.pathname,
-              userLocation: props.location.state.parameters.userLocation
+              userLocation: props.location.state.parameters.userLocation,
             },
           }}
         >
           Return to results
         </Link>
       )}
-      <h2 id="restaurant_name">
-        {restaurant.name}
+      <div id="header">
+        <p id="restaurant_name">{restaurant.name}</p>
         {localStorage.getItem("token") &&
           (favorites_place_ids.includes(restaurant.place_id) ? (
             <FavoriteIcon
@@ -190,18 +193,19 @@ const SingleRestaurant = (props) => {
               onClick={(e) => handleAddFavoriteChanges(e, restaurant)}
             />
           ))}
-        <span style={{ fontSize: "0.8rem" }}>
-          {restaurant.opening_hours ? (
-            restaurant.opening_hours["open_now"] === true ? (
-              <h4 style={{ color: "green" }}>Open</h4>
-            ) : (
-              <h4 style={{ color: "red" }}>Closed</h4>
-            )
+      </div>
+      <p id="restaurant_address">{restaurant.formatted_address}</p>
+      <span>
+        {restaurant.opening_hours ? (
+          restaurant.opening_hours["open_now"] === true ? (
+            <Opening_hours color={"green"}>Open</Opening_hours>
           ) : (
-            false
-          )}
-        </span>
-      </h2>
+            <Opening_hours color={"red"}>Closed</Opening_hours>
+          )
+        ) : (
+          false
+        )}
+      </span>
       {localStorage.getItem("token") && faveDeleting && (
         <DeleteFavoriteModal
           favorite={currentFavorite}
@@ -209,17 +213,14 @@ const SingleRestaurant = (props) => {
           user_id={user_id}
         />
       )}
-      <p>{restaurant.formatted_address}</p>
-      <Typography component="legend">
+      <p id="avgHygiene">
         Hygiene Rating:{" "}
         {restaurant.avgHygieneRating === null ? (
-          <span style={{ fontWeight: "bold" }}>Not Rated</span>
+          <span>Not Rated</span>
         ) : (
-          <span style={{ fontWeight: "bold" }}>
-            {restaurant.avgHygieneRating}
-          </span>
+          <span>{restaurant.avgHygieneRating}</span>
         )}
-      </Typography>
+      </p>
       <Rating
         name="average_rating"
         defaultValue={restaurant.avgHygieneRating}
@@ -231,8 +232,14 @@ const SingleRestaurant = (props) => {
         restaurantInfo.reviews.message ===
         "There are no reviews for this restaurant." ? (
           <div>
-            Be the first to add a review!
-            <AddIcon className="add_review" onClick={() => setCreating(true)} />
+            <div className="reviews_header">
+              <p>Reviews</p>
+              <AddIcon
+                className="add_review"
+                onClick={() => setCreating(true)}
+              />
+            </div>
+            <p className="reviews_message">Be the first to add a review!</p>
             {creating && (
               <AddReviewModal
                 restaurant={restaurant}
@@ -243,7 +250,13 @@ const SingleRestaurant = (props) => {
           </div>
         ) : (
           <div className="review">
-            <AddIcon className="add_review" onClick={() => setCreating(true)} />
+            <div className="reviews_header">
+              <p>Reviews</p>
+              <AddIcon
+                className="add_review"
+                onClick={() => setCreating(true)}
+              />
+            </div>
             {restaurantInfo.reviews.map((review, index) => {
               return review.user_id === Number(user_id) ? (
                 <div className="user_reviews" key={index}>
@@ -305,9 +318,10 @@ const SingleRestaurant = (props) => {
         )
       ) : props.location.state !== undefined ? (
         <div>
+          <p>Reviews</p>
           Please{" "}
           <Link
-            className='link login' 
+            className="link login"
             to={{
               pathname: "/login",
               state: {
@@ -322,9 +336,10 @@ const SingleRestaurant = (props) => {
         </div>
       ) : (
         <div>
+          <p>Reviews</p>
           Please{" "}
           <Link
-            className='link login' 
+            className="link login"
             to={{
               pathname: "/login",
               state: { last: props.location.pathname },
@@ -335,7 +350,7 @@ const SingleRestaurant = (props) => {
           to see user ratings and reviews
         </div>
       )}
-    </div>
+    </SingleRestaurantPage>
   );
 };
 
