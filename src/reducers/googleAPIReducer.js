@@ -1,12 +1,11 @@
 import { LOCATION_SUCCESS, NEXT_PAGE_LOCATION_SUCCESS, FETCH_RESTAURANT_SUCCESS, LOGOUT_SUCCESS, RESET_STATE } from '../actions';
+import { places } from '../components/dummyData';
 
 const initialState = {
   places: [],
   pages: [],
-  page_number: 0,
   next_page: '',
   single_restaurant: [],
-  test: '',
   status: 'OK'
 }
 

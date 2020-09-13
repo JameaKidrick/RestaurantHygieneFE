@@ -4,20 +4,28 @@ import { Link } from "react-router-dom";
 import DeleteReviewModal from "./DeleteReviewModal";
 import EditReviewModal from "./EditReviewModal";
 import AddReviewModal from "./AddReviewModal";
-import DeleteFavoriteModal from './DeleteFavoriteModal';
+import DeleteFavoriteModal from "./DeleteFavoriteModal";
 
 // ACTIONS
-import { getRestaurantByPlaceID, addNewFavorite, placeDetails } from '../actions'
+import {
+  getRestaurantByPlaceID,
+  addNewFavorite,
+  placeDetails,
+} from "../actions";
 
 // STYLING
 import { makeStyles } from "@material-ui/core/styles";
 import Rating from "@material-ui/lab/Rating";
 import Typography from "@material-ui/core/Typography";
-import AddIcon from '@material-ui/icons/Add';
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import AddIcon from "@material-ui/icons/Add";
+import EditIcon from "@material-ui/icons/Edit";
+import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import FavoriteIcon from "@material-ui/icons/Favorite";
+import {
+  SingleRestaurantPage,
+  Opening_hours,
+} from "../syles/singleRestaurantStyling";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -50,55 +58,73 @@ const customIcons = {
 const SingleRestaurant = (props) => {
   /****************************************** STATE ******************************************/
   const classes = useStyles();
-  const dispatch = useDispatch()
-  const isFetching = useSelector(state => state.appStatusReducer.isFetching)
-  const restaurantInfo = useSelector(state => state.reviewsReducer)
-  const user_id = useSelector(state => state.logInReducer.user_id)
+  const dispatch = useDispatch();
+  const isFetching = useSelector((state) => state.appStatusReducer.isFetching);
+  const restaurantInfo = useSelector((state) => state.reviewsReducer);
+  const user_id = useSelector((state) => state.logInReducer.user_id);
   const user_favorites = useSelector(
     (state) => state.logInReducer.user_favorites
   );
   const favorites_place_ids = user_favorites.map((favorite) => {
     return favorite.place_id;
   });
-  const [restaurant, setRestaurant] = useState({})
+  const [restaurant, setRestaurant] = useState({});
   const [currentFavorite, setCurrentFavorite] = useState({});
-  const [faveDeleting, setFaveDeleting] = useState(false)
-  const [creating, setCreating] = useState(false)
-  const [editing, setEditing] = useState(false)
-  const [deleting, setDeleting] = useState(false)
+  const [faveDeleting, setFaveDeleting] = useState(false);
+  const [creating, setCreating] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [originalReview, setOriginalReview] = useState({
     rating: 0,
-    review: ''
-  })
+    review: "",
+  });
 
   const formatDate = (date) => {
-    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const days = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
 
     const monthNames = [
-      "January", "February", "March",
-      "April", "May", "June", "July",
-      "August", "September", "October",
-      "November", "December"
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
     ];
-    const publishDate = new Date(date)
-    return `${days[publishDate.getDay()]}, ${monthNames[publishDate.getMonth()]} ${publishDate.getDate()}, ${publishDate.getFullYear()}`
-  }
+    const publishDate = new Date(date);
+    return `${days[publishDate.getDay()]}, ${
+      monthNames[publishDate.getMonth()]
+    } ${publishDate.getDate()}, ${publishDate.getFullYear()}`;
+  };
 
   /************************************** HANDLERS **************************************/
 
   const handleEditingStatus = (review) => {
-    if(editing === false){
-      setEditing(true)
+    if (editing === false) {
+      setEditing(true);
     }
-    setOriginalReview(review)
-  }
+    setOriginalReview(review);
+  };
 
   const handleDeletingStatus = (review) => {
-    if(deleting === false){
-      setDeleting(true)
+    if (deleting === false) {
+      setDeleting(true);
     }
-    setOriginalReview(review)
-  }
+    setOriginalReview(review);
+  };
 
   const handleDeleteFavoriteChanges = (e, favorite) => {
     e.preventDefault();
@@ -108,76 +134,93 @@ const SingleRestaurant = (props) => {
 
   const handleAddFavoriteChanges = (e, favorite) => {
     e.preventDefault();
-    dispatch(addNewFavorite({place_id: favorite.place_id, restaurant_name: favorite.name, restaurant_address: favorite.formatted_address}, user_id))
+    dispatch(
+      addNewFavorite(
+        {
+          place_id: favorite.place_id,
+          restaurant_name: favorite.name,
+          restaurant_address: favorite.formatted_address,
+        },
+        user_id
+      )
+    );
   };
 
   /************************************** LIFECYCLE **************************************/
   useEffect(() => {
-    if(!props.location.state){
-      dispatch(placeDetails(props.match.params.place_id, setRestaurant))
-    }else{
-      setRestaurant(props.location.state.restaurant)
+    if (!props.location.state) {
+      dispatch(placeDetails(props.match.params.place_id, setRestaurant));
+    } else {
+      setRestaurant(props.location.state.restaurant);
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
-    dispatch(getRestaurantByPlaceID(restaurant.place_id))
-  }, [restaurant])
+    dispatch(getRestaurantByPlaceID(restaurant.place_id));
+  }, [restaurant]);
 
-  if(isFetching === true){
-    return(
-      <div>Loading...</div>
-    )
+  if (isFetching) {
+    return <div>Loading...</div>;
   }
 
   return (
-    <div>
-      SINGLE RESTAURANT PAGE
+    <SingleRestaurantPage>
       {props.location.state && (
-        <Link to={{pathname: `/findrestaurant?page=${props.location.state.page}`, state: {page:props.location.state.page, parameters:props.location.state.parameters, last:props.location.pathname}}}>Return to results</Link>
+        <Link
+          className="link search return"
+          to={{
+            pathname: `/findrestaurant?page=${props.location.state.page}`,
+            state: {
+              page: props.location.state.page,
+              parameters: props.location.state.parameters,
+              last: props.location.pathname,
+              userLocation: props.location.state.parameters.userLocation,
+            },
+          }}
+        >
+          Return to results
+        </Link>
       )}
-      <h2>{restaurant.name}
-      {localStorage.getItem('token') && (
-        favorites_place_ids.includes(restaurant.place_id) ? (
-          <FavoriteIcon
-            onClick={(e) =>
-              handleDeleteFavoriteChanges(e, restaurant)
-            }
-          />
+      <div id="header">
+        <p id="restaurant_name">{restaurant.name}</p>
+        {localStorage.getItem("token") &&
+          (favorites_place_ids.includes(restaurant.place_id) ? (
+            <FavoriteIcon
+              onClick={(e) => handleDeleteFavoriteChanges(e, restaurant)}
+            />
+          ) : (
+            <FavoriteBorderIcon
+              onClick={(e) => handleAddFavoriteChanges(e, restaurant)}
+            />
+          ))}
+      </div>
+      <p id="restaurant_address">{restaurant.formatted_address}</p>
+      <span>
+        {restaurant.opening_hours ? (
+          restaurant.opening_hours["open_now"] === true ? (
+            <Opening_hours color={"green"}>Open</Opening_hours>
+          ) : (
+            <Opening_hours color={"red"}>Closed</Opening_hours>
+          )
         ) : (
-          <FavoriteBorderIcon
-            onClick={(e) => handleAddFavoriteChanges(e, restaurant)}
-          />
-        )
-        
-      )}
-        <span style={{fontSize: '0.8rem'}}>{restaurant.opening_hours ?
-          restaurant.opening_hours['open_now'] === true ? 
-          <h4 style={{color: 'green'}}>Open</h4>: <h4 style={{color: 'red'}}>Closed</h4>: false
-          }
-        </span>
-      </h2>
-      {localStorage.getItem('token') && (
-        faveDeleting && (
-          <DeleteFavoriteModal
-            favorite={currentFavorite}
-            setDeleting={setFaveDeleting}
-            user_id={user_id}
-          />
-        )
-      )}
-      <p>{restaurant.formatted_address}</p>
-      <Typography component="legend">
-        Hygiene Rating:{' '}
-        {restaurant.avgHygieneRating === null ? (
-          <span style={{ fontWeight: "bold" }}>Not Rated</span>
-        ) : (
-          <span style={{ fontWeight: "bold" }}>
-            {restaurant.avgHygieneRating}
-          </span>
+          false
         )}
-      </Typography>
-
+      </span>
+      {localStorage.getItem("token") && faveDeleting && (
+        <DeleteFavoriteModal
+          favorite={currentFavorite}
+          setDeleting={setFaveDeleting}
+          user_id={user_id}
+        />
+      )}
+      <p id="avgHygiene">
+        Hygiene Rating:{" "}
+        {restaurant.avgHygieneRating === null ? (
+          <span>Not Rated</span>
+        ) : (
+          <span>{restaurant.avgHygieneRating}</span>
+        )}
+      </p>
       <Rating
         name="average_rating"
         defaultValue={restaurant.avgHygieneRating}
@@ -185,23 +228,47 @@ const SingleRestaurant = (props) => {
         className={classes[customIcons[Math.ceil(restaurant.avgHygieneRating)]]}
         readOnly
       />
-      {
-        localStorage.getItem('token') ? 
-          restaurantInfo.reviews.message === 'There are no reviews for this restaurant.' ? <div>
-            Be the first to add a review!
-            <AddIcon onClick={()=>setCreating(true)} />
+      {localStorage.getItem("token") ? (
+        restaurantInfo.reviews.message ===
+        "There are no reviews for this restaurant." ? (
+          <div>
+            <div className="reviews_header">
+              <p>Reviews</p>
+              <AddIcon
+                className="add_review"
+                onClick={() => setCreating(true)}
+              />
+            </div>
+            <p className="reviews_message">Be the first to add a review!</p>
             {creating && (
-              <AddReviewModal restaurant={restaurant} restaurantInfo={restaurantInfo} setCreating={setCreating} />
+              <AddReviewModal
+                restaurant={restaurant}
+                restaurantInfo={restaurantInfo}
+                setCreating={setCreating}
+              />
             )}
-          </div>:<div className='review'>
-          <AddIcon onClick={()=>setCreating(true)} />
-          {restaurantInfo.reviews.map((review, index) => {
-            return(
-              review.user_id === Number(user_id) ? 
-                <div key={index}>
-                <br/>
-                  <EditIcon onClick={()=>handleEditingStatus(review)}/>
-                  <DeleteForeverIcon onClick={()=>handleDeletingStatus(review)}/>
+          </div>
+        ) : (
+          <div className="review">
+            <div className="reviews_header">
+              <p>Reviews</p>
+              <AddIcon
+                className="add_review"
+                onClick={() => setCreating(true)}
+              />
+            </div>
+            {restaurantInfo.reviews.map((review, index) => {
+              return review.user_id === Number(user_id) ? (
+                <div className="user_reviews" key={index}>
+                  <br />
+                  <EditIcon
+                    id="edit_review"
+                    onClick={() => handleEditingStatus(review)}
+                  />
+                  <DeleteForeverIcon
+                    id="delete_review"
+                    onClick={() => handleDeletingStatus(review)}
+                  />
                   <div>{review.username}</div>
                   <div>{formatDate(review.created_at)}</div>
                   <Rating
@@ -211,11 +278,10 @@ const SingleRestaurant = (props) => {
                     readOnly
                   />
                   <div>{review.review}</div>
-
                 </div>
-                :
-                <div key={index}>
-                  <br/>
+              ) : (
+                <div className="user_reviews" key={index}>
+                  <br />
                   <div>{review.username}</div>
                   <div>{formatDate(review.created_at)}</div>
                   <Rating
@@ -226,22 +292,65 @@ const SingleRestaurant = (props) => {
                   />
                   <div>{review.review}</div>
                 </div>
-            )
-          })}
-          {creating && (
-            <AddReviewModal restaurant={restaurant} restaurantInfo={restaurantInfo} setCreating={setCreating} />
-          )}
-          {editing && (
-            <EditReviewModal originalReview={originalReview} setEditing={setEditing} />
-          )}
-          {deleting && (
-            <DeleteReviewModal review={originalReview} formatDate={formatDate} setDeleting={setDeleting} />
-          )}
+              );
+            })}
+            {creating && (
+              <AddReviewModal
+                restaurant={restaurant}
+                restaurantInfo={restaurantInfo}
+                setCreating={setCreating}
+              />
+            )}
+            {editing && (
+              <EditReviewModal
+                originalReview={originalReview}
+                setEditing={setEditing}
+              />
+            )}
+            {deleting && (
+              <DeleteReviewModal
+                review={originalReview}
+                formatDate={formatDate}
+                setDeleting={setDeleting}
+              />
+            )}
+          </div>
+        )
+      ) : props.location.state !== undefined ? (
+        <div>
+          <p>Reviews</p>
+          Please{" "}
+          <Link
+            className="link login"
+            to={{
+              pathname: "/login",
+              state: {
+                last: props.location.pathname,
+                next: props.location.state.last,
+              },
+            }}
+          >
+            sign in
+          </Link>{" "}
+          to see user ratings and reviews
         </div>
-        :
-        <div>Please <Link to={{ pathname: '/login', state: {last:props.location.pathname, next:props.location.state.last}}}>sign in</Link> to see user ratings and reviews</div>
-      }
-    </div>
+      ) : (
+        <div>
+          <p>Reviews</p>
+          Please{" "}
+          <Link
+            className="link login"
+            to={{
+              pathname: "/login",
+              state: { last: props.location.pathname },
+            }}
+          >
+            sign in
+          </Link>{" "}
+          to see user ratings and reviews
+        </div>
+      )}
+    </SingleRestaurantPage>
   );
 };
 

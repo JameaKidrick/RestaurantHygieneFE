@@ -6,6 +6,9 @@ import * as Yup from "yup";
 // ACTIONS
 import { logInUser, resetErrors } from '../actions';
 
+// STYLING
+import { ParentContainer, FormPage, Form, InputContainer, Label, LabelHide, Input, Button } from '../syles/formStyling'
+
 const LogIn = (props) => {
   const dispatch = useDispatch()
   const error = useSelector(state => state.appStatusReducer.error)
@@ -78,46 +81,51 @@ const LogIn = (props) => {
   }
 
   return(
-    <div>
-      Log In
-      <form onSubmit={handleSubmit}>
-        <label htmlFor='username'>
-          username*
-          <input
-          type='text' 
-          name='username'
-          onChange={handleChanges} 
-          value={user.username}
-          />
-        </label>
-        <label htmlFor='password'>
-          password*
-          <input
-          type={passwordType}
-          name='password'
-          onChange={handleChanges}
-          value={user.password}
-          />
-        </label>
-        <label htmlFor='hidePassword'>
-          Hide password
-          <input
-          type='checkbox'
-          name='hidePassword'
-          onChange={handleChanges}
-          value={hidePassword}
-          checked={hidePassword}
-          />
-        </label>
-        <button type='submit' disabled={buttonDisabled}>Log In</button>
-      </form>
-      <div id='goToRegister'>
-        <p>Don't have an account? <Link to='/register'>Click to register</Link></p>
-      </div>
-      {error && (error === 'Invalid credentials: Please check your password and try again.' || error === 'Invalid credentials: Please check your username and try again.') && (
-        <p id='loginError'>{error}</p>
-      )}
-    </div>
+    <ParentContainer>
+      <p id='header'>Log In</p>
+      <FormPage>
+        <Form onSubmit={handleSubmit}>
+          <InputContainer htmlFor='username'>
+            <Label>username<span> *</span></Label>
+            <Input
+            type='text' 
+            name='username'
+            onChange={handleChanges} 
+            value={user.username}
+            />
+            {error && (error === 'Invalid credentials: Please check your username and try again.') && (
+              <p id='loginError' className='error'>{error}</p>
+            )}
+          </InputContainer>
+          <InputContainer htmlFor='password'>
+            <Label>password<span> *</span></Label>
+            <Input
+            type={passwordType}
+            name='password'
+            onChange={handleChanges}
+            value={user.password}
+            />
+            {error && (error === 'Invalid credentials: Please check your password and try again.') && (
+              <p id='loginError' className='error'>{error}</p>
+            )}
+          </InputContainer>
+          <LabelHide htmlFor='hidePassword'>
+            <span>Hide password</span>
+            <Input
+            type='checkbox'
+            name='hidePassword'
+            onChange={handleChanges}
+            value={hidePassword}
+            checked={hidePassword}
+            />
+          </LabelHide>
+          <Button id={buttonDisabled ? 'enabled':'disabled'} type='submit' disabled={buttonDisabled}>Log In</Button>
+        </Form>
+        <div id='goToRegister'>
+          <p>Don't have an account? <Link className='link register' to='/register'>Click to register</Link></p>
+        </div>
+      </FormPage>
+    </ParentContainer>
   )
 };
 

@@ -6,6 +6,9 @@ import * as Yup from "yup";
 // ACTIONS
 import { registerUser, resetErrors } from '../actions';
 
+// STYLING
+import { ParentContainer, FormPage, Form, InputContainer, Label, LabelHide, Input, Button } from '../syles/formStyling'
+
 const Register = (props) => {
   const dispatch = useDispatch()
   const error = useSelector(state => state.appStatusReducer.error)
@@ -84,66 +87,68 @@ const Register = (props) => {
   }
 
   return(
-    <div>
-      Register
-      <form id='test' onSubmit={handleSubmit}>
-        <label htmlFor='first_name'>
-          first name*
-          <input
-          type='text' 
-          name='first_name'
-          onChange={handleChanges} 
-          value={user.first_name}
-          />
-        </label>
-        <label htmlFor='last_name'>
-          last name*
-          <input
-          type='text' 
-          name='last_name'
-          onChange={handleChanges}
-          value={user.last_name}
-          />
-        </label>
-        <label htmlFor='username'>
-          username*
-          <input
-          type='text' 
-          name='username'
-          onChange={handleChanges} 
-          value={user.username}
-          />
-          {user.username.length < 3 && (<p className="error">{formErrors.username}</p>)}
-        </label>
-        <label htmlFor='password'>
-          password*
-          <input
-          type={passwordType}
-          name='password'
-          onChange={handleChanges} 
-          value={user.password}
-          />
-          {user.password.length < 6 && (<p className="error">{formErrors.password}</p>)}
-        </label>
-        <label htmlFor='hidePassword'>
-          Hide password
-          <input
-          type='checkbox'
-          name='hidePassword'
-          onChange={handleChanges}
-          value={hidePassword}
-          checked={hidePassword}
-          />
-        </label>
-        <button type='submit' disabled={buttonDisabled}>Register</button>
-      </form>
-      <div id='goToLogin'>
-        <p>Already have an account? <Link to='/login'>Click to login</Link></p>
-      </div>
-      {error && (error === 'There is already a user with that username in the database. Please choose a new username.') && (
-        <p id='loginError'>{error}</p>
-      )}
-    </div>
+    <ParentContainer>
+      <p id='header'>Register</p>
+      <FormPage>
+        <Form onSubmit={handleSubmit}>
+          <InputContainer htmlFor='first_name'>
+            <Label>first name<span> *</span></Label>
+            <Input
+            type='text' 
+            name='first_name'
+            onChange={handleChanges} 
+            value={user.first_name}
+            />
+          </InputContainer>
+          <InputContainer htmlFor='last_name'>
+            <Label>last name<span> *</span></Label>
+            <Input
+            type='text' 
+            name='last_name'
+            onChange={handleChanges}
+            value={user.last_name}
+            />
+          </InputContainer>
+          <InputContainer htmlFor='username'>
+            <Label>username<span> *</span></Label>
+            <Input
+            type='text' 
+            name='username'
+            onChange={handleChanges} 
+            value={user.username}
+            />
+            {user.username.length < 3 && (<p className="error">{formErrors.username}</p>)}
+            {error && (error === 'There is already a user with that username in the database. Please choose a new username.') && (
+              <p id='registerError' className='error'>{error}</p>
+            )}
+          </InputContainer>
+          <InputContainer htmlFor='password'>
+            <Label>password<span> *</span></Label>
+            <Input
+            type={passwordType}
+            name='password'
+            onChange={handleChanges} 
+            value={user.password}
+            />
+            {user.password.length < 6 && (<p className="error">{formErrors.password}</p>)}
+          </InputContainer>
+          <LabelHide htmlFor='hidePassword'>
+            Hide password
+            <Input
+            type='checkbox'
+            name='hidePassword'
+            onChange={handleChanges}
+            value={hidePassword}
+            checked={hidePassword}
+            />
+          </LabelHide>
+          <Button type='submit' disabled={buttonDisabled}>Register</Button>
+        </Form>
+        <div id='goToLogin'>
+          <p>Already have an account? <Link className='link login' to='/login'>Click to login</Link></p>
+        </div>
+      </FormPage>
+    </ParentContainer>
   )
 };
 
