@@ -6,6 +6,9 @@ import DeleteUserModal from './DeleteUserModal';
 // ACTIONS
 import { editUser } from '../actions'
 
+// STYLING
+import { ParentContainer, FormPage, Form, InputContainer, Label, LabelHide, Input, Button, DeleteButton } from '../syles/formStyling'
+
 const MyProfile = (props) => {
   const dispatch = useDispatch()
   const isFetching = useSelector(state => state.appStatusReducer.isFetching)
@@ -112,87 +115,91 @@ const MyProfile = (props) => {
   }
 
   return(
-    <div>
-      <h2>Settings</h2>
-      {success && (
-        <p>Your account information has been successfully updated.</p>
-      )}
-      <form onSubmit={handleSubmit}>
-        <label>
-          First name
-          <input
-          type='text'
-          name='first_name'
-          onChange={handleChanges}
-          />
-        </label>
-        <br />
-        <label>
-          Last name
-          <input
-          type='text'
-          name='last_name'
-          onChange={handleChanges}
-          />
-        </label>
-        <br />
-        <label>
-          Username
-          <input
-          type='text'
-          name='username'
-          onChange={handleChanges}
-          />
-        </label>
-        <br />
-        <label>
-          New Password
-          <input
-          type={passwordType}
-          name='password'
-          onChange={handleChanges}
-          />
-        </label>
-        <label htmlFor='hidePassword'>
-          Hide password
-          <input
-          type='checkbox'
-          name='hidePassword'
-          onChange={handleChanges}
-          value={hidePassword}
-          checked={hidePassword}
-          />
-        </label>
-        {update.password && update.password.length < 6 && (<p className="error">{formErrors.password}</p>)}
-        <br />
-        <label>
-          Current Password*
-          <input
-          type={currentPasswordType}
-          name='confirm_password'
-          onChange={handleChanges}
-          />
-        </label>
-        <label htmlFor='hideCurrentPassword'>
-          Hide password
-          <input
-          type='checkbox'
-          name='hideCurrentPassword'
-          onChange={handleChanges}
-          value={hideCurrentPassword}
-          checked={hideCurrentPassword}
-          />
-        </label>
-        {error && (
-          <p>{formErrors.confirm_password}</p>
+    <ParentContainer>
+      <div id='headerWithMessage'>
+        <p id='header'>Settings</p>
+        {success && (
+          <p id='successMessage'>Your account information has been successfully updated.</p>
         )}
-        <button>Submit</button>
-      </form>
-      <button onClick={()=>handleDeletingStatus()}>Delete Account</button>
+      </div>
+      <FormPage>
+        <Form onSubmit={handleSubmit}>
+          <InputContainer>
+            <Label>First name</Label>
+            <Input
+            type='text'
+            name='first_name'
+            onChange={handleChanges}
+            />
+          </InputContainer>
+          <br />
+          <InputContainer>
+            <Label>Last name</Label>
+            <Input
+            type='text'
+            name='last_name'
+            onChange={handleChanges}
+            />
+          </InputContainer>
+          <br />
+          <InputContainer>
+            <Label>Username</Label>
+            <Input
+            type='text'
+            name='username'
+            onChange={handleChanges}
+            />
+          </InputContainer>
+          <br />
+          <InputContainer>
+            <Label>New Password</Label>
+            <Input
+            type={passwordType}
+            name='password'
+            onChange={handleChanges}
+            />
+            {update.password && update.password.length < 6 && (<p className="error">{formErrors.password}</p>)}
+          </InputContainer>
+          <LabelHide htmlFor='hidePassword'>
+            Hide password
+            <Input
+            type='checkbox'
+            name='hidePassword'
+            onChange={handleChanges}
+            value={hidePassword}
+            checked={hidePassword}
+            />
+          </LabelHide>
+          <br />
+          <InputContainer>
+            <Label>Current Password<span> *</span></Label>
+            <Input
+            type={currentPasswordType}
+            name='confirm_password'
+            onChange={handleChanges}
+            />
+            {error && (
+              <p className="error">{formErrors.confirm_password}</p>
+            )}
+          </InputContainer>
+          <LabelHide htmlFor='hideCurrentPassword'>
+            Hide password
+            <Input
+            type='checkbox'
+            name='hideCurrentPassword'
+            onChange={handleChanges}
+            value={hideCurrentPassword}
+            checked={hideCurrentPassword}
+            />
+          </LabelHide>
+          <Button>Submit</Button>
+        </Form>
+        <DeleteButton onClick={()=>handleDeletingStatus()}>Delete Account</DeleteButton>
+      </FormPage>
       {deleting && (
         <DeleteUserModal user_id={user_id} setDeleting={setDeleting} persistor={props.persistor} history={props.history} />
       )}
-    </div>
+    </ParentContainer>
   )
 }
 
