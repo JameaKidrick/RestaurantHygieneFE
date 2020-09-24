@@ -4,6 +4,9 @@ import { useDispatch } from 'react-redux'
 // ACTIONS
 import { deleteUser } from '../actions'
 
+// STYLES
+import { ModalContainer } from '../syles/modalStyling'
+
 const DeleteUserModal = ({ user_id, setDeleting, persistor, history }) => {
   const dispatch = useDispatch()
 
@@ -13,13 +16,13 @@ const DeleteUserModal = ({ user_id, setDeleting, persistor, history }) => {
   }
 
   return(
-    <div className='delete_modal'>
-      <form onSubmit={handleSubmit}>
-        Are you sure you want to delete your account?
+    <ModalContainer className='overlay' onClick={()=>setDeleting(false)}>
+      <form id='modalForm' onSubmit={handleSubmit}>
+        <p>Are you sure you want to delete your account?</p>
         <button type='submit'>Yes</button>
         <button onClick={()=>setDeleting(false)}>No</button>
       </form>
-    </div>
+    </ModalContainer>
   )
 }
 

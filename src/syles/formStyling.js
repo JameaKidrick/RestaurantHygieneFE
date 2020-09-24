@@ -9,6 +9,7 @@ export const ParentContainer = styled.div`
   width: ${props => props.results ? '25%': '45%'};
   margin: ${props => props.results ? '0 0 0 3rem': '0 auto'};
   margin-top: 3rem;
+  z-index: 0;
 
   #header {
     font-weight: bold;
