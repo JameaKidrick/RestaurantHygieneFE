@@ -53,7 +53,7 @@ table {
 html, body {
 	height: 100%;
 	font-family: 'Roboto', sans-serif;
-	overflow: scroll;
+	overflow: auto;
 }
 
 html:not(.overlay){

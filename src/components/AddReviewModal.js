@@ -7,6 +7,8 @@ import { addReview } from "../actions";
 // STYLING
 import Rating from "@material-ui/lab/Rating";
 import Typography from "@material-ui/core/Typography";
+import { ModalContainer } from '../syles/modalStyling'
+import { Button, DeleteButton, Input } from '../syles/formStyling'
 
 const AddCommentModal = ({ restaurant, restaurantInfo, setCreating }) => {
   const dispatch = useDispatch();
@@ -44,36 +46,39 @@ const AddCommentModal = ({ restaurant, restaurantInfo, setCreating }) => {
   };
 
   return (
-    <div className="add_modal">
-      <form style={{ border: "2px solid blue" }} onSubmit={handleSubmit}>
-        <div style={{ display: "flex" }}>
+    <ModalContainer className="overlay">
+      <form id='modalForm' onSubmit={handleSubmit}>
+        <p>Add a review</p>
+        <div className='reviewContainer'>
           <Rating
-            id="rating"
             name="rating"
+            id='ratingStars'
             precision={0.5}
             value={newReview.rating}
             onChange={handleChanges}
             onChangeActive={handleHoverChanges}
           />
-          <Typography component="legend">
+          <p className='ratingScore'>
             {
-              <span style={{ fontWeight: "bold" }}>
+              <p>
                 {hover > 0
                   ? hover
                   : newReview.rating
                   ? newReview.rating === 0
                     ? false
                     : newReview.rating
-                  : false}
-              </span>
+                  : 0}
+              </p>
             }
-          </Typography>
+          </p>
         </div>
-        <input type="text" name="review" onChange={handleChanges} />
-        <button>Add Review</button>
-        <button onClick={() => setCreating(false)}>Cancel</button>
+        <Input type="text" name="review" placeholder='Review' onChange={handleChanges} />
+        <div className='buttonContainer'>
+          <DeleteButton>Add Review</DeleteButton>
+          <Button onClick={() => setCreating(false)}>Cancel</Button>
+        </div>
       </form>
-    </div>
+    </ModalContainer>
   );
 };
 

@@ -6,6 +6,10 @@ import Typography from "@material-ui/core/Typography";
 // ACTIONS
 import { editReviewAction } from '../actions'
 
+// STYLES
+import { ModalContainer } from '../syles/modalStyling'
+import { Button, DeleteButton, Input } from '../syles/formStyling'
+
 const EditCommentModal = ({ originalReview, setEditing, user_id }) => {
   const dispatch = useDispatch()
   const restaurantInfo = useSelector(state => state.reviewsReducer)
@@ -30,31 +34,32 @@ const EditCommentModal = ({ originalReview, setEditing, user_id }) => {
   }
 
   return(
-    <div className='edit_modal'>
-      <form style={{border:'2px solid blue'}} onSubmit={handleEditSubmit}>
-        <h4>Edit your review</h4>
-        <div style={{display:'flex'}}>
+    <ModalContainer className="overlay">
+      <form id='modalForm' onSubmit={handleEditSubmit}>
+        <p>Edit your review</p>
+        <div className='reviewContainer'>
           <Rating
             name="edit_rating"
+            id='ratingStars'
             precision={0.5}
             value={editReview.rating ? editReview.rating: originalReview.rating}
             onChange={handleEditChanges}
             onChangeActive={handleEditHoverChanges}
           />
-          <Typography component="legend">
-            {<span style={{ fontWeight: "bold" }}>{editHover > 0 ? editHover : editReview.rating ? editReview.rating: originalReview.rating}</span>}
-          </Typography>
+          <p className='ratingScore'>{editHover > 0 ? editHover : editReview.rating ? editReview.rating: originalReview.rating}</p>
         </div>
-        <input
+        <Input
           type='text'
           name='review'
           onChange={handleEditChanges}
           value={editReview.review ? editReview.review: originalReview.review}
         />
-        <button>Edit Review</button>
-        <button onClick={()=>setEditing(false)}>Cancel</button>
+        <div className='buttonContainer'>
+          <DeleteButton type='submit'>Edit Review</DeleteButton>
+          <Button onClick={()=>setEditing(false)}>Cancel</Button>
+        </div>
       </form>
-    </div>
+    </ModalContainer>
   )
 }
 

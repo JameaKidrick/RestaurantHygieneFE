@@ -201,7 +201,6 @@ const MyProfile = (props) => {
           <DeleteUserModal user_id={user_id} setDeleting={setDeleting} persistor={props.persistor} history={props.history} />
         )}
       </ParentContainer>
-      {/* <DeleteUserModal user_id={user_id} deleting={deleting} setDeleting={setDeleting} persistor={props.persistor} history={props.history} /> */}
     </>
   )
 }
