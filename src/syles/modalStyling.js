@@ -77,4 +77,11 @@ export const ModalContainer = styled.div`
     justify-content: flex-end;
     width: 5%;
   }
+
+  .error {
+    color: red;
+    font-size: 0.7rem;
+    margin-left: 0.5rem;
+    margin-top: 0.2rem;
+  }
 `;

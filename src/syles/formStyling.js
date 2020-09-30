@@ -116,17 +116,17 @@ export const Button = styled.button`
   `;
 
 export const DeleteButton = styled.button`
-  border: 1px solid red;
   margin: 0 auto;
   margin-bottom: 2rem;
   padding: 0.5rem;
   border-radius: 0.2rem;
   transition: 0.5s;
-  background: red;
-  color: white;
-  cursor: pointer;
+  border: 1px solid ${props => props.disabled ? 'grey': 'red'};
+  background: ${props => props.disabled ? 'white': 'red'};
+  color: ${props => props.disabled ? 'grey': 'white'};
+  cursor: ${props => props.disabled ? 'not-allowed': 'pointer'};
   &:hover{
-    background: white;
-    color: red;
+    background: ${props => props.disabled ? 'none': 'white'};
+    color: ${props => props.disabled ? 'none': 'red'};
   }
 `
