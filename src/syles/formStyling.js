@@ -7,11 +7,26 @@ export const GrandparentContainer = styled.div`
 export const ParentContainer = styled.div`
   // border: 2px solid green;
   width: ${props => props.results ? '25%': '45%'};
-  margin: ${props => props.results ? '0 0 0 3rem': '0 auto'};
+  margin: ${props => props.results ? '0 0 0 3rem': '3rem auto'};
   margin-top: 3rem;
+  z-index: 0;
+
   #header {
     font-weight: bold;
     font-size: 1.3rem;
+  }
+
+  #headerWithMessage {
+    // border: 2px solid blue;
+    display: flex;
+    align-items: center;
+  }
+
+  #successMessage {
+    color: limegreen;
+    font-size: 0.8rem;
+    margin-left: 0.5rem;
+    margin-top: 0.2rem;
   }
 `
 
@@ -99,3 +114,19 @@ export const Button = styled.button`
     color: ${props => props.disabled ? 'none': 'black'};
   }
   `;
+
+export const DeleteButton = styled.button`
+  margin: 0 auto;
+  margin-bottom: 2rem;
+  padding: 0.5rem;
+  border-radius: 0.2rem;
+  transition: 0.5s;
+  border: 1px solid ${props => props.disabled ? 'grey': 'red'};
+  background: ${props => props.disabled ? 'white': 'red'};
+  color: ${props => props.disabled ? 'grey': 'white'};
+  cursor: ${props => props.disabled ? 'not-allowed': 'pointer'};
+  &:hover{
+    background: ${props => props.disabled ? 'none': 'white'};
+    color: ${props => props.disabled ? 'none': 'red'};
+  }
+`

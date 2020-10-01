@@ -4,6 +4,10 @@ import { useDispatch, useSelector } from 'react-redux'
 // ACTIONS
 import { deleteFavorite } from '../actions'
 
+// STYLES
+import { ModalContainer } from '../syles/modalStyling'
+import { Button, DeleteButton } from '../syles/formStyling'
+
 const DeleteFavoriteModal = ({ favorite, setDeleting, user_id }) => {
   const dispatch = useDispatch()
   const user_favorites = useSelector(state => state.logInReducer.user_favorites)
@@ -19,13 +23,15 @@ const DeleteFavoriteModal = ({ favorite, setDeleting, user_id }) => {
   }
 
   return(
-    <div className='delete_modal'>
-      <form onSubmit={handleSubmit}>
-        Are you sure you want to delete {favorite.restaurant_name ? favorite.restaurant_name : favorite.name} from your favorites list?
-        <button type='submit'>Yes</button>
-        <button onClick={()=>setDeleting(false)}>No</button>
+    <ModalContainer className='overlay'>
+      <form id='modalForm' onSubmit={handleSubmit}>
+        <p>Are you sure you want to delete {favorite.restaurant_name ? <span>{favorite.restaurant_name}</span> : <span>{favorite.name}</span>} from your favorites list?</p>
+        <div className='buttonContainer'>
+          <DeleteButton type='submit'>Yes</DeleteButton>
+          <Button onClick={()=>setDeleting(false)}>No</Button>
+        </div>
       </form>
-    </div>
+    </ModalContainer>
   )
 }
 

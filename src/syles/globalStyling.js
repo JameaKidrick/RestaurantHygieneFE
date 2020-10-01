@@ -9,4 +9,8 @@ export const GlobalStyle = styled.div`
     text-decoration: none;
     cursor: point;
   }
+
+  .overlay{
+    background: rgba(220, 220, 220, 0.9);
+  }
 `;

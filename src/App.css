@@ -53,6 +53,11 @@ table {
 html, body {
 	height: 100%;
 	font-family: 'Roboto', sans-serif;
+	overflow: auto;
+}
+
+html:not(.overlay){
+	overflow: hidden;
 }
 
 /* h1, h2, h3, h4, h5 {

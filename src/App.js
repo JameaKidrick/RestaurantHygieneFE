@@ -40,7 +40,7 @@ function App(props) {
 
   return (
     <Router>
-      <GlobalStyle className="App" style={{ margin: "0" }}>
+      <GlobalStyle className="App">
         {loggedIn && (
           <Nav>
             <NavLink className="link home logo" to="/">
