@@ -184,10 +184,6 @@ const RestaurantSearch = (props) => {
     dispatch(placeLocator(parameters, props.history, `?page=${1}`));
   };
 
-  // if (isFetching) {
-  //   return <div>Loading...</div>;
-  // }
-
   return (
     <GrandparentContainer>
       <ParentContainer results={results}>

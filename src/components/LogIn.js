@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
+import Loading from './Loading';
 
 // ACTIONS
 import { logInUser, resetErrors } from "../actions";
@@ -81,7 +82,7 @@ const LogIn = (props) => {
   };
 
   if (isFetching) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   return (

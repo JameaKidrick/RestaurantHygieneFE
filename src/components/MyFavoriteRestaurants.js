@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom'
 import DeleteFavoriteModal from './DeleteFavoriteModal';
+import Loading from './Loading';
 
 // ACTIONS
 import { getAllFavoritesByUserID } from '../actions';
@@ -26,10 +27,8 @@ const MyFavoriteRestaurants = () => {
     setDeleting(true)
   }
 
-  if(isFetching){
-    return(
-      <div>Loading...</div>
-    )
+  if (isFetching) {
+    return <Loading />
   }
 
   return(

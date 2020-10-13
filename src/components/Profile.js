@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import DeleteUserModal from "./DeleteUserModal";
+import Loading from './Loading';
 
 // ACTIONS
 import { editUser } from "../actions";
@@ -126,8 +127,8 @@ const MyProfile = (props) => {
     }
   };
 
-  if (isFetching === true) {
-    return <div>Loading...</div>;
+  if (isFetching) {
+    return <Loading />;
   }
 
   return (

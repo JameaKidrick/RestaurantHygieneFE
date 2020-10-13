@@ -36,8 +36,6 @@ const AddCommentModal = ({ restaurant, restaurantInfo, setCreating }) => {
     });
   }, [newReview]);
 
-  console.log('Errors', formErrors)
-
   const handleChanges = (e) => {
     e.persist();
     Yup

@@ -5,6 +5,7 @@ import DeleteReviewModal from "./DeleteReviewModal";
 import EditReviewModal from "./EditReviewModal";
 import AddReviewModal from "./AddReviewModal";
 import DeleteFavoriteModal from "./DeleteFavoriteModal";
+import Loading from './Loading';
 
 // ACTIONS
 import {
@@ -17,8 +18,6 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import Rating from "@material-ui/lab/Rating";
 import AddIcon from "@material-ui/icons/Add";
-import EditIcon from "@material-ui/icons/Edit";
-import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import {
@@ -160,7 +159,7 @@ const SingleRestaurant = (props) => {
   }, [restaurant]);
 
   if (isFetching) {
-    return <div>Loading...</div>;
+    return <Loading />
   }
 
   return (

@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import Rating from "@material-ui/lab/Rating";
 import Typography from "@material-ui/core/Typography";
 import DeleteFavoriteModal from "./DeleteFavoriteModal";
+import Loading from './Loading';
+
 
 // ACTIONS
 import { placeLocator_nextPage, addNewFavorite } from "../actions";
@@ -121,7 +123,7 @@ const SearchResults = ({
   }, []);
 
   if (isFetching) {
-    return <div>Loading...</div>;
+    return <Loading section='results' />
   }
 
   return (

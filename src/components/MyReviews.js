@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom'
 import DeleteReviewModal from "./DeleteReviewModal";
 import EditReviewModal from "./EditReviewModal";
+import Loading from './Loading';
 
 // ACTIONS
 import { getReviewsByUserID } from '../actions';
@@ -56,10 +57,8 @@ const MyReviews = () => {
     dispatch(getReviewsByUserID(user_id))
   }, [])
 
-  if(isFetching === true){
-    return(
-      <div>Loading...</div>
-    )
+  if (isFetching) {
+    return <Loading />;
   }
 
   return(
