@@ -8,7 +8,7 @@ import { editReviewAction } from '../actions'
 
 // STYLES
 import { ModalContainer } from '../syles/modalStyling'
-import { Button, DeleteButton, Input } from '../syles/formStyling'
+import { Button, DeleteButton, Input, TextArea } from '../syles/formStyling'
 
 const EditCommentModal = ({ originalReview, setEditing, user_id }) => {
   const dispatch = useDispatch()
@@ -48,7 +48,7 @@ const EditCommentModal = ({ originalReview, setEditing, user_id }) => {
           />
           <p className='ratingScore'>{editHover > 0 ? editHover : editReview.rating ? editReview.rating: originalReview.rating}</p>
         </div>
-        <Input
+        <TextArea
           type='text'
           name='review'
           onChange={handleEditChanges}

@@ -90,6 +90,16 @@ export const Input = styled.input`
   padding: 0.5rem;
 `
 
+export const TextArea = styled.textarea`
+  // border: 2px solid red;
+  margin-top: 1rem;
+  border-radius: 0.2rem;
+  border: 1px solid black;
+  padding: 0.5rem;
+  box-sizing:border-box;
+  width: 90%;
+`
+
 export const Select = styled.select`
   // border: 2px solid red;
   margin-top: 1rem;
