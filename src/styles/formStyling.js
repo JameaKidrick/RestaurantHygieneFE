@@ -5,7 +5,7 @@ export const GrandparentContainer = styled.div`
 `
 
 export const ParentContainer = styled.div`
-  border: 2px solid green;
+  // border: 2px solid green;
   width: ${props => props.results ? '25%': '45%'};
   margin: ${props => props.results ? '0 0 0 3rem': '3rem auto'};
   margin-top: 3rem;

@@ -3,7 +3,8 @@ import styled from "styled-components";
 export const ParentContainer = styled.div`
   // border: 2px solid red;
   width: 65%;
-  margin: 3rem 0 0 3rem;
+  // margin: 3rem 0 0 3rem;
+  margin: ${props => props.section === 'singleRestaurant' ? '':'3rem 0 0 3rem'};
 
   #header {
     font-weight: bold;
@@ -15,9 +16,13 @@ export const ParentContainer = styled.div`
     border-bottom: 2px solid black;
     // border-radius: 1rem;
     padding: 0.5rem;
-    padding-top: ${props => props.section ? '1.5rem':''};
+    padding-top: ${props => props.section==='fave' ? '1.5rem':''};
     // margin: 1rem 0 1rem 0;
     margin-top: 1rem;
+  }
+
+  .username {
+    font-weight: bold;
   }
 
   .restaurantName {
@@ -27,6 +32,11 @@ export const ParentContainer = styled.div`
 
   .review {
     margin-bottom: 0.5rem;
+  }
+
+  .reviewDate {
+    font-size: 0.8rem;
+    margin-top: 0.3rem;
   }
 
   .ratingContainer {

@@ -16,7 +16,6 @@ import {
 // STYLING
 import { makeStyles } from "@material-ui/core/styles";
 import Rating from "@material-ui/lab/Rating";
-import Typography from "@material-ui/core/Typography";
 import AddIcon from "@material-ui/icons/Add";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
@@ -26,6 +25,7 @@ import {
   SingleRestaurantPage,
   Opening_hours,
 } from "../styles/singleRestaurantStyling";
+import { ParentContainer } from '../styles/cardsStyling';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -259,39 +259,47 @@ const SingleRestaurant = (props) => {
             </div>
             {restaurantInfo.reviews.map((review, index) => {
               return review.user_id === Number(user_id) ? (
-                <div className="user_reviews" key={index}>
-                  <br />
-                  <EditIcon
-                    id="edit_review"
-                    onClick={() => handleEditingStatus(review)}
-                  />
-                  <DeleteForeverIcon
-                    id="delete_review"
-                    onClick={() => handleDeletingStatus(review)}
-                  />
-                  <div>{review.username}</div>
-                  <div>{formatDate(review.created_at)}</div>
-                  <Rating
-                    name="restaurant_rating"
-                    defaultValue={review.rating}
-                    precision={0.1}
-                    readOnly
-                  />
-                  <div>{review.review}</div>
-                </div>
+                <ParentContainer section='singleRestaurant' key={index}>
+                  <div className='card'>
+                    <div className='username'>{review.username}</div>
+                    <div className='reviewDate'>{formatDate(review.created_at)}</div>
+                    <div className='ratingContainer'>
+                      <Rating
+                        name="restaurant_rating"
+                        defaultValue={review.rating}
+                        precision={0.1}
+                        readOnly
+                      />
+                    </div>
+                    <div className='review'>{review.review}</div>
+                    <div className='buttonContainer'>
+                      <button
+                        id="editButton"
+                        onClick={() => handleEditingStatus(review)}
+                      >Edit</button>
+                      <button
+                        id="deleteButton"
+                        onClick={() => handleDeletingStatus(review)}
+                      >Delete</button>
+                    </div>
+                  </div>
+                </ParentContainer>
               ) : (
-                <div className="user_reviews" key={index}>
-                  <br />
-                  <div>{review.username}</div>
-                  <div>{formatDate(review.created_at)}</div>
-                  <Rating
-                    name="restaurant_rating"
-                    defaultValue={review.rating}
-                    precision={0.1}
-                    readOnly
-                  />
-                  <div>{review.review}</div>
-                </div>
+                <ParentContainer section='singleRestaurant' key={index}>
+                  <div className='card'>
+                    <div className='username'>{review.username}</div>
+                    <div className='reviewDate'>{formatDate(review.created_at)}</div>
+                    <div className='ratingContainer'>
+                      <Rating
+                        name="restaurant_rating"
+                        defaultValue={review.rating}
+                        precision={0.1}
+                        readOnly
+                      />
+                    </div>
+                    <div className='review'>{review.review}</div>
+                  </div>
+                </ParentContainer>
               );
             })}
             {creating && (
