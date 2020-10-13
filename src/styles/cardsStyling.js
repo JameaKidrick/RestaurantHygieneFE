@@ -2,7 +2,6 @@ import styled from "styled-components";
 
 export const ParentContainer = styled.div`
   // border: 2px solid red;
-  // width: ${props => props.results ? '25%': '45%'};
   width: 65%;
   margin: 3rem 0 0 3rem;
 
@@ -11,17 +10,14 @@ export const ParentContainer = styled.div`
     font-size: 1.3rem;
   }
 
-  .reviewsContainer {
-    // border: 2px solid blue;
-    // margin-top: 1rem;
-  }
-
   .card {
     // border: 2px solid black;
     border-bottom: 2px solid black;
     // border-radius: 1rem;
     padding: 0.5rem;
+    padding-top: ${props => props.section ? '1.5rem':''};
     // margin: 1rem 0 1rem 0;
+    margin-top: 1rem;
   }
 
   .restaurantName {

@@ -6,6 +6,9 @@ import DeleteFavoriteModal from './DeleteFavoriteModal';
 // ACTIONS
 import { getAllFavoritesByUserID } from '../actions';
 
+// STYLES
+import { ParentContainer } from '../styles/cardsStyling';
+
 const MyFavoriteRestaurants = () => {
   const dispatch = useDispatch()
   const isFetching = useSelector(state => state.appStatusReducer.isFetching)
@@ -30,35 +33,24 @@ const MyFavoriteRestaurants = () => {
   }
 
   return(
-    <div>
-      <h2>My Favorite Restaurants</h2>
+    <ParentContainer section='fave'>
+      <p id='header'>My Favorite Restaurants</p>
       {user_favorites.map((favorite, index) => {
         return(
-          <div key={index}>
+          <div className='card' key={index}>
             <Link className='link singleRestaurant' to={`/restaurant/${favorite.place_id}`}>
-              <div>{favorite.restaurant_name}</div>
-              <div>{favorite.restaurant_address}</div>
+              <div className='restaurantName'>{favorite.restaurant_name}</div>
+              <div className='restaurantAddress'>{favorite.restaurant_address}</div>
             </Link>
-            <button onClick={()=>handleFavoriteChanges(favorite)}>Delete</button>
+            <div className='buttonContainer'><button id='deleteButton' onClick={()=>handleFavoriteChanges(favorite)}>Delete</button></div>
           </div>
         )
       })}
       {deleting && (
         <DeleteFavoriteModal favorite={currentFavorite} setDeleting={setDeleting} user_id={user_id} />
       )}
-    </div>
+    </ParentContainer>
   )
 }
 
 export default MyFavoriteRestaurants;
-
-/*
-created_at: "2020-08-02T17:14:24.514Z"
-id: 32
-place_id: "ChIJVZ6MsNkDyokRs884W2r6gE8"
-restaurant_address: "14634 Apple Harvest Dr, Martinsburg, WV 25401, USA"
-restaurant_id: 2
-restaurant_name: "McDonald's"
-updated_at: "2020-08-02T17:14:24.514Z"
-user_id: 6
-*/

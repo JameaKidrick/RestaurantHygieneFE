@@ -65,7 +65,7 @@ const MyReviews = () => {
   return(
     <ParentContainer>
       <p id='header'>My Reviews</p>
-      <div className='reviewsContainer'>
+      <div>
         {user_reviews.map((review, index) => {
           return(
             <div className='card' key={index}>
