@@ -7,8 +7,8 @@ import Typography from "@material-ui/core/Typography";
 import { editReviewAction } from '../actions'
 
 // STYLES
-import { ModalContainer } from '../syles/modalStyling'
-import { Button, DeleteButton, Input, TextArea } from '../syles/formStyling'
+import { ModalContainer } from '../styles/modalStyling'
+import { Button, DeleteButton, Input, TextArea } from '../styles/formStyling'
 
 const EditCommentModal = ({ originalReview, setEditing, user_id }) => {
   const dispatch = useDispatch()

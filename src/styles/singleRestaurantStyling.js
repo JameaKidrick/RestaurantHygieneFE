@@ -43,6 +43,11 @@ export const SingleRestaurantPage = styled.div`
   .reviews_message {
     margin-top: 0.3rem;
   }
+
+  .user_reviews {
+    padding-bottom: 3rem;
+    border-bottom: 2px solid black;
+  }
 `;
 
 export const Opening_hours = styled.p`

@@ -7,8 +7,8 @@ import { addReview } from "../actions";
 
 // STYLING
 import Rating from "@material-ui/lab/Rating";
-import { ModalContainer } from '../syles/modalStyling'
-import { Button, DeleteButton, Input, TextArea } from '../syles/formStyling'
+import { ModalContainer } from '../styles/modalStyling'
+import { Button, DeleteButton, Input, TextArea } from '../styles/formStyling'
 
 const AddCommentModal = ({ restaurant, restaurantInfo, setCreating }) => {
   const dispatch = useDispatch();

@@ -25,7 +25,7 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import {
   SingleRestaurantPage,
   Opening_hours,
-} from "../syles/singleRestaurantStyling";
+} from "../styles/singleRestaurantStyling";
 
 const useStyles = makeStyles(() => ({
   root: {

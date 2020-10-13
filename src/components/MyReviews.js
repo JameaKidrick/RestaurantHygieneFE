@@ -9,9 +9,7 @@ import { getReviewsByUserID } from '../actions';
 
 // STYLES
 import Rating from "@material-ui/lab/Rating";
-import Typography from "@material-ui/core/Typography";
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import { ParentContainer } from '../styles/cardsStyling';
 
 const MyReviews = () => {
   const dispatch = useDispatch()
@@ -58,8 +56,6 @@ const MyReviews = () => {
     dispatch(getReviewsByUserID(user_id))
   }, [])
 
-  
-
   if(isFetching === true){
     return(
       <div>Loading...</div>
@@ -67,54 +63,47 @@ const MyReviews = () => {
   }
 
   return(
-    <div>
-      <h2>My Reviews</h2>
-      {user_reviews.map((review, index) => {
-        return(
-          <div key={index}>
-            <br/>
-            <Link className='link singleRestaurant' to={`/restaurant/${review.place_id}`}>
-              <div>{review.restaurant_name}</div>
-              <div>{review.restaurant_address}</div>
-              <div>{formatDate(review.created_at)}</div>
-            </Link>
-            <div style={{display:'flex'}}>
-              <Rating
-                name="edit_rating"
-                precision={0.5}
-                value={review.rating}
-                readOnly
-              />
-              <Typography component="legend">
-                {<span style={{ fontWeight: "bold" }}>{review.rating}</span>}
-              </Typography>
+    <ParentContainer>
+      <p id='header'>My Reviews</p>
+      <div className='reviewsContainer'>
+        {user_reviews.map((review, index) => {
+          return(
+            <div className='card' key={index}>
+              <br/>
+              <Link className='link singleRestaurant' to={`/restaurant/${review.place_id}`}>
+                <div className='restaurantName'>{review.restaurant_name}</div>
+                <div className='restaurantAddress'>{review.restaurant_address}</div>
+                <div className='reviewDate'>{formatDate(review.created_at)}</div>
+              </Link>
+              <div className='ratingContainer'>
+                <Rating
+                  name="edit_rating"
+                  id='ratingStars'
+                  precision={0.5}
+                  value={review.rating}
+                  readOnly
+                />
+                <p className='ratingScore'>
+                  {<span>{review.rating}</span>}
+                </p>
+              </div>
+              <div className='review'>{review.review}</div>
+              <div className='buttonContainer'>
+                <button id='editButton' onClick={()=>handleEditingStatus(review)}>Edit</button>
+                <button id='deleteButton' onClick={()=>handleDeletingStatus(review)}>Delete</button>
+              </div>
             </div>
-            <div>{review.review}</div>
-            <EditIcon onClick={()=>handleEditingStatus(review)}/>
-            <DeleteForeverIcon onClick={()=>handleDeletingStatus(review)}/>
-          </div>
-        )
-      })}
+          )
+        })}
+      </div>
       {editing && (
         <EditReviewModal originalReview={originalReview} setEditing={setEditing} user_id={user_id} />
       )}
       {deleting && (
         <DeleteReviewModal review={originalReview} formatDate={formatDate} setDeleting={setDeleting} user_id={user_id} />
       )}
-    </div>
+    </ParentContainer>
   )
 }
 
 export default MyReviews;
-
-/*
-created_at: "2020-08-03T04:28:59.610Z"
-id: 6
-place_id: "ChIJjWYOtykDyokR-kS0ikxSI84"
-rating: 5
-restaurant_address: "Martinsburg, WV 25401, USA"
-restaurant_id: 1
-restaurant_name: "McDonald's"
-review: "great"
-user_id: 6
-*/

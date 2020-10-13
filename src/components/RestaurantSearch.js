@@ -1,23 +1,81 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import SearchResults from './SearchResults';
+import SearchResults from "./SearchResults";
 import * as Yup from "yup";
 import queryString from "query-string";
 
 // ACTIONS
-import {
-  placeLocator,
-} from "../actions";
+import { placeLocator } from "../actions";
 
 // STYLING
-import { GrandparentContainer, ParentContainer, FormPage, Form, InputContainer, Label, Input, Select, Button } from '../syles/formStyling'
-
+import {
+  GrandparentContainer,
+  ParentContainer,
+  FormPage,
+  Form,
+  InputContainer,
+  Label,
+  Input,
+  Select,
+  Button,
+} from "../styles/formStyling";
 
 const RestaurantSearch = (props) => {
   const dispatch = useDispatch();
   const isFetching = useSelector((state) => state.appStatusReducer.isFetching);
 
-  const usStates = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon','Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming']
+  const usStates = [
+    "Alabama",
+    "Alaska",
+    "Arizona",
+    "Arkansas",
+    "California",
+    "Colorado",
+    "Connecticut",
+    "Delaware",
+    "Florida",
+    "Georgia",
+    "Hawaii",
+    "Idaho",
+    "Illinois",
+    "Indiana",
+    "Iowa",
+    "Kansas",
+    "Kentucky",
+    "Louisiana",
+    "Maine",
+    "Maryland",
+    "Massachusetts",
+    "Michigan",
+    "Minnesota",
+    "Mississippi",
+    "Missouri",
+    "Montana",
+    "Nebraska",
+    "Nevada",
+    "New Hampshire",
+    "New Jersey",
+    "New Mexico",
+    "New York",
+    "North Carolina",
+    "North Dakota",
+    "Ohio",
+    "Oklahoma",
+    "Oregon",
+    "Pennsylvania",
+    "Rhode Island",
+    "South Carolina",
+    "South Dakota",
+    "Tennessee",
+    "Texas",
+    "Utah",
+    "Vermont",
+    "Virginia",
+    "Washington",
+    "West Virginia",
+    "Wisconsin",
+    "Wyoming",
+  ];
   const parse = queryString.parse(props.location.search);
   const [pageNumber, setPageNumber] = useState(Number(parse.page));
   const [buttonDisabled, setButtonDisabled] = useState(false);
@@ -35,7 +93,7 @@ const RestaurantSearch = (props) => {
     userState: "",
   });
   const [query, setQuery] = useState(`?page=${pageNumber}`);
-  const [results, setResults] = useState(false)
+  const [results, setResults] = useState(false);
 
   let searchFormSchema = Yup.object().shape({
     query: Yup.string(),
@@ -63,10 +121,15 @@ const RestaurantSearch = (props) => {
       setPageNumber(0);
     }
 
-    if (props.location.state !== null && props.location.state !== undefined && props.location.state.page && props.location.state.parameters) {
+    if (
+      props.location.state !== null &&
+      props.location.state !== undefined &&
+      props.location.state.page &&
+      props.location.state.parameters
+    ) {
       setPageNumber(props.location.state.page);
-      setParameters(props.location.state.parameters)
-      setUserLocation(props.location.state.userLocation)
+      setParameters(props.location.state.parameters);
+      setUserLocation(props.location.state.userLocation);
     }
   }, []);
 
@@ -114,7 +177,7 @@ const RestaurantSearch = (props) => {
   /******************************** HANDLE SUBMIT & FORM ********************************/
   const handleSubmit = (e) => {
     e.preventDefault();
-    setResults(true)
+    setResults(true);
     setPageNumber(1);
     setQuery(`?page=${1}`);
     delete props.location.state;
@@ -128,7 +191,7 @@ const RestaurantSearch = (props) => {
   return (
     <GrandparentContainer>
       <ParentContainer results={results}>
-        <p id='header'>Find a Restaurant</p>
+        <p id="header">Find a Restaurant</p>
         <FormPage>
           {/* <p>Search based on a location:</p> */}
           <Form onSubmit={handleSubmit}>
@@ -147,7 +210,9 @@ const RestaurantSearch = (props) => {
               />
             </InputContainer>
             <InputContainer>
-              <Label>City<span> *</span></Label>
+              <Label>
+                City<span> *</span>
+              </Label>
               <Input
                 type="text"
                 name="userCity"
@@ -161,7 +226,9 @@ const RestaurantSearch = (props) => {
               />
             </InputContainer>
             <InputContainer>
-              <Label>State<span> *</span></Label>
+              <Label>
+                State<span> *</span>
+              </Label>
               <Select
                 name="userState"
                 onChange={handleChange}
@@ -171,7 +238,7 @@ const RestaurantSearch = (props) => {
                     : parameters.userLocation.userState
                 }
               >
-                <option selected disabled hidden value=''></option>
+                <option selected disabled hidden value=""></option>
                 {usStates.map((state, index) => {
                   return (
                     <option key={index} value={state}>
@@ -220,7 +287,18 @@ const RestaurantSearch = (props) => {
           </Form>
         </FormPage>
       </ParentContainer>
-      <SearchResults pageNumber={pageNumber} setPageNumber={setPageNumber} parameters={parameters} setParameters={setParameters} setUserLocation={setUserLocation} query={query} history={props.history} location={props.location} results={results} setResults={setResults} />
+      <SearchResults
+        pageNumber={pageNumber}
+        setPageNumber={setPageNumber}
+        parameters={parameters}
+        setParameters={setParameters}
+        setUserLocation={setUserLocation}
+        query={query}
+        history={props.history}
+        location={props.location}
+        results={results}
+        setResults={setResults}
+      />
     </GrandparentContainer>
   );
 };

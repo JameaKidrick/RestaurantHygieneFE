@@ -26,8 +26,8 @@ import Profile from "./components/Profile";
 import FastfoodIcon from "@material-ui/icons/Fastfood";
 
 // STYLING
-import { GlobalStyle } from "./syles/globalStyling";
-import { Nav } from "./syles/navBar";
+import { GlobalStyle } from "./styles/globalStyling";
+import { Nav } from "./styles/navBar";
 
 function App(props) {
   const dispatch = useDispatch();
