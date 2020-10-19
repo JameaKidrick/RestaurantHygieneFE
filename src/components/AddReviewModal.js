@@ -7,8 +7,8 @@ import { addReview } from "../actions";
 
 // STYLING
 import Rating from "@material-ui/lab/Rating";
-import { ModalContainer } from '../syles/modalStyling'
-import { Button, DeleteButton, Input } from '../syles/formStyling'
+import { ModalContainer } from '../styles/modalStyling'
+import { Button, DeleteButton, Input, TextArea } from '../styles/formStyling'
 
 const AddCommentModal = ({ restaurant, restaurantInfo, setCreating }) => {
   const dispatch = useDispatch();
@@ -35,8 +35,6 @@ const AddCommentModal = ({ restaurant, restaurantInfo, setCreating }) => {
       setButtonDisabled(!valid);
     });
   }, [newReview]);
-
-  console.log('Errors', formErrors)
 
   const handleChanges = (e) => {
     e.persist();
@@ -100,7 +98,7 @@ const AddCommentModal = ({ restaurant, restaurantInfo, setCreating }) => {
             }
           </p>
         </div>
-        <Input type="text" name="review" placeholder='Review' onChange={handleChanges} />
+        <TextArea type="text" name="review" placeholder='Review' onChange={handleChanges} />
         {formErrors.review && (<p className="error">{formErrors.review}</p>)}
         <div type='submit' className='buttonContainer'>
           <DeleteButton disabled={buttonDisabled}>Add Review</DeleteButton>

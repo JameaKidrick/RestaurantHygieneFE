@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import Rating from "@material-ui/lab/Rating";
 import Typography from "@material-ui/core/Typography";
 import DeleteFavoriteModal from "./DeleteFavoriteModal";
+import Loading from './Loading';
+
 
 // ACTIONS
 import { placeLocator_nextPage, addNewFavorite } from "../actions";
@@ -12,9 +14,9 @@ import { placeLocator_nextPage, addNewFavorite } from "../actions";
 import { makeStyles } from "@material-ui/core/styles";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import FavoriteIcon from "@material-ui/icons/Favorite";
-import { Results } from "../syles/resultsStyling";
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import { Results } from "../styles/resultsStyling";
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -54,7 +56,7 @@ const SearchResults = ({
   history,
   location,
   results,
-  setResults
+  setResults,
 }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -94,45 +96,51 @@ const SearchResults = ({
   };
 
   const handleNextPage = (e) => {
-    if(pageNumber !== pages.length || next_page){
+    if (pageNumber !== pages.length || next_page) {
       setPageNumber(pageNumber + 1);
       if (!pages[pageNumber]) {
         dispatch(
           placeLocator_nextPage(next_page, history, `?page=${pageNumber + 1}`)
         );
       }
-    }else{
-      e.preventDefault()
+    } else {
+      e.preventDefault();
     }
   };
 
   const handleBackPage = (e) => {
-    if(pages.length > 1 && pageNumber !== 1){
+    if (pages.length > 1 && pageNumber !== 1) {
       setPageNumber(pageNumber - 1);
-    }else{
-      e.preventDefault()
+    } else {
+      e.preventDefault();
     }
   };
 
   useEffect(() => {
-    if(places.length > 0){
-      setResults(true)
+    if (places.length > 0) {
+      setResults(true);
     }
-  }, [])
+  }, []);
 
   if (isFetching) {
-    return <div>Loading...</div>;
+    return <Loading section='results' />
   }
 
   return (
     <Results results={results}>
-      <div className='pageDirections'>
+      <div className="pageDirections">
         {results && (
           <Link
-            className='link search back'
+            className="link search back"
             to={`/findrestaurant?page=${pageNumber - 1}`}
             onClick={(e) => handleBackPage(e)}
-          ><ChevronLeftIcon className={`${pages.length > 1 && pageNumber !== 1 ? '':'disabledLink'}`} /></Link>
+          >
+            <ChevronLeftIcon
+              className={`${
+                pages.length > 1 && pageNumber !== 1 ? "" : "disabledLink"
+              }`}
+            />
+          </Link>
         )}
         <p>Page {pageNumber}</p>
         {results && (
@@ -140,7 +148,13 @@ const SearchResults = ({
             className="link search next"
             to={`/findrestaurant?page=${pageNumber + 1}`}
             onClick={(e) => handleNextPage(e)}
-          ><ChevronRightIcon className={`${pageNumber !== pages.length || next_page ? '':'disabledLink'}`} /></Link>
+          >
+            <ChevronRightIcon
+              className={`${
+                pageNumber !== pages.length || next_page ? "" : "disabledLink"
+              }`}
+            />
+          </Link>
         )}
       </div>
       {status === "ZERO_RESULTS" ? (
@@ -150,62 +164,66 @@ const SearchResults = ({
       ) : places.length > 0 ? (
         location.state &&
         (location.state !== undefined || location.state !== null) ? (
-          <div className='cards'>
-            {pages[location.state.page - 1].map((restaurant, restaurantIndex) => {
-              return (
-                <Link
-                  to={{
-                    pathname: `/restaurant/${restaurant.place_id}`,
-                    state: {
-                      restaurant,
-                      pageNumber,
-                      last: location.pathname + query,
-                      page: pageNumber,
-                      parameters: parameters,
-                    },
-                  }}
-                  className="link singleRestaurant restaurant"
-                  key={restaurantIndex}
-                >
-                  <p className='restaurantName'>{restaurant.name}</p>
-                  {localStorage.getItem("token") &&
-                    (favorites_place_ids.includes(restaurant.place_id) ? (
-                      <FavoriteIcon
-                        onClick={(e) =>
-                          handleDeleteFavoriteChanges(e, restaurant)
+          <div className="cards">
+            {pages[location.state.page - 1].map(
+              (restaurant, restaurantIndex) => {
+                return (
+                  <Link
+                    to={{
+                      pathname: `/restaurant/${restaurant.place_id}`,
+                      state: {
+                        restaurant,
+                        pageNumber,
+                        last: location.pathname + query,
+                        page: pageNumber,
+                        parameters: parameters,
+                      },
+                    }}
+                    className="link singleRestaurant restaurant"
+                    key={restaurantIndex}
+                  >
+                    <p className="restaurantName">{restaurant.name}</p>
+                    {localStorage.getItem("token") &&
+                      (favorites_place_ids.includes(restaurant.place_id) ? (
+                        <FavoriteIcon
+                          onClick={(e) =>
+                            handleDeleteFavoriteChanges(e, restaurant)
+                          }
+                        />
+                      ) : (
+                        <FavoriteBorderIcon
+                          onClick={(e) =>
+                            handleAddFavoriteChanges(e, restaurant)
+                          }
+                        />
+                      ))}
+                    <div className={classes.root}>
+                      <Typography component="legend">Hygiene Rating</Typography>
+                      <Rating
+                        name="restaurant_rating"
+                        defaultValue={restaurant.avgHygieneRating}
+                        precision={0.1}
+                        className={
+                          classes[
+                            customIcons[Math.ceil(restaurant.avgHygieneRating)]
+                          ]
                         }
+                        readOnly
                       />
-                    ) : (
-                      <FavoriteBorderIcon
-                        onClick={(e) => handleAddFavoriteChanges(e, restaurant)}
-                      />
-                    ))}
-                  <div className={classes.root}>
-                    <Typography component="legend">Hygiene Rating</Typography>
-                    <Rating
-                      name="restaurant_rating"
-                      defaultValue={restaurant.avgHygieneRating}
-                      precision={0.1}
-                      className={
-                        classes[
-                          customIcons[Math.ceil(restaurant.avgHygieneRating)]
-                        ]
-                      }
-                      readOnly
-                    />
-                    {restaurant.avgHygieneRating === null ? (
-                      <div>Not Rated</div>
-                    ) : (
-                      <div>{restaurant.avgHygieneRating}</div>
-                    )}
-                  </div>
-                  <p>Address: {restaurant.formatted_address}</p>
-                </Link>
-              );
-            })}
+                      {restaurant.avgHygieneRating === null ? (
+                        <div>Not Rated</div>
+                      ) : (
+                        <div>{restaurant.avgHygieneRating}</div>
+                      )}
+                    </div>
+                    <p>Address: {restaurant.formatted_address}</p>
+                  </Link>
+                );
+              }
+            )}
           </div>
         ) : (
-          <div className='cards'>
+          <div className="cards">
             {pages[pageNumber - 1].map((restaurant, restaurantIndex) => {
               return (
                 <Link
@@ -222,26 +240,28 @@ const SearchResults = ({
                   className="link singleRestaurant restaurant"
                   key={restaurantIndex}
                 >
-                  <div id='favorite'>
+                  <div id="favorite">
                     {localStorage.getItem("token") &&
                       (favorites_place_ids.includes(restaurant.place_id) ? (
                         <FavoriteIcon
                           onClick={(e) =>
                             handleDeleteFavoriteChanges(e, restaurant)
                           }
-                          className='heartIcon favorited'
+                          className="heartIcon favorited"
                         />
                       ) : (
                         <FavoriteBorderIcon
-                          onClick={(e) => handleAddFavoriteChanges(e, restaurant)}
-                          className='heartIcon'
+                          onClick={(e) =>
+                            handleAddFavoriteChanges(e, restaurant)
+                          }
+                          className="heartIcon"
                         />
                       ))}
-                    <p className='restaurantName'>{restaurant.name}</p>
+                    <p className="restaurantName">{restaurant.name}</p>
                   </div>
-                  <p id='address'>{restaurant.formatted_address}</p>
-                  <div className='rating'>
-                    <p className='subtitle'>Hygiene Rating</p>
+                  <p id="address">{restaurant.formatted_address}</p>
+                  <div className="rating">
+                    <p className="subtitle">Hygiene Rating</p>
                     <div>
                       <Rating
                         name="customized-color"
@@ -252,13 +272,13 @@ const SearchResults = ({
                             customIcons[Math.ceil(restaurant.avgHygieneRating)]
                           ]
                         }
-                        id='stars'
+                        id="stars"
                         readOnly
                       />
                       {restaurant.avgHygieneRating === null ? (
-                        <p className='avg'>Not Rated</p>
+                        <p className="avg">Not Rated</p>
                       ) : (
-                        <p className='avg'>{restaurant.avgHygieneRating}</p>
+                        <p className="avg">{restaurant.avgHygieneRating}</p>
                       )}
                     </div>
                   </div>
@@ -277,13 +297,19 @@ const SearchResults = ({
           user_id={user_id}
         />
       )}
-      <div className='pageDirections'>
+      <div className="pageDirections">
         {results && (
           <Link
             className="link search back"
             to={`/findrestaurant?page=${pageNumber - 1}`}
             onClick={(e) => handleBackPage(e)}
-          ><ChevronLeftIcon className={`${pages.length > 1 && pageNumber !== 1 ? '':'disabledLink'}`} /></Link>
+          >
+            <ChevronLeftIcon
+              className={`${
+                pages.length > 1 && pageNumber !== 1 ? "" : "disabledLink"
+              }`}
+            />
+          </Link>
         )}
         <p>Page {pageNumber}</p>
         {results && (
@@ -291,7 +317,13 @@ const SearchResults = ({
             className="link search next"
             to={`/findrestaurant?page=${pageNumber + 1}`}
             onClick={(e) => handleNextPage(e)}
-          ><ChevronRightIcon className={`${pageNumber !== pages.length || next_page ? '':'disabledLink'}`} /></Link>
+          >
+            <ChevronRightIcon
+              className={`${
+                pageNumber !== pages.length || next_page ? "" : "disabledLink"
+              }`}
+            />
+          </Link>
         )}
       </div>
     </Results>

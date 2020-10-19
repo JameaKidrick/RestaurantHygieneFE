@@ -6,8 +6,8 @@ import { deleteReview } from "../actions";
 
 // STYLING
 import Rating from "@material-ui/lab/Rating";
-import { ModalContainer } from "../syles/modalStyling";
-import { Button, DeleteButton } from "../syles/formStyling";
+import { ModalContainer } from "../styles/modalStyling";
+import { Button, DeleteButton } from "../styles/formStyling";
 
 const DeleteCommentModal = ({ review, formatDate, setDeleting, user_id }) => {
   const dispatch = useDispatch();
